@@ -14,10 +14,27 @@ namespace Entity
     
     public partial class POST
     {
-        public int POST_ID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public POST()
+        {
+            this.COMMENTs = new HashSet<COMMENT>();
+            this.LIKEs = new HashSet<LIKE>();
+            this.NOTIFICATIONs = new HashSet<NOTIFICATION>();
+        }
+    
+        public int ID { get; set; }
         public System.DateTime CREATED_DATE { get; set; }
         public string CONTENT { get; set; }
         public int PROFILE_OWNER_ID { get; set; }
         public int POSTER_ID { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<COMMENT> COMMENTs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LIKE> LIKEs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NOTIFICATION> NOTIFICATIONs { get; set; }
+        public virtual USER USER { get; set; }
+        public virtual USER USER1 { get; set; }
     }
 }

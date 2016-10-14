@@ -15,10 +15,13 @@ namespace Entity
     public partial class FRIEND
     {
         public int ID { get; set; }
-        public string USER_NAME { get; set; }
+        public int USER_ID { get; set; }
         public int FRIEND_ID { get; set; }
         public string REQUEST { get; set; }
-        public string IsBLOCKED { get; set; }
+        public string BLOCKED { get; set; }
         public System.DateTime CREATED_DATE { get; set; }
+    
+        public virtual USER USER { get; set; }
+        public virtual USER USER1 { get; set; }
     }
 }

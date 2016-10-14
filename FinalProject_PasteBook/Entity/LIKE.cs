@@ -14,8 +14,11 @@ namespace Entity
     
     public partial class LIKE
     {
-        public int LIKE_ID { get; set; }
+        public int ID { get; set; }
         public int POST_ID { get; set; }
         public int LIKE_BY { get; set; }
+    
+        public virtual POST POST { get; set; }
+        public virtual USER USER { get; set; }
     }
 }

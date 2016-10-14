@@ -4,15 +4,27 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e7ae05f2599f4084b96c3ea0d1d105b2" Name="Diagram1">
-        <EntityTypeShape EntityType="PastebookModel.COMMENT" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PastebookModel.FRIEND" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PastebookModel.POST" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PastebookModel.REF_COUNTRY" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PastebookModel.USER" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PastebookModel.LIKE" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PastebookModel.NOTIFICATION" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
-        <AssociationConnector Association="PastebookModel.FK_USER_USER" ManuallyRouted="false" />
+      <Diagram DiagramId="8b9fde0e1c914040ab01fcc4bc6fca1a" Name="Diagram1" ZoomLevel="40">
+        <EntityTypeShape EntityType="PastebookModel.COMMENT" Width="1.5" PointX="7.5" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="PastebookModel.FRIEND" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PastebookModel.LIKE" Width="1.5" PointX="7.5" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PastebookModel.NOTIFICATION" Width="1.5" PointX="9.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PastebookModel.POST" Width="1.5" PointX="5.25" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PastebookModel.REF_COUNTRY" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PastebookModel.USER" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <AssociationConnector Association="PastebookModel.FK_COMMENT_COMMENT" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_COMMENT_USER" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_NOTIFICATION_COMMENT" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_FRIEND_FRIEND1" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_FRIEND_USER" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_LIKE_POST" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_LIKE_USER" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_NOTIFICATION_POST" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_NOTIFICATION_USER" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_NOTIFICATION_USER1" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_POST_FRIEND" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_POST_USER" ManuallyRouted="false" />
+        <AssociationConnector Association="PastebookModel.FK_USER_REF_COUNTRY" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

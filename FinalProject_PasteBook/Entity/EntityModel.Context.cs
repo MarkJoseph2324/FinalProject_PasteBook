@@ -13,10 +13,10 @@ namespace Entity
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class PastebookEntities : DbContext
+    public partial class PastebookEntities1 : DbContext
     {
-        public PastebookEntities()
-            : base("name=PastebookEntities")
+        public PastebookEntities1()
+            : base("name=PastebookEntities1")
         {
         }
     
@@ -27,10 +27,10 @@ namespace Entity
     
         public virtual DbSet<COMMENT> COMMENTs { get; set; }
         public virtual DbSet<FRIEND> FRIENDs { get; set; }
+        public virtual DbSet<LIKE> LIKEs { get; set; }
+        public virtual DbSet<NOTIFICATION> NOTIFICATIONs { get; set; }
         public virtual DbSet<POST> POSTs { get; set; }
         public virtual DbSet<REF_COUNTRY> REF_COUNTRY { get; set; }
         public virtual DbSet<USER> USERs { get; set; }
-        public virtual DbSet<LIKE> LIKEs { get; set; }
-        public virtual DbSet<NOTIFICATION> NOTIFICATIONs { get; set; }
     }
 }
