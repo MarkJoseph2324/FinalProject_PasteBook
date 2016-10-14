@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PastebookModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="COMMENT">
+          <Key>
+            <PropertyRef Name="COMMENT_ID" />
+          </Key>
+          <Property Name="COMMENT_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="POST_ID" Type="int" Nullable="false" />
+          <Property Name="POSTER_ID" Type="int" Nullable="false" />
+          <Property Name="CONTENT" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FRIEND">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="USER_NAME" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FRIEND_ID" Type="int" Nullable="false" />
+          <Property Name="REQUEST" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="IsBLOCKED" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Pastebook.dbo.LIKE' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="LIKE">
+          <Key>
+            <PropertyRef Name="LIKE_ID" />
+            <PropertyRef Name="POST_ID" />
+            <PropertyRef Name="LIKE_BY" />
+          </Key>
+          <Property Name="LIKE_ID" Type="int" Nullable="false" />
+          <Property Name="POST_ID" Type="int" Nullable="false" />
+          <Property Name="LIKE_BY" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Pastebook.dbo.NOTIFICATION' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="NOTIFICATION">
+          <Key>
+            <PropertyRef Name="NOTIF_ID" />
+            <PropertyRef Name="NOTIF_TYPE" />
+            <PropertyRef Name="RECEIVER_ID" />
+            <PropertyRef Name="SENDER_ID" />
+            <PropertyRef Name="CREATED_DATE" />
+            <PropertyRef Name="LIKES_ID" />
+            <PropertyRef Name="COMMENT_ID" />
+            <PropertyRef Name="POST_ID" />
+            <PropertyRef Name="FRIEND_ID" />
+            <PropertyRef Name="SEEN" />
+          </Key>
+          <Property Name="NOTIF_ID" Type="int" Nullable="false" />
+          <Property Name="NOTIF_TYPE" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="RECEIVER_ID" Type="int" Nullable="false" />
+          <Property Name="SENDER_ID" Type="int" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="int" Nullable="false" />
+          <Property Name="LIKES_ID" Type="int" Nullable="false" />
+          <Property Name="COMMENT_ID" Type="int" Nullable="false" />
+          <Property Name="POST_ID" Type="int" Nullable="false" />
+          <Property Name="FRIEND_ID" Type="int" Nullable="false" />
+          <Property Name="SEEN" Type="varchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="POST">
+          <Key>
+            <PropertyRef Name="POST_ID" />
+          </Key>
+          <Property Name="POST_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="datetime" Nullable="false" />
+          <Property Name="CONTENT" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PROFILE_OWNER_ID" Type="int" Nullable="false" />
+          <Property Name="POSTER_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="REF_COUNTRY">
+          <Key>
+            <PropertyRef Name="COUNTRY_ID" />
+          </Key>
+          <Property Name="COUNTRY_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="COUNTRY" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USER">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+          </Key>
+          <Property Name="USER_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USER_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PASSWORD" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SALT" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LAST_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BIRTHDAY" Type="datetime" Nullable="false" />
+          <Property Name="COUNTRY_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MOBILE_NO" Type="varchar" MaxLength="50" />
+          <Property Name="GENDER" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PROFILE_PIC" Type="varbinary(max)" Nullable="false" />
+          <Property Name="DATE_CREATED" Type="datetime" Nullable="false" />
+          <Property Name="ABOUT_ME" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK_USER_USER">
+          <End Role="USER" Type="Self.USER" Multiplicity="1" />
+          <End Role="USER1" Type="Self.USER" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="USER">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="USER1">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PastebookModelStoreContainer">
+          <EntitySet Name="COMMENT" EntityType="Self.COMMENT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FRIEND" EntityType="Self.FRIEND" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="POST" EntityType="Self.POST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="REF_COUNTRY" EntityType="Self.REF_COUNTRY" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USER" EntityType="Self.USER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LIKE" EntityType="Self.LIKE" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [LIKE].[LIKE_ID] AS [LIKE_ID], 
+    [LIKE].[POST_ID] AS [POST_ID], 
+    [LIKE].[LIKE_BY] AS [LIKE_BY]
+    FROM [dbo].[LIKE] AS [LIKE]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="NOTIFICATION" EntityType="Self.NOTIFICATION" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [NOTIFICATION].[NOTIF_ID] AS [NOTIF_ID], 
+    [NOTIFICATION].[NOTIF_TYPE] AS [NOTIF_TYPE], 
+    [NOTIFICATION].[RECEIVER_ID] AS [RECEIVER_ID], 
+    [NOTIFICATION].[SENDER_ID] AS [SENDER_ID], 
+    [NOTIFICATION].[CREATED_DATE] AS [CREATED_DATE], 
+    [NOTIFICATION].[LIKES_ID] AS [LIKES_ID], 
+    [NOTIFICATION].[COMMENT_ID] AS [COMMENT_ID], 
+    [NOTIFICATION].[POST_ID] AS [POST_ID], 
+    [NOTIFICATION].[FRIEND_ID] AS [FRIEND_ID], 
+    [NOTIFICATION].[SEEN] AS [SEEN]
+    FROM [dbo].[NOTIFICATION] AS [NOTIFICATION]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_USER_USER" Association="Self.FK_USER_USER">
+            <End Role="USER" EntitySet="USER" />
+            <End Role="USER1" EntitySet="USER" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PastebookModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="COMMENT">
+          <Key>
+            <PropertyRef Name="COMMENT_ID" />
+          </Key>
+          <Property Name="COMMENT_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="POST_ID" Type="Int32" Nullable="false" />
+          <Property Name="POSTER_ID" Type="Int32" Nullable="false" />
+          <Property Name="CONTENT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="FRIEND">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="USER_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FRIEND_ID" Type="Int32" Nullable="false" />
+          <Property Name="REQUEST" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsBLOCKED" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="POST">
+          <Key>
+            <PropertyRef Name="POST_ID" />
+          </Key>
+          <Property Name="POST_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CREATED_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CONTENT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PROFILE_OWNER_ID" Type="Int32" Nullable="false" />
+          <Property Name="POSTER_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="REF_COUNTRY">
+          <Key>
+            <PropertyRef Name="COUNTRY_ID" />
+          </Key>
+          <Property Name="COUNTRY_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="COUNTRY" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USER">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+          </Key>
+          <Property Name="USER_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USER_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SALT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LAST_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BIRTHDAY" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="COUNTRY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MOBILE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GENDER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PROFILE_PIC" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="DATE_CREATED" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ABOUT_ME" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="USER1" Relationship="Self.FK_USER_USER" FromRole="USER" ToRole="USER1" />
+          <NavigationProperty Name="USER2" Relationship="Self.FK_USER_USER" FromRole="USER1" ToRole="USER" />
+        </EntityType>
+        <EntityType Name="LIKE">
+          <Key>
+            <PropertyRef Name="LIKE_ID" />
+            <PropertyRef Name="POST_ID" />
+            <PropertyRef Name="LIKE_BY" />
+          </Key>
+          <Property Name="LIKE_ID" Type="Int32" Nullable="false" />
+          <Property Name="POST_ID" Type="Int32" Nullable="false" />
+          <Property Name="LIKE_BY" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NOTIFICATION">
+          <Key>
+            <PropertyRef Name="NOTIF_ID" />
+            <PropertyRef Name="NOTIF_TYPE" />
+            <PropertyRef Name="RECEIVER_ID" />
+            <PropertyRef Name="SENDER_ID" />
+            <PropertyRef Name="CREATED_DATE" />
+            <PropertyRef Name="LIKES_ID" />
+            <PropertyRef Name="COMMENT_ID" />
+            <PropertyRef Name="POST_ID" />
+            <PropertyRef Name="FRIEND_ID" />
+            <PropertyRef Name="SEEN" />
+          </Key>
+          <Property Name="NOTIF_ID" Type="Int32" Nullable="false" />
+          <Property Name="NOTIF_TYPE" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RECEIVER_ID" Type="Int32" Nullable="false" />
+          <Property Name="SENDER_ID" Type="Int32" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="Int32" Nullable="false" />
+          <Property Name="LIKES_ID" Type="Int32" Nullable="false" />
+          <Property Name="COMMENT_ID" Type="Int32" Nullable="false" />
+          <Property Name="POST_ID" Type="Int32" Nullable="false" />
+          <Property Name="FRIEND_ID" Type="Int32" Nullable="false" />
+          <Property Name="SEEN" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_USER_USER">
+          <End Role="USER" Type="Self.USER" Multiplicity="1" />
+          <End Role="USER1" Type="Self.USER" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="USER">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="USER1">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PastebookEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="COMMENTs" EntityType="Self.COMMENT" />
+          <EntitySet Name="FRIENDs" EntityType="Self.FRIEND" />
+          <EntitySet Name="POSTs" EntityType="Self.POST" />
+          <EntitySet Name="REF_COUNTRY" EntityType="Self.REF_COUNTRY" />
+          <EntitySet Name="USERs" EntityType="Self.USER" />
+          <EntitySet Name="LIKEs" EntityType="Self.LIKE" />
+          <EntitySet Name="NOTIFICATIONs" EntityType="Self.NOTIFICATION" />
+          <AssociationSet Name="FK_USER_USER" Association="Self.FK_USER_USER">
+            <End Role="USER" EntitySet="USERs" />
+            <End Role="USER1" EntitySet="USERs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PastebookModelStoreContainer" CdmEntityContainer="PastebookEntities">
+          <EntitySetMapping Name="COMMENTs">
+            <EntityTypeMapping TypeName="PastebookModel.COMMENT">
+              <MappingFragment StoreEntitySet="COMMENT">
+                <ScalarProperty Name="COMMENT_ID" ColumnName="COMMENT_ID" />
+                <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+                <ScalarProperty Name="POSTER_ID" ColumnName="POSTER_ID" />
+                <ScalarProperty Name="CONTENT" ColumnName="CONTENT" />
+                <ScalarProperty Name="CREATED_DATE" ColumnName="CREATED_DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FRIENDs">
+            <EntityTypeMapping TypeName="PastebookModel.FRIEND">
+              <MappingFragment StoreEntitySet="FRIEND">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="USER_NAME" ColumnName="USER_NAME" />
+                <ScalarProperty Name="FRIEND_ID" ColumnName="FRIEND_ID" />
+                <ScalarProperty Name="REQUEST" ColumnName="REQUEST" />
+                <ScalarProperty Name="IsBLOCKED" ColumnName="IsBLOCKED" />
+                <ScalarProperty Name="CREATED_DATE" ColumnName="CREATED_DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="POSTs">
+            <EntityTypeMapping TypeName="PastebookModel.POST">
+              <MappingFragment StoreEntitySet="POST">
+                <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+                <ScalarProperty Name="CREATED_DATE" ColumnName="CREATED_DATE" />
+                <ScalarProperty Name="CONTENT" ColumnName="CONTENT" />
+                <ScalarProperty Name="PROFILE_OWNER_ID" ColumnName="PROFILE_OWNER_ID" />
+                <ScalarProperty Name="POSTER_ID" ColumnName="POSTER_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="REF_COUNTRY">
+            <EntityTypeMapping TypeName="PastebookModel.REF_COUNTRY">
+              <MappingFragment StoreEntitySet="REF_COUNTRY">
+                <ScalarProperty Name="COUNTRY_ID" ColumnName="COUNTRY_ID" />
+                <ScalarProperty Name="COUNTRY" ColumnName="COUNTRY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USERs">
+            <EntityTypeMapping TypeName="PastebookModel.USER">
+              <MappingFragment StoreEntitySet="USER">
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="USER_NAME" ColumnName="USER_NAME" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="SALT" ColumnName="SALT" />
+                <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+                <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+                <ScalarProperty Name="BIRTHDAY" ColumnName="BIRTHDAY" />
+                <ScalarProperty Name="COUNTRY_ID" ColumnName="COUNTRY_ID" />
+                <ScalarProperty Name="MOBILE_NO" ColumnName="MOBILE_NO" />
+                <ScalarProperty Name="GENDER" ColumnName="GENDER" />
+                <ScalarProperty Name="PROFILE_PIC" ColumnName="PROFILE_PIC" />
+                <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
+                <ScalarProperty Name="ABOUT_ME" ColumnName="ABOUT_ME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LIKEs">
+            <EntityTypeMapping TypeName="PastebookModel.LIKE">
+              <MappingFragment StoreEntitySet="LIKE">
+                <ScalarProperty Name="LIKE_ID" ColumnName="LIKE_ID" />
+                <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+                <ScalarProperty Name="LIKE_BY" ColumnName="LIKE_BY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NOTIFICATIONs">
+            <EntityTypeMapping TypeName="PastebookModel.NOTIFICATION">
+              <MappingFragment StoreEntitySet="NOTIFICATION">
+                <ScalarProperty Name="NOTIF_ID" ColumnName="NOTIF_ID" />
+                <ScalarProperty Name="NOTIF_TYPE" ColumnName="NOTIF_TYPE" />
+                <ScalarProperty Name="RECEIVER_ID" ColumnName="RECEIVER_ID" />
+                <ScalarProperty Name="SENDER_ID" ColumnName="SENDER_ID" />
+                <ScalarProperty Name="CREATED_DATE" ColumnName="CREATED_DATE" />
+                <ScalarProperty Name="LIKES_ID" ColumnName="LIKES_ID" />
+                <ScalarProperty Name="COMMENT_ID" ColumnName="COMMENT_ID" />
+                <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+                <ScalarProperty Name="FRIEND_ID" ColumnName="FRIEND_ID" />
+                <ScalarProperty Name="SEEN" ColumnName="SEEN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
