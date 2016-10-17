@@ -9,7 +9,11 @@ namespace BusinessLogic
 {
     class PasswordManager
     {
-        private static RNGCryptoServiceProvider CryptoServiceProvider = null;
+        /// <summary>
+        /// http://www.codeproject.com/Articles/608860/Understanding-and-Implementing-Password-Hashing
+        /// </summary>
+
+        private RNGCryptoServiceProvider CryptoServiceProvider = null;
         private const int SaltSize = 24;
 
         public string GeneratePasswordHash(string plainTextPassword, out string salt)

@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalProject_PasteBook", "FinalProject_PasteBook\FinalProject_PasteBook.csproj", "{F340AA66-2DB1-4C43-901B-50DFEF0FCC29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entitties", "Entity\Entitties.csproj", "{8B3C2E8A-C688-4998-AB4E-F17EF87AA97B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entity\Entities.csproj", "{8B3C2E8A-C688-4998-AB4E-F17EF87AA97B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{B7237CE9-4D1E-4CDD-8E31-69AC6373A3D7}"
 EndProject

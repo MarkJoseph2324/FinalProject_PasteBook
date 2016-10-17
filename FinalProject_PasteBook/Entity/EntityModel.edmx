@@ -565,7 +565,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="PastebookEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="PastebookEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="COMMENTs" EntityType="Self.COMMENT" />
           <EntitySet Name="FRIENDs" EntityType="Self.FRIEND" />
           <EntitySet Name="LIKEs" EntityType="Self.LIKE" />
@@ -631,7 +631,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="PastebookModelStoreContainer" CdmEntityContainer="PastebookEntities1">
+        <EntityContainerMapping StorageEntityContainer="PastebookModelStoreContainer" CdmEntityContainer="PastebookEntities">
           <EntitySetMapping Name="COMMENTs">
             <EntityTypeMapping TypeName="PastebookModel.COMMENT">
               <MappingFragment StoreEntitySet="COMMENT">
