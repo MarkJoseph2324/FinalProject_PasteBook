@@ -7,27 +7,22 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    public class RegistrationManager
+    public class CountryManager
     {
-        public bool AddUserToDatabase(User user)
+        public List<REF_COUNTRY> GetAllCountries()
         {
-            DataAccessMapper map = new DataAccessMapper();
-            bool returnValue = false;
+            List<REF_COUNTRY> countryList = new List<REF_COUNTRY>();
             try
             {
                 using (var context = new PastebookEntities())
                 {
-                    DateTime curretDate = DateTime.Now;
-                    user.DateCreated = curretDate;
-                    context.USERs.Add(map.MapAddUser(user));
+                    countryList = context.REF_COUNTRY.ToList();
                 }
             }
             catch (Exception ex)
             {
-                
             }
-
-            return returnValue;
+            return countryList;
         }
     }
 }

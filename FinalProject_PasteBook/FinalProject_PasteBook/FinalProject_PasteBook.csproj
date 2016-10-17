@@ -274,7 +274,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="BusinessLogic\" />
+    <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -292,6 +292,10 @@
     <ProjectReference Include="..\Entity\Entities.csproj">
       <Project>{8b3c2e8a-c688-4998-ab4e-f17ef87aa97b}</Project>
       <Name>Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PasteBook_FinalProject\PasteBook_FinalProject.csproj">
+      <Project>{3D4455D5-78B1-474B-A22F-14CE85FEDBC2}</Project>
+      <Name>PasteBook_FinalProject</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

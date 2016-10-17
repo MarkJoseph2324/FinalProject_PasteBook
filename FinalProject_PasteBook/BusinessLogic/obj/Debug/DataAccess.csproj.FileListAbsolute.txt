@@ -1,3 +1,0 @@
-C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
-C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\obj\Debug\BusinessLogic.dll
-C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\obj\Debug\BusinessLogic.pdb

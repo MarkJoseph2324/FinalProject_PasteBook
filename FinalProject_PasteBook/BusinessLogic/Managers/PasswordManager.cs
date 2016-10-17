@@ -61,7 +61,7 @@ namespace DataAccess
         private static RNGCryptoServiceProvider CryptoServiceProvider = null;
         private const int SaltSize = 24;
 
-        static SaltGenerator()
+        public SaltGenerator()
         {
             CryptoServiceProvider = new RNGCryptoServiceProvider();
         }
