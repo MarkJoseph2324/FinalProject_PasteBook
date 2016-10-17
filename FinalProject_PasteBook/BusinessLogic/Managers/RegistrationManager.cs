@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic
+namespace DataAccess
 {
     public class RegistrationManager
     {
@@ -23,6 +23,24 @@ namespace BusinessLogic
             {
             }
             return countryList;
+        }
+
+        public bool AddUser(USER user)
+        {
+            bool returnValue = false;
+            try
+            {
+                using (var context = new PastebookEntities())
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return returnValue;
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using BusinessLogic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DataAccess;
+using Entity;
 
 namespace FinalProject_PasteBook.Controllers
 {
@@ -20,10 +21,15 @@ namespace FinalProject_PasteBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult Registration(RegistrationModel model)
+        public ActionResult Registration(USER user)
         {
             registrationModel.Countries = new SelectList(registrationManager.GetAllCountries(), "ID", "Country");
-            return View(model);
+            if (ModelState.IsValid)
+            {
+                registrationManager.AddUser(user);
+            }
+
+            return View(user);
         }
     }
 }

@@ -5,38 +5,33 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic
+namespace DataAccess
 {
-    class PasswordManager
+    public class PasswordManager
     {
         /// <summary>
         /// http://www.codeproject.com/Articles/608860/Understanding-and-Implementing-Password-Hashing
         /// </summary>
 
-        private RNGCryptoServiceProvider CryptoServiceProvider = null;
-        private const int SaltSize = 24;
+        HashComputer hashComputer = new HashComputer();
+        SaltGenerator saltGenerator = new SaltGenerator();
 
         public string GeneratePasswordHash(string plainTextPassword, out string salt)
         {
-            salt = GetSaltString();
+            salt = saltGenerator.GetSaltString();
             string finalString = plainTextPassword + salt;
-            return GetPasswordHashAndSalt(finalString);
+            return hashComputer.GetPasswordHashAndSalt(finalString);
         }
 
         public bool IsPasswordMatch(string password, string salt, string hash)
         {
             string finalString = password + salt;
-            return hash == GetPasswordHashAndSalt(finalString);
+            return hash == hashComputer.GetPasswordHashAndSalt(finalString);
         }
+    }
 
-        public string GetPasswordHashAndSalt(string message)
-        {
-            SHA256 sha = new SHA256CryptoServiceProvider();
-            byte[] dataBytes = GetBytes(message);
-            byte[] resultBytes = sha.ComputeHash(dataBytes);
-            return GetString(resultBytes);
-        }
-
+    public class Utility
+    {
         public byte[] GetBytes(string message)
         {
             return Encoding.ASCII.GetBytes(message);
@@ -46,8 +41,27 @@ namespace BusinessLogic
         {
             return Encoding.ASCII.GetString(resultBytes);
         }
-        
-        public void SaltGenerator()
+    }
+
+    public class HashComputer
+    {
+        Utility utility = new Utility();
+        public string GetPasswordHashAndSalt(string message)
+        {
+            SHA256 sha = new SHA256CryptoServiceProvider();
+            byte[] dataBytes = utility.GetBytes(message);
+            byte[] resultBytes = sha.ComputeHash(dataBytes);
+            return utility.GetString(resultBytes);
+        }
+    }
+
+    public class SaltGenerator
+    {
+        Utility utility = new Utility();
+        private static RNGCryptoServiceProvider CryptoServiceProvider = null;
+        private const int SaltSize = 24;
+
+        static SaltGenerator()
         {
             CryptoServiceProvider = new RNGCryptoServiceProvider();
         }
@@ -56,7 +70,7 @@ namespace BusinessLogic
         {
             byte[] saltBytes = new byte[SaltSize];
             CryptoServiceProvider.GetNonZeroBytes(saltBytes);
-            string saltString = GetString(saltBytes);
+            string saltString = utility.GetString(saltBytes);
             return saltString;
         }
     }

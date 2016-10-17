@@ -49,6 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\DataAccess.cs" />
+    <Compile Include="Entities\Comment.cs" />
+    <Compile Include="Entities\Friend.cs" />
+    <Compile Include="Entities\Like.cs" />
+    <Compile Include="Entities\Notification.cs" />
+    <Compile Include="Entities\Post.cs" />
+    <Compile Include="Entities\RefCountry.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Managers\PasswordManager.cs" />
     <Compile Include="Managers\RegistrationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +70,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mappers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
