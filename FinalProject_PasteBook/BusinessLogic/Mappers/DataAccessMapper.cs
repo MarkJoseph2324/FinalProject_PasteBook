@@ -46,5 +46,19 @@ namespace DataAccessLibrary
             return country;
         }
 
+        public User MapUserCredentialFromDB(USER user)
+        {
+            User userCredential = new User()
+            {
+                ID = user.ID,
+                FirstName = user.FIRST_NAME,
+                Email = user.EMAIL_ADDRESS,
+                Password = user.PASSWORD,
+                Salt = user.SALT
+            };
+
+            return userCredential;
+        }
+
     }
 }

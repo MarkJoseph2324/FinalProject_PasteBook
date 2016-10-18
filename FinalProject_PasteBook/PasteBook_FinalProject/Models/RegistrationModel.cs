@@ -45,9 +45,6 @@ namespace PasteBook_FinalProject
 
         public int CountryID { get; set; }
 
-        //[DisplayName("Country:")]
-        //public string Country { get; set; }
-
         [DataType(DataType.PhoneNumber)]
         [DisplayName("Mobile Number:")]
         public string MobileNumber { get; set; }

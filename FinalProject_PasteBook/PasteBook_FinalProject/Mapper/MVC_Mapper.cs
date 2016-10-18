@@ -35,5 +35,15 @@ namespace PasteBook_FinalProject
             };
             return user;
         }
+
+        public User MapUserCredentials(LogInModel model)
+        {
+            User userCredentials = new User()
+            {
+                Email = model.Email,
+                Password = model.Password
+            };
+            return userCredentials;
+        }
     }
 }

@@ -22,12 +22,33 @@ namespace PasteBook_FinalProject
             
             return countriesList;
         }
-
         
         public RegistrationModel AddUser(RegistrationModel user)
         {
             dataAccess.AddUser(mapper.MapUserToDB(user));
             return user;
+        }
+
+        public string CheckUserIfExisting(LogInModel model)
+        {
+            PasswordManager pwdManager = new PasswordManager();
+            User userCredential = new User();
+
+            string returnValue = string.Empty;
+
+            userCredential = dataAccess.CheckIfUserExist(mapper.MapUserCredentials(model));
+            if (userCredential.ToString().Count() != 0)
+            {
+                if (pwdManager.IsPasswordMatch(model.Password, userCredential.Salt, userCredential.Password))
+                {
+                    returnValue = userCredential.FirstName;
+                }
+            }
+            else
+            {
+                returnValue = string.Empty;                
+            }
+            return returnValue;
         }
     }
 }

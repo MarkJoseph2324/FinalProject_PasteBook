@@ -157,13 +157,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PasteBookUserController.cs" />
+    <Compile Include="Controllers\PasteBookAccountController.cs" />
+    <Compile Include="Controllers\PasteBookController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Manager\MVC_Manager.cs" />
     <Compile Include="Mapper\MVC_Mapper.cs" />
     <Compile Include="Models\CountryModel.cs" />
+    <Compile Include="Models\LogInModel.cs" />
     <Compile Include="Models\RegistrationModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -208,10 +210,13 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\PasteBookUser\Registration.cshtml" />
+    <Content Include="Views\PasteBookAccount\Registration.cshtml" />
+    <Content Include="Views\PasteBookAccount\LogIn.cshtml" />
+    <Content Include="Views\PasteBookAccount\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\PasteBook\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

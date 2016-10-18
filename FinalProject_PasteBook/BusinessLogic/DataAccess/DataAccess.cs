@@ -31,5 +31,15 @@ namespace DataAccessLibrary
             countryList = countryMapper.MapCountryFromDB(countryManager.GetAllCountries());
             return countryList;
         }
+
+        public User CheckIfUserExist(User user)
+        {
+            LogInManager logInManager = new LogInManager();
+            User userCredential = new User();
+
+            userCredential = logInManager.CheckIfUserExist(user);
+
+            return userCredential;
+        }
     }
 }
