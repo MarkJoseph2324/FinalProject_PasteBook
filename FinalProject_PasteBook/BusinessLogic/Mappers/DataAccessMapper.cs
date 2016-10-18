@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using DataAccessLibrary;
 using Entity;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace DataAccessLibrary
 {
     class DataAccessMapper
     {

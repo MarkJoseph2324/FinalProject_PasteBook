@@ -1,0 +1,12 @@
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\obj\Debug\DataAccessLibrary.csprojResolveAssemblyReference.cache
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\DataAccessLibrary.dll.config
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\DataAccessLibrary.dll
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\DataAccessLibrary.pdb
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\Entity.dll
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\EntityFramework.dll
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\Entity.pdb
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\EntityFramework.xml
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\obj\Debug\DataAccessLibrary.dll
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\BusinessLogic\obj\Debug\DataAccessLibrary.pdb

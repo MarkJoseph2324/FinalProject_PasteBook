@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace DataAccessLibrary
 {
     public class CountryManager
     {
@@ -16,7 +16,10 @@ namespace DataAccess
             {
                 using (var context = new PastebookEntities())
                 {
-                    countryList = context.REF_COUNTRY.ToList();
+                    foreach (var item in context.REF_COUNTRY.ToList())
+                    {
+                        countryList.Add(item);
+                    }
                 }
             }
             catch (Exception ex)

@@ -158,13 +158,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PasteBookUserController.cs" />
-    <Compile Include="Entities\MVC_Country.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Manager\MVC_CountryManager.cs" />
+    <Compile Include="Manager\MVC_Manager.cs" />
     <Compile Include="Mapper\MVC_Mapper.cs" />
+    <Compile Include="Models\CountryModel.cs" />
     <Compile Include="Models\RegistrationModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -207,10 +208,10 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\PasteBookUser\Registration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\PasteBookUser\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -221,9 +222,9 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BusinessLogic\DataAccess.csproj">
+    <ProjectReference Include="..\BusinessLogic\DataAccessLibrary.csproj">
       <Project>{b7237ce9-4d1e-4cdd-8e31-69ac6373a3d7}</Project>
-      <Name>DataAccess</Name>
+      <Name>DataAccessLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entity\Entities.csproj">
       <Project>{8B3C2E8A-C688-4998-AB4E-F17EF87AA97B}</Project>

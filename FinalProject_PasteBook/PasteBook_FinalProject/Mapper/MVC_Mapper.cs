@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,15 @@ namespace PasteBook_FinalProject
 {
     public class MVC_Mapper
     {
-        public MVC_Country MapCountryFromDB(RefCountry country)
+        public CountryModel MapCountryFromDB(RefCountry country)
         {
+            CountryModel countryModel = new CountryModel()
+            {
+                ID = country.ID,
+                Country = country.Country
+            };
 
+            return countryModel;
         }
     }
 }

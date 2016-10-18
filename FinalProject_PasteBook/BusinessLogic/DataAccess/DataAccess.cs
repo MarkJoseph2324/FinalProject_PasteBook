@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace DataAccessLibrary
 {
     public class DataAccess
     {
@@ -21,15 +21,14 @@ namespace DataAccess
             return returnValue;
         }
 
-        public bool GetCoutries()
+        public List<RefCountry> GetCoutries()
         {
             DataAccessMapper countryMapper = new DataAccessMapper();
             CountryManager countryManager = new CountryManager();
-
-            bool returnValue = false;
+            
             List<RefCountry> countryList = new List<RefCountry>();
             countryList = countryMapper.MapCountryFromDB(countryManager.GetAllCountries());
-            return returnValue;
+            return countryList;
         }
     }
 }
