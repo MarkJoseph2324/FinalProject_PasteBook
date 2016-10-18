@@ -17,7 +17,8 @@ namespace DataAccessLibrary
             bool returnValue = false;
             string salt = string.Empty;
             user.Password = pwdManager.GeneratePasswordHash(user.Password, out salt);
-            registrationManager.AddUserToDatabase(user);
+            user.Salt = salt;
+            returnValue = registrationManager.AddUserToDatabase(user);
             return returnValue;
         }
 

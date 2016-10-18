@@ -22,5 +22,12 @@ namespace PasteBook_FinalProject
             
             return countriesList;
         }
+
+        
+        public RegistrationModel AddUser(RegistrationModel user)
+        {
+            dataAccess.AddUser(mapper.MapUserToDB(user));
+            return user;
+        }
     }
 }

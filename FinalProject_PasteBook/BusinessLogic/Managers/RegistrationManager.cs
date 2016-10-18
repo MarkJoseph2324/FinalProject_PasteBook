@@ -20,6 +20,7 @@ namespace DataAccessLibrary
                     DateTime curretDate = DateTime.Now;
                     user.DateCreated = curretDate;
                     context.USERs.Add(map.MapAddUser(user));
+                    context.SaveChanges();
                 }
             }
             catch (Exception ex)

@@ -24,13 +24,12 @@ namespace PasteBook_FinalProject
         }
 
         [HttpPost]
-        public ActionResult Registration(USER user)
+        public ActionResult Registration(RegistrationModel user)
         {
-            //registrationModel.Countries = new SelectList(registrationManager.GetAllCountries(), "ID", "Country");
-            //if (ModelState.IsValid)
-            //{
-            //    registrationManager.AddUser(user);
-            //}
+            if (ModelState.IsValid)
+            {
+                manager.AddUser(user);
+            }
 
             return View(user);
         }

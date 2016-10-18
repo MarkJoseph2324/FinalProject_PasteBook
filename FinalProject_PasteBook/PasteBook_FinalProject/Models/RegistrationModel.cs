@@ -37,6 +37,8 @@ namespace PasteBook_FinalProject
         [DisplayName("Confirm Password:")]
         public string ConfirmPassword { get; set; }
 
+        public string Gender { get; set; }
+
         [Required(ErrorMessage = "Birth Date is a required field.")]
         [DisplayName("Birth Date:")]
         public DateTime Birthday { get; set; }

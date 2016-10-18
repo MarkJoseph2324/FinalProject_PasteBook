@@ -18,5 +18,22 @@ namespace PasteBook_FinalProject
 
             return countryModel;
         }
+
+        public User MapUserToDB(RegistrationModel model)
+        {
+            User user = new User()
+            {
+                Username = model.Username,
+                Password = model.Password,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                BirthDate = model.Birthday,
+                Email = model.Email,
+                Gender = model.Gender,
+                MobileNumber = model.MobileNumber,
+                CountryID = model.CountryID
+            };
+            return user;
+        }
     }
 }
