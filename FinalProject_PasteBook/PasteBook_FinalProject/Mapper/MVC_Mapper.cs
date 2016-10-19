@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary;
+using PasteBook_FinalProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,36 @@ namespace PasteBook_FinalProject
                 Password = model.Password
             };
             return userCredentials;
+        }
+
+        public Post MapPost(string post, int posterID, int profileOwnerID)
+        {
+            DateTime dateCreated = DateTime.Now;
+            Post entityPost = new Post()
+            {
+                DateCreated = dateCreated,
+                postContent = post,
+                PosterID = posterID,
+                ProfileOwnerID = profileOwnerID
+            };
+            return entityPost;
+        }
+
+        public List<PostModel> MapPostFromDB(List<Post> postList)
+        {
+            List<PostModel> postModel = new List<PostModel>();
+            foreach (var item in postList)
+            {
+                postModel.Add(new PostModel()
+                {
+                    DateCreated = item.DateCreated,
+                    ID = item.ID,
+                    PosterID = item.PosterID,
+                    ProfileOwnerID = item.ProfileOwnerID,
+                    postContent = item.postContent
+                });
+            }
+            return postModel;
         }
     }
 }

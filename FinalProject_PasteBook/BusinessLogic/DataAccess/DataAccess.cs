@@ -9,6 +9,26 @@ namespace DataAccessLibrary
 {
     public class DataAccess
     {
+        public List<RefCountry> GetCoutries()
+        {
+            DataAccessMapper countryMapper = new DataAccessMapper();
+            CountryManager countryManager = new CountryManager();
+
+            List<RefCountry> countryList = new List<RefCountry>();
+            countryList = countryMapper.MapCountryFromDB(countryManager.GetAllCountries());
+            return countryList;
+        }
+
+        public User GetUser(User user)
+        {
+            LogInManager logInManager = new LogInManager();
+            User userCredential = new User();
+
+            userCredential = logInManager.GetUser(user);
+
+            return userCredential;
+        }
+
         public bool AddUser(User user)
         {
             RegistrationManager registrationManager = new RegistrationManager();
@@ -22,24 +42,28 @@ namespace DataAccessLibrary
             return returnValue;
         }
 
-        public List<RefCountry> GetCoutries()
+        public bool CreatePost(Post post)
         {
-            DataAccessMapper countryMapper = new DataAccessMapper();
-            CountryManager countryManager = new CountryManager();
-            
-            List<RefCountry> countryList = new List<RefCountry>();
-            countryList = countryMapper.MapCountryFromDB(countryManager.GetAllCountries());
-            return countryList;
+            PostManager postManager = new PostManager();
+            bool returnValue = false;
+            returnValue = postManager.AddPost(post);
+            return returnValue;
         }
 
-        public User CheckIfUserExist(User user)
+        public List<Post> RetrievePostForNewsFeed(int userID)
         {
-            LogInManager logInManager = new LogInManager();
-            User userCredential = new User();
+            PostManager postManager = new PostManager();
+            List<Post> postList = new List<Post>();
+            postList = postManager.RetrievePostForNewsFeed(userID);
+            return postList;
+        }
 
-            userCredential = logInManager.CheckIfUserExist(user);
-
-            return userCredential;
+        public Post RetrievePostForNewsFeed1(int userID)
+        {
+            PostManager postManager = new PostManager();
+            Post postList = new Post();
+            postList = postManager.RetrievePostForNewsFeed(userID);
+            return postList;
         }
     }
 }

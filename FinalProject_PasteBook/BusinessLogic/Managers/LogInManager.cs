@@ -9,7 +9,7 @@ namespace DataAccessLibrary
 {
     public class LogInManager
     {
-        public User CheckIfUserExist(User user)
+        public User GetUser(User user)
         {
             DataAccessMapper mapper = new DataAccessMapper();
             User userCredential = new User();

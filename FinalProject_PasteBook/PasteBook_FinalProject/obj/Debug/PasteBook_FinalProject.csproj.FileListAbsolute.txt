@@ -1,4 +1,3 @@
-C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\obj\Debug\PasteBook_FinalProject.csprojResolveAssemblyReference.cache
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\bin\ApplicationInsights.config
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\bin\roslyn\csc.exe
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -57,5 +56,6 @@ C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\Pas
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\bin\System.Web.WebPages.Razor.xml
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\bin\Antlr3.Runtime.pdb
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\bin\Newtonsoft.Json.xml
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\obj\Debug\PasteBook_FinalProject.csprojResolveAssemblyReference.cache
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\obj\Debug\PasteBook_FinalProject.dll
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\PasteBook_FinalProject\obj\Debug\PasteBook_FinalProject.pdb

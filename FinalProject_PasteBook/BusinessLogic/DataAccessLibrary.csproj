@@ -60,6 +60,7 @@
     <Compile Include="Managers\CountryManager.cs" />
     <Compile Include="Managers\LogInManager.cs" />
     <Compile Include="Managers\PasswordManager.cs" />
+    <Compile Include="Managers\PostManager.cs" />
     <Compile Include="Managers\RegistrationManager.cs" />
     <Compile Include="Mappers\DataAccessMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

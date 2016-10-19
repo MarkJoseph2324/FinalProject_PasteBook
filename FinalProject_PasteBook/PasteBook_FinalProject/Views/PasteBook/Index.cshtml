@@ -1,0 +1,67 @@
+﻿
+    <div class="form-horizontal">
+        <hr />
+        <div class="panel panel-primary" >
+            <div class="panel-heading">
+                Update Status
+            </div>
+            <div class="col-md-12 panel-body">
+                @Html.TextArea("txtPost", null, new { @cols = 80, @rows=8, @placeholder="What's on your mind?", id="txtPost" })
+            </div>
+            <div class="panel-footer">
+                <button type="button" id="btnPost" class="btn btn-default">Post</button>
+            </div>
+        </div>
+    </div>
+
+<div id="refreshPartialView">
+    @{
+        Html.RenderAction("RetrieveAllPostPartial", "PasteBook");
+    }
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+@{ 
+    @Scripts.Render("~/bundles/jquery");
+    <script>
+        var getCreatePostUrl = '@Url.Action("CreatePost", "PasteBook")';
+        var getRefreshPartialViewUrl = '@Url.Action("RetrieveAllPostPartial", "PasteBook")';
+
+        $(document).ready(function () {
+            $('#btnPost').click(function () {
+                var data = {
+                    post: $('#txtPost').val()
+                }
+                if ($('#txtPost').val() != null)
+                {
+                    $.ajax({
+                        url: getCreatePostUrl,
+                        data: data,
+                        type: 'GET',
+                        success: function (data) {
+                            ShowResult(data);
+                        },
+                        error: function () {
+                            alert('Something went wrong.')
+                        }
+                    })
+                }
+                else {
+                    //$('#txtHeightInCMValidator').text("Invalid input. Please enter numbers only.")
+                }
+            });
+
+            function ShowResult(data) {
+                $('#refreshPartialView').load(getRefreshPartialViewUrl);
+                $('#txtPost').val() = null;
+              
+            };
+
+        });
+    </script>
+}

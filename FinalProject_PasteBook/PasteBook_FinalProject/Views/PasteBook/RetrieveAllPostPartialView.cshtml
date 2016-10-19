@@ -1,0 +1,23 @@
+﻿@model IEnumerable<PasteBook_FinalProject.Models.PostModel>
+
+@{
+    ViewBag.Title = "RetrieveAllPostPartialView";
+}
+
+@foreach (var item in Model)
+{
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            @Html.DisplayFor(modelItem => item.DateCreated)
+        </div>
+        <div class="panel-body">
+            @Html.DisplayFor(modelItem => item.postContent)
+        </div>
+        <div class="panel-footer">
+            @Html.DisplayFor(modelItem => item.ProfileOwnerID)
+            @Html.DisplayFor(modelItem => item.PosterID)
+            Like Comment
+        </div>
+    </div>
+}
+

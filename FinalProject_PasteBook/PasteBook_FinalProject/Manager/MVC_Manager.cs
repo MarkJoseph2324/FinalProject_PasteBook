@@ -29,26 +29,46 @@ namespace PasteBook_FinalProject
             return user;
         }
 
-        public string CheckUserIfExisting(LogInModel model)
+        public LogInModel CheckUserUserCredential(LogInModel model)
         {
             PasswordManager pwdManager = new PasswordManager();
             User userCredential = new User();
-
-            string returnValue = string.Empty;
-
-            userCredential = dataAccess.CheckIfUserExist(mapper.MapUserCredentials(model));
+            userCredential = dataAccess.GetUser(mapper.MapUserCredentials(model));
             if (userCredential.ToString().Count() != 0)
             {
                 if (pwdManager.IsPasswordMatch(model.Password, userCredential.Salt, userCredential.Password))
                 {
-                    returnValue = userCredential.FirstName;
+                    model.FirstName = userCredential.FirstName;
+                    model.UserID = userCredential.ID;
+                    return model;
+                }
+                else
+                {
+                    model.Password = null;
+                    return model;
                 }
             }
             else
             {
-                returnValue = string.Empty;                
+                model.Email = userCredential.Email;
+                return model;
             }
+        }
+
+        public bool CreatePost(string post, int posterID, int profileOwnerID)
+        {
+            bool returnValue = false;
+
+            returnValue = dataAccess.CreatePost(mapper.MapPost(post, posterID, profileOwnerID));
+
             return returnValue;
+        }
+
+        public List<Post> RetrievePostForNewsFeed(int userID)
+        {
+            List<Post> postList = new List<Post>();
+            postList = dataAccess.RetrievePostForNewsFeed(userID);
+            return postList;
         }
     }
 }

@@ -19,5 +19,9 @@ namespace PasteBook_FinalProject
         public string Password { get; set; }
 
         public string Salt { get; set; }
+
+        public string FirstName { get; set; }
+
+        public int UserID { get; set; }
     }
 }

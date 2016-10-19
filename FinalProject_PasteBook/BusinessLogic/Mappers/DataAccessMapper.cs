@@ -60,5 +60,72 @@ namespace DataAccessLibrary
             return userCredential;
         }
 
+        public POST MapAddPost(Post post)
+        {
+            POST tblPost = new POST()
+            {
+                 CONTENT = post.postContent,
+                 POSTER_ID = post.PosterID,
+                 PROFILE_OWNER_ID = post.ProfileOwnerID,
+                 CREATED_DATE = post.DateCreated
+            };
+            return tblPost;
+        }
+
+        public List<User> MapUserListFromDB(List<USER> user)
+        {
+            List<User> userList = new List<User>();
+            foreach (var item in user)
+            {
+                userList.Add(new User()
+                {
+                    ID = item.ID,
+                    AboutMe = item.ABOUT_ME,
+                    BirthDate = item.BIRTHDAY,
+                    DateCreated = item.DATE_CREATED,
+                    Email = item.EMAIL_ADDRESS,
+                    FirstName = item.FIRST_NAME,
+                    Gender = item.GENDER,
+                    LastName = item.LAST_NAME,
+                    MobileNumber = item.MOBILE_NO,
+                    Password = item.PASSWORD,
+                    ProfilePicture = item.PROFILE_PIC,
+                    Salt = item.SALT,
+                    Username = item.USER_NAME
+                });
+            }
+
+            return userList;
+        }
+
+        public List<Post> MapRetrievePostFromDB(List<POST> post)
+        {
+            List<Post> entityPost = new List<Post>();
+            foreach (var item in post)
+            {
+                entityPost.Add(new Post()
+                {
+                    ID = item.ID,
+                    PosterID = item.POSTER_ID,
+                    postContent = item.CONTENT,
+                    DateCreated = item.CREATED_DATE,
+                    ProfileOwnerID = item.PROFILE_OWNER_ID
+                });
+            }
+            return entityPost;
+        }
+
+        public Post MapRetrievePostFromDB1(POST post)
+        {
+            Post entityPost = new Post()
+            {
+                ID = post.ID,
+                PosterID = post.POSTER_ID,
+                postContent = post.CONTENT,
+                DateCreated = post.CREATED_DATE,
+                ProfileOwnerID = post.PROFILE_OWNER_ID
+            };
+            return entityPost;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Entity;
+﻿using DataAccessLibrary;
+using Entity;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -43,21 +44,27 @@ namespace PasteBook_FinalProject
         [HttpPost]
         public ActionResult LogIn(LogInModel model)
         {
-            string result = string.Empty;
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                result = manager.CheckUserIfExisting(model);
+                model = manager.CheckUserUserCredential(model);
             }
-            if (result == string.Empty)
+            if (model.Password == null || model.Email == null)
             {
                 ModelState.AddModelError("Password", "Invalid Username or Password.");
                 return View(model);
             }
             else
             {
-                Session["FirstName"] = result;
-                return View("Index");
+                Session["FirstName"] = model.FirstName;
+                Session["ID"] = model.UserID;
+                return RedirectToAction("Index","Pastebook");
             }
+        }
+
+        public ActionResult LogOut()
+        {
+            Session["FirstName"] = null;
+            return View("LogIn");
         }
     }
 }
