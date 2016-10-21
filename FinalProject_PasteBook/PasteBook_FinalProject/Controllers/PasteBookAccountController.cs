@@ -1,5 +1,6 @@
-﻿using DataAccessLibrary;
+﻿using BusinessLogicLibrary;
 using Entity;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -7,7 +8,8 @@ namespace PasteBook_FinalProject
 {
     public class PasteBookAccountController : Controller
     {
-        MVC_Manager manager = new MVC_Manager();
+        BusinessLogic businessLogic = new BusinessLogic();
+        Mapper mapper = new Mapper();
         // GET: PasteBookUser
         public ActionResult Index()
         {
@@ -17,10 +19,8 @@ namespace PasteBook_FinalProject
         [HttpGet]
         public ActionResult Registration()
         {
-            if(Session["Country"]==null)
-            {
-                Session["Country"] = new SelectList(manager.GetAllCountries(), "ID", "Country");
-            }
+            ViewBag.Country = new SelectList(businessLogic.GetAllCountries(), "ID", "Country");
+            
             return View();
         }
 
@@ -29,7 +29,7 @@ namespace PasteBook_FinalProject
         {
             if (ModelState.IsValid)
             {
-                manager.AddUser(user);
+                businessLogic.AddUser(mapper.UserMapper(user));
             }
 
             return View(user);
@@ -44,19 +44,21 @@ namespace PasteBook_FinalProject
         [HttpPost]
         public ActionResult LogIn(LogInModel model)
         {
+            USER user = new USER();
+            user = mapper.UserCredentailMapper(model);
             if (ModelState.IsValid)
             {
-                model = manager.CheckUserUserCredential(model);
+                user = businessLogic.CheckUserCredential(user);
             }
-            if (model.Password == null || model.Email == null)
+            if (user.PASSWORD == null || user.EMAIL_ADDRESS == null)
             {
                 ModelState.AddModelError("Password", "Invalid Username or Password.");
                 return View(model);
             }
             else
             {
-                Session["FirstName"] = model.FirstName;
-                Session["ID"] = model.UserID;
+                Session["FirstName"] = user.FIRST_NAME;
+                Session["ID"] = user.ID;
                 return RedirectToAction("Index","Pastebook");
             }
         }
@@ -64,6 +66,7 @@ namespace PasteBook_FinalProject
         public ActionResult LogOut()
         {
             Session["FirstName"] = null;
+            Session["ID"] = null;
             return View("LogIn");
         }
     }

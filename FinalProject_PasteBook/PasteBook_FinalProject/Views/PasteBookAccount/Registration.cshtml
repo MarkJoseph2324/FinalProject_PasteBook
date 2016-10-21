@@ -111,7 +111,7 @@
                 <span class="text-danger control-label"></span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.DropDownList("CountryID", Session["Country"] as SelectList, "-- Select Country --", new { @class = "form-control" })
+                @Html.DropDownList("CountryID", ViewBag.Country as SelectList, "-- Select Country --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CountryID, "", new { @class = "text-danger" })
             </div>
         </div>

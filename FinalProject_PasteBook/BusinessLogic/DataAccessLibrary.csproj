@@ -49,21 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\DataAccess.cs" />
-    <Compile Include="Entities\Comment.cs" />
-    <Compile Include="Entities\Friend.cs" />
-    <Compile Include="Entities\Like.cs" />
-    <Compile Include="Entities\Notification.cs" />
-    <Compile Include="Entities\Post.cs" />
-    <Compile Include="Entities\RefCountry.cs" />
-    <Compile Include="Entities\User.cs" />
-    <Compile Include="Managers\CountryManager.cs" />
-    <Compile Include="Managers\LogInManager.cs" />
-    <Compile Include="Managers\PasswordManager.cs" />
-    <Compile Include="Managers\PostManager.cs" />
-    <Compile Include="Managers\RegistrationManager.cs" />
-    <Compile Include="Mappers\DataAccessMapper.cs" />
+    <Compile Include="DataAccess\CountryDataAccess.cs" />
+    <Compile Include="DataAccess\FriendDataAccess.cs" />
+    <Compile Include="DataAccess\GenericDataAccess.cs" />
+    <Compile Include="DataAccess\PostDataAccess.cs" />
+    <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entity\Entities.csproj">
@@ -71,11 +69,6 @@
       <Name>Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

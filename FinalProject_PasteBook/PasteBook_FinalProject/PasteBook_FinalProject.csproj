@@ -162,8 +162,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Manager\MVC_Manager.cs" />
-    <Compile Include="Mapper\MVC_Mapper.cs" />
+    <Compile Include="Mapper\Mapper.cs" />
     <Compile Include="Models\CountryModel.cs" />
     <Compile Include="Models\LogInModel.cs" />
     <Compile Include="Models\PostModel.cs" />
@@ -229,12 +228,12 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BusinessLogic\DataAccessLibrary.csproj">
-      <Project>{b7237ce9-4d1e-4cdd-8e31-69ac6373a3d7}</Project>
-      <Name>DataAccessLibrary</Name>
+    <ProjectReference Include="..\BusinessLogicLibrary\BusinessLogicLibrary.csproj">
+      <Project>{e1f48127-3925-4db4-9e86-c9df3ee84fcd}</Project>
+      <Name>BusinessLogicLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entity\Entities.csproj">
-      <Project>{8B3C2E8A-C688-4998-AB4E-F17EF87AA97B}</Project>
+      <Project>{8b3c2e8a-c688-4998-ab4e-f17ef87aa97b}</Project>
       <Name>Entities</Name>
     </ProjectReference>
   </ItemGroup>
