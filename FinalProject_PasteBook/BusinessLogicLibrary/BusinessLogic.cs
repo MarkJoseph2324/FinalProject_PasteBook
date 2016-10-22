@@ -1,5 +1,6 @@
 ﻿using BusinessLogicLibrary;
 using DataAccessLibrary;
+using DataAccessLibrary.DataAccess;
 using Entity;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace BusinessLogicLibrary
         PostDataAccess postDataAccess = new PostDataAccess();
         FriendDataAccess friendDataAccess = new FriendDataAccess();
         LikeDataAccess likeDataAccess = new LikeDataAccess();
+        CommentDataAcces commentDataAcces = new CommentDataAcces();
 
         public List<REF_COUNTRY> GetAllCountries()
         {
@@ -71,9 +73,9 @@ namespace BusinessLogicLibrary
             return postDataAccess.CreatePost(entityPost);
         }
 
-        public List<POST> RetrievePostForNewsFeed(int posterID, int profileOwnerID)
+        public List<POST> GetPostForNewsFeed(int posterID, int profileOwnerID)
         {
-            return postDataAccess.RetrievePostForNewsFeed(posterID, profileOwnerID);
+            return postDataAccess.GetPostForNewsFeed(posterID, profileOwnerID);
         }
 
         public List<FRIEND> GetFriendsList(int userID)
@@ -128,8 +130,6 @@ namespace BusinessLogicLibrary
             });
             return mergeList;
         }
-        
-        
         /// <summary>
         /// Reference:
         /// http://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
@@ -186,6 +186,16 @@ namespace BusinessLogicLibrary
         public List<LIKE> GetAllLikeList()
         {
             return likeDataAccess.GetAllLike();
+        }
+
+        public bool AddComment(COMMENT comment)
+        {
+            return commentDataAcces.AddComment(comment);
+        }
+
+        public List<COMMENT> GetAllComments()
+        {
+            return commentDataAcces.GetAllComments();
         }
     }
 }

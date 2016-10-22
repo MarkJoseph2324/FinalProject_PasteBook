@@ -28,7 +28,7 @@ namespace BusinessLogicLibrary
         }
 
 
-        public List<POST> RetrievePostForNewsFeed(int posterID, int profileOwnerID)
+        public List<POST> GetPostForNewsFeed(int posterID, int profileOwnerID)
         {
             FriendDataAccess friendDataAccess = new FriendDataAccess();
             UserDataAccess userDataAccess = new UserDataAccess();

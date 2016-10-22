@@ -1,4 +1,5 @@
 ﻿@using BusinessLogicLibrary;
+@using Entity;
 
 @model IEnumerable<PasteBook_FinalProject.Models.PostModel>
 
@@ -27,43 +28,101 @@
                 if (item.PosterID == item.ProfileOwnerID)
                 {
                     @Html.Label("FullName", poster);
-                    <span class="glyphicon glyphicon-one-fine-full-dot"></span>
-                    @Html.Label("Time", bl.TimeStamp(item.DateCreated));
+                    <span class="glyphicon glyphicon-one-fine-full-dot "></span>
+                    <span>@bl.TimeStamp(@item.DateCreated)</span>
                 }
                 else if (item.PosterID != item.ProfileOwnerID)
                 {
                     @Html.Label("FullName", poster);
                     <span aria-hidden="true" class="glyphicon glyphicon-play" id="glyphiconArrowHead" ></span>
                     @Html.Label("FullName", profileOwner);
-                    <span class="glyphicon glyphicon-one-fine-full-dot"></span>
-                    @Html.Label("Time", bl.TimeStamp(item.DateCreated));
+                    <span class="glyphicon glyphicon-one-fine-full-dot "></span>
+                    <span>@bl.TimeStamp(@item.DateCreated)</span>
                 }
             }
         </div>
         <div class="panel-body">
             @Html.DisplayFor(modelItem => item.postContent)
+
             @{
-                
-                int likes = item.LikeList.Where(x => x.POST_ID == item.ID).Count();
-                if (likes != 0)
+                List<FRIEND> likedByList = new List<FRIEND>();
+                BusinessLogic businessLogic = new BusinessLogic();
+                foreach (var friends in item.LikeList.Where(x => x.POST_ID == item.ID))
                 {
-                    <a href="#" data-toggle="tooltip" title="Hooray!">@Html.Label("LikeCounts", String.Format(" {0} {1}", likes, likes == 1 ? "like" : "likes"));</a>
+                    likedByList.Add(new FRIEND()
+                    {
+                        FRIEND_ID = friends.LIKE_BY
+                    });
                 }
+                int likes = item.LikeList.Where(x => x.POST_ID == item.ID).Count();
+                List<string> list = new List<string>();
+                <div>
+                    @if (likes > 0)
+                    {
+                        <a href="#" onclick="AddLike(@item.ID)">Unlike 
+                            @if (likes != 0)
+                            {
+                                <span class="glyphicon glyphicon-one-fine-full-dot "></span>
+                            }
+                        </a>
+
+                    } 
+                    else
+                    {
+                        <a href="#" onclick="AddLike(@item.ID)">Like 
+                            @if (likes != 0)
+                            {
+                                <span class="glyphicon glyphicon-one-fine-full-dot"></span>
+                            }
+                        </a>
+                    }
+                    @if (likes != 0)
+                    {
+                        @*@foreach (var itemNames in businessLogic.GetFriendsInformationList(0, likedByList))
+                        {
+                            var list1 = @itemNames.FIRST_NAME /*+ @itemNames.LAST_NAME*/;
+                            foreach (var itemList in list1)
+                            {
+                                list.Add(list1);
+                            }
+                        }*@
+                        <a href="#" data-toggle="tooltip" title="d" class="likeHover" >@likes <span class="glyphicon glyphicon-thumbs-up"></span></a>
+                        
+                        
+                        @*@Html.Label("Time", bl.TimeStamp(item.DateCreated))*@
+
+
+                    foreach (var itemComment in item.CommentList)
+                    {
+                        if (item.ID == itemComment.POST_ID)
+                        {
+                            foreach (var itemName in item.UserInformationList)
+                            {
+                                if (itemComment.POSTER_ID == itemName.ID)
+                                {
+                                    <div class="bg-info">
+
+                                        @Html.Label("FullName", itemName.FIRST_NAME + " " + itemName.LAST_NAME)
+                                        
+                                    </div>
+                                }
+                            }
+                            <div class="bg-info">
+                                @Html.Label("Comment", itemComment.CONTENT)
+                            </div>
+                                <div class="bg-info">
+                                    @Html.Label("Date", itemComment.CREATED_DATE)
+                                </div>
+                            }
+                        }
+                    }
+                </div>
             }
         </div>
         <div class="panel-footer">
             @{
-                if (likes > 0)
-                {
-                    <button type="button" id="btnLike" class="btn btn-default" onclick="Like(@item.ID)">UnLike</button>
-                }
-                else
-                {
-                    <button type="button" id="btnLike" class="btn btn-default" onclick="Like(@item.ID)">Like</button>
-                }
                 <input type="text" name="comment" id="txtComment" class="form-control" />
-                <button type="button" id="btnComment" class="btn btn-default" onclick="Comment(@item.ID)">Comment</button>
-           
+                <button type="button" id="btnComment" class="btn btn-default" onclick="AddComment(@item.ID)">Comment</button>
             }
         </div>
     </div>

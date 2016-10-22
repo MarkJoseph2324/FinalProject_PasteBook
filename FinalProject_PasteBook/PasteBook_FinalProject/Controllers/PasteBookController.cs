@@ -30,7 +30,8 @@ namespace PasteBook_FinalProject.Controllers
             var userInformation = businessLogic.GetSpecificUser(entityUser);
             var mergeUserInformation = businessLogic.MergeFriendsAndUserList(friendsInformationList, userInformation);
             var likeList = businessLogic.GetAllLikeList();
-            return PartialView("GetAllPostPartialView", mapper.ListOfPostMapper((businessLogic.RetrievePostForNewsFeed(userID, userID)), mergeUserInformation, likeList, userInformation));
+            var commentsList = businessLogic.GetAllComments();
+            return PartialView("GetAllPostPartialView", mapper.ListOfPostMapper((businessLogic.GetPostForNewsFeed(userID, userID)), mergeUserInformation, likeList,commentsList, userInformation));
         }
 
         public JsonResult CreatePost(string post)
@@ -44,7 +45,13 @@ namespace PasteBook_FinalProject.Controllers
         {
             int likedBy = Convert.ToInt32(Session["ID"]);
             businessLogic.AddLike(mapper.LikeMapper(postID, likedBy));
-            return Json(new { PostID = postID, LikedBy = likedBy }, JsonRequestBehavior.AllowGet);
+            return Json(new { PostID = postID, LikeBy = likedBy }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AddComment(int postID, string postContent)
+        {
+            int commentID = Convert.ToInt32(Session["ID"]);
+            businessLogic.AddComment(mapper.CommentMapper(postID, commentID, postContent));
+            return Json(new { PosterID = commentID, Content = postContent }, JsonRequestBehavior.AllowGet);
         }
     }
-}
+} 

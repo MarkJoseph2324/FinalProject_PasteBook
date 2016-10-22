@@ -32,6 +32,7 @@
         var getCreatePostUrl = '@Url.Action("CreatePost", "PasteBook")';
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
+        var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook")';
 
         $(document).ready(function () {
             $('#btnPost').click(function () {
@@ -54,43 +55,51 @@
             })
         });
 
-        function Like(ID) {
-            alert(ID)
-                var data = {
-                    postID: ID
-                };
+        function AddLike(ID) {
+            alert("liked: " + ID);
+            var data = {
+                postID: ID
+            };
 
-                $.ajax({
-                    url: getLikePostUrl,
-                    data: data,
-                    type: 'GET',
-                    success: function () {
-                        LikeButtonChange();
-                    },
-                    error: function () {
-                        alert('Something went wrong.')
-                    }
-                })
-            }
-        
+            $.ajax({
+                url: getLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                },
+                error: function () {
+                    alert('Something went wrong.')
+                }
+            })
+        };
 
-        $(document).ready(function () {
-            //Attach the hover event of button
-            $('#likeCounts').hover(function () {
-                alert("naghover")
-                //Show the values on mouse over
-                $(".slidingDiv").show(500);
-            },
-            function () {
-                //Hide the value on mouse out
-                $(".slidingDiv").hide(500);
-            });
-        });
+        function AddComment(ID) {
+            alert("comment: " + ID)
+            var data = {
+                postID: ID,
+                postContent: $('#txtComment').val()
+            };
+
+            $.ajax({
+                url: getCommentPostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                },
+                error: function () {
+                    alert('Something went wrong.')
+                }
+            })
+        };
 
 
-        function Reload() {
+        function Reload(data) {
             $('#refreshPartialView').load(getRefreshPartialViewUrl);
             $('#txtPost').val("");
+            $('#txtComment').val("");
+            alert("liked: " + data.postID);
         };
 
     </script>

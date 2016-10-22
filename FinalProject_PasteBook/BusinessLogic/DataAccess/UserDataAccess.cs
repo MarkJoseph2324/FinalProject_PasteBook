@@ -64,13 +64,16 @@ namespace BusinessLogicLibrary
                 {
                     foreach (var item in friendsList)
                     {
-                        if (item.USER_ID == userID)
+                        if(userID != 0)
                         {
-                            friendID = item.FRIEND_ID;
-                        }
-                        else if (item.FRIEND_ID == userID)
-                        {
-                            friendID = item.USER_ID;
+                            if (item.USER_ID == userID)
+                            {
+                                friendID = item.FRIEND_ID;
+                            }
+                            else if (item.FRIEND_ID == userID)
+                            {
+                                friendID = item.USER_ID;
+                            }
                         }
 
                         var list = context.USERs.Where(x => x.ID == friendID).ToList();

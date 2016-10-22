@@ -49,3 +49,7 @@ span[class*="glyphicon-one-fine"] {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+.bg-info{
+    background-color:#d9edf7;
+}
