@@ -16,8 +16,6 @@ namespace BusinessLogicLibrary
             {
                 using (var context = new PastebookEntities())
                 {
-                    DateTime curretDate = DateTime.Now;
-                    user.DATE_CREATED = curretDate;
                     context.USERs.Add(user);
                     returnValue = context.SaveChanges() != 0;
                 }

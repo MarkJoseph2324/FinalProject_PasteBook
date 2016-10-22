@@ -52,6 +52,7 @@
     <Compile Include="DataAccess\CountryDataAccess.cs" />
     <Compile Include="DataAccess\FriendDataAccess.cs" />
     <Compile Include="DataAccess\GenericDataAccess.cs" />
+    <Compile Include="DataAccess\LikeDataAccess.cs" />
     <Compile Include="DataAccess\PostDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,5 @@
 ﻿using BusinessLogicLibrary;
+using DataAccessLibrary;
 using Entity;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace BusinessLogicLibrary
         UserDataAccess userDataAccess = new UserDataAccess();
         PostDataAccess postDataAccess = new PostDataAccess();
         FriendDataAccess friendDataAccess = new FriendDataAccess();
+        LikeDataAccess likeDataAccess = new LikeDataAccess();
 
         public List<REF_COUNTRY> GetAllCountries()
         {
@@ -24,6 +26,8 @@ namespace BusinessLogicLibrary
         public bool AddUser(USER user)
         {
             string salt = string.Empty;
+            DateTime curretDate = DateTime.Now;
+            user.DATE_CREATED = curretDate;
             user.PASSWORD = passwordManager.GeneratePasswordHash(user.PASSWORD, out salt);
             user.SALT = salt;
             return userDataAccess.AddUser(user);
@@ -72,12 +76,12 @@ namespace BusinessLogicLibrary
             return postDataAccess.RetrievePostForNewsFeed(posterID, profileOwnerID);
         }
 
-        public List<FRIEND> RetrieveFriendsList(int userID)
+        public List<FRIEND> GetFriendsList(int userID)
         {
             return friendDataAccess.GetAllFriends(userID);
         }
 
-        public List<USER> RetrieveFriendsInformationList(int userID, List<FRIEND> friendsList)
+        public List<USER> GetFriendsInformationList(int userID, List<FRIEND> friendsList)
         {
             return userDataAccess.GetAllFriendsInformation(userID, friendsList);
         }
@@ -124,7 +128,12 @@ namespace BusinessLogicLibrary
             });
             return mergeList;
         }
-
+        
+        
+        /// <summary>
+        /// Reference:
+        /// http://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
+        /// </summary>
         public string TimeStamp(DateTime date)
         {
             TimeSpan span = DateTime.Now - date;
@@ -135,7 +144,7 @@ namespace BusinessLogicLibrary
                 {
                     years += 1;
                 }
-                return String.Format("about {0} {1} ago", years, years == 1 ? "year" : "years");
+                return String.Format(" {0} {1} ago", years, years == 1 ? "year" : "years");
             }
             if (span.Days > 30)
             {
@@ -144,29 +153,39 @@ namespace BusinessLogicLibrary
                 {
                     months += 1;
                 }
-                return String.Format("about {0} {1} ago", months, months == 1 ? "month" : "months");
+                return String.Format(" {0} {1} ago", months, months == 1 ? "month" : "months");
             }
             if (span.Days > 0)
             {
-                return String.Format("about {0} {1} ago", span.Days, span.Days == 1 ? "day" : "days");
+                return String.Format(" {0} {1} ago", span.Days, span.Days == 1 ? "day" : "days");
             }
             if (span.Hours > 0)
             {
-                return String.Format("about {0} {1} ago", span.Hours, span.Hours == 1 ? "hour" : "hours");
+                return String.Format(" {0} {1} ago", span.Hours, span.Hours == 1 ? "hour" : "hours");
             }
             if (span.Minutes > 0)
             {
-                return String.Format("about {0} {1} ago", span.Minutes, span.Minutes == 1 ? "minute" : "minutes");
+                return String.Format(" {0} {1} ago", span.Minutes, span.Minutes == 1 ? "minute" : "minutes");
             }
             if (span.Seconds > 5)
             {
-                return String.Format("about {0} seconds ago", span.Seconds);
+                return String.Format(" {0} seconds ago", span.Seconds);
             }
             if (span.Seconds <= 5)
             {
                 return "just now";
             }
             return string.Empty;
+        }
+
+        public bool AddLike(LIKE like)
+        {
+            return likeDataAccess.AddLike(like);
+        }
+
+        public List<LIKE> GetAllLikeList()
+        {
+            return likeDataAccess.GetAllLike();
         }
     }
 }

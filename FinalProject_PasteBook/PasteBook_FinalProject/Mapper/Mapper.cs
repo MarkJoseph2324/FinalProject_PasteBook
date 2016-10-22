@@ -37,7 +37,7 @@ namespace PasteBook_FinalProject
             return entityUser;
         }
 
-        public List<PostModel> ListOfPostMapper(List<POST> postList, List<USER> userInformation, USER currentUser)
+        public List<PostModel> ListOfPostMapper(List<POST> postList, List<USER> userInformation, List<LIKE> likeList, USER currentUser)
         {
             List<PostModel> listOfPost = new List<PostModel>();
             foreach (var item2 in postList)
@@ -49,11 +49,22 @@ namespace PasteBook_FinalProject
                     postContent = item2.CONTENT,
                     ProfileOwnerID = item2.PROFILE_OWNER_ID,
                     PosterID = item2.POSTER_ID,
+                    FullName = currentUser.FIRST_NAME + " "+ currentUser.LAST_NAME,
                     UserInformationList = userInformation,
-                    FullName = currentUser.FIRST_NAME + " "+ currentUser.LAST_NAME
+                    LikeList = likeList
                 });
             }
             return listOfPost;
+        }
+
+        public LIKE LikeMapper(int postID, int likedBy)
+        {
+            LIKE entityLike = new LIKE()
+            {
+                POST_ID = postID,
+                LIKE_BY = likedBy
+            };
+            return entityLike;
         }
     }
 }

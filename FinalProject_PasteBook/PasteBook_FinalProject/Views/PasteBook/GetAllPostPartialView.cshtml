@@ -1,0 +1,71 @@
+﻿@using BusinessLogicLibrary;
+
+@model IEnumerable<PasteBook_FinalProject.Models.PostModel>
+
+@foreach (var item in Model)
+{
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            @{ 
+                BusinessLogic bl = new BusinessLogic();
+                
+                
+                string poster = string.Empty;
+                string profileOwner = string.Empty;
+                foreach (var itemUser in item.UserInformationList)
+                {
+                    if (item.PosterID == itemUser.ID)
+                    {
+                        poster = itemUser.FIRST_NAME + " " + itemUser.LAST_NAME;
+                    }
+                    else if(item.ProfileOwnerID == itemUser.ID)
+                    {
+                        profileOwner = itemUser.FIRST_NAME + " " + itemUser.LAST_NAME;
+                    }
+                }
+
+                if (item.PosterID == item.ProfileOwnerID)
+                {
+                    @Html.Label("FullName", poster);
+                    <span class="glyphicon glyphicon-one-fine-full-dot"></span>
+                    @Html.Label("Time", bl.TimeStamp(item.DateCreated));
+                }
+                else if (item.PosterID != item.ProfileOwnerID)
+                {
+                    @Html.Label("FullName", poster);
+                    <span aria-hidden="true" class="glyphicon glyphicon-play" id="glyphiconArrowHead" ></span>
+                    @Html.Label("FullName", profileOwner);
+                    <span class="glyphicon glyphicon-one-fine-full-dot"></span>
+                    @Html.Label("Time", bl.TimeStamp(item.DateCreated));
+                }
+            }
+        </div>
+        <div class="panel-body">
+            @Html.DisplayFor(modelItem => item.postContent)
+            @{
+                
+                int likes = item.LikeList.Where(x => x.POST_ID == item.ID).Count();
+                if (likes != 0)
+                {
+                    <a href="#" data-toggle="tooltip" title="Hooray!">@Html.Label("LikeCounts", String.Format(" {0} {1}", likes, likes == 1 ? "like" : "likes"));</a>
+                }
+            }
+        </div>
+        <div class="panel-footer">
+            @{
+                if (likes > 0)
+                {
+                    <button type="button" id="btnLike" class="btn btn-default" onclick="Like(@item.ID)">UnLike</button>
+                }
+                else
+                {
+                    <button type="button" id="btnLike" class="btn btn-default" onclick="Like(@item.ID)">Like</button>
+                }
+                <input type="text" name="comment" id="txtComment" class="form-control" />
+                <button type="button" id="btnComment" class="btn btn-default" onclick="Comment(@item.ID)">Comment</button>
+           
+            }
+        </div>
+    </div>
+}
+

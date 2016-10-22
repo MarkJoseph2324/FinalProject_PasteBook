@@ -19,16 +19,18 @@ namespace PasteBook_FinalProject.Controllers
             return View();
         }
 
-        public ActionResult RetrieveAllPostPartial()
+        public ActionResult GetAllPostPartial()
         {
             USER entityUser = new USER();
+            LIKE entityLike = new LIKE();
             int userID = Convert.ToInt32(Session["ID"]);
             entityUser.ID = userID;
-            var friendsList = businessLogic.RetrieveFriendsList(userID);
-            var friendsInformationList = businessLogic.RetrieveFriendsInformationList(userID, friendsList);
+            var friendsList = businessLogic.GetFriendsList(userID);
+            var friendsInformationList = businessLogic.GetFriendsInformationList(userID, friendsList);
             var userInformation = businessLogic.GetSpecificUser(entityUser);
             var mergeUserInformation = businessLogic.MergeFriendsAndUserList(friendsInformationList, userInformation);
-            return PartialView("RetrieveAllPostPartialView", mapper.ListOfPostMapper((businessLogic.RetrievePostForNewsFeed(userID, userID)), mergeUserInformation, userInformation));
+            var likeList = businessLogic.GetAllLikeList();
+            return PartialView("GetAllPostPartialView", mapper.ListOfPostMapper((businessLogic.RetrievePostForNewsFeed(userID, userID)), mergeUserInformation, likeList, userInformation));
         }
 
         public JsonResult CreatePost(string post)
@@ -36,6 +38,13 @@ namespace PasteBook_FinalProject.Controllers
             int posterID = Convert.ToInt32(Session["ID"]);
             businessLogic.CreatePost(post, posterID, posterID);
             return Json(new { Post = post, PosterID = posterID, ProfileOwnerID = posterID }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult LikePost(int postID)
+        {
+            int likedBy = Convert.ToInt32(Session["ID"]);
+            businessLogic.AddLike(mapper.LikeMapper(postID, likedBy));
+            return Json(new { PostID = postID, LikedBy = likedBy }, JsonRequestBehavior.AllowGet);
         }
     }
 }

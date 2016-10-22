@@ -34,6 +34,7 @@ namespace BusinessLogicLibrary
             UserDataAccess userDataAccess = new UserDataAccess();
             
             List<POST> listOfPost = new List<POST>();
+            List<POST> listOfPostOfFriends = new List<POST>();
             List<FRIEND> friendsList = new List<FRIEND>();
             List<USER> friendsInformationList = new List<USER>();
 
@@ -43,9 +44,11 @@ namespace BusinessLogicLibrary
                 {
                     friendsList = friendDataAccess.GetAllFriends(posterID);
                     friendsInformationList = userDataAccess.GetAllFriendsInformation(posterID, friendsList);
+
+                    listOfPost = context.POSTs.Where(x => x.POSTER_ID == posterID || x.PROFILE_OWNER_ID == posterID).ToList();
                     foreach (var friendItem in friendsInformationList)
                     {
-                        var postList = context.POSTs.Where(x => x.POSTER_ID == friendItem.ID || x.POSTER_ID == posterID).ToList();
+                        var postList = context.POSTs.Where((x=>x.POSTER_ID == friendItem.ID && x.PROFILE_OWNER_ID == friendItem.ID)).ToList();
 
                         foreach (var item in postList)
                         {
@@ -60,6 +63,10 @@ namespace BusinessLogicLibrary
                         }
                     };
 
+                    foreach (var item in listOfPostOfFriends)
+                    {
+
+                    }
                     listOfPost = listOfPost.OrderByDescending(x => x.CREATED_DATE).Take(100).ToList();
                 }
             }
