@@ -1,40 +1,64 @@
-﻿<a href="#" onclick="">Friends</a>
-    Unlike
-    <div class="form-horizontal">
-        <hr />
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                Update Status
-            </div>
-            <div class="panel-body">
-                @Html.TextArea("txtPost", null, new { @rows = 10, @cols = 300, @placeholder = "What's on your mind?", id = "txtPost" })
-            </div>
-            <div class="panel-footer">
-                <button type="button" id="btnPost" class="btn btn-default">Post</button>
-            </div>
-        </div>
-        <div class="col-md-8"></div>
-    </div>
-
-    <div id="refreshPartialView">
+﻿@section RightNavBar
+{
+<div class="navbar-collapse collapse pull-right">
+    <ul class="nav navbar-nav">
+        <li><span class="glyphicon glyphicon-globe navIcon"></span></li>
+        <li><span class="glyphicon glyphicon-user navIcon"></span></li>
         @{
-            Html.RenderAction("GetAllPostPartial", "PasteBook");
+            if (Session["FirstName"] != null)
+            {
+                var name = Session["FirstName"].ToString();
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                       Welcome, @name!<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#" id="btnLogout">Log-Out</a></li>
+                    </ul>
+                </li>
+            }
         }
+    </ul>
+</div>
+}
+
+<a href="PasteBook/Friends">Friends</a>
+    
+<div class="form-horizontal">
+    <hr />
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Update Status
+        </div>
+        <div class="panel-body">
+            @Html.TextArea("txtPost", null, new { @rows = 10, @cols = 300, @placeholder = "What's on your mind?", id = "txtPost" })
+        </div>
+        <div class="panel-footer">
+            <button type="button" id="btnPost" class="btn btn-default">Post</button>
+        </div>
     </div>
+    <div class="col-md-8"></div>
+</div>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
-
-
+<div id="refreshPartialView">
     @{
-        @Scripts.Render("~/bundles/jquery");
-        <script>
+        Html.RenderAction("GetAllPostPartial", "PasteBook", new { username = "" });
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+@{
+    @Scripts.Render("~/bundles/jquery");
+    <script>
         var getCreatePostUrl = '@Url.Action("CreatePost", "PasteBook")';
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
-        var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook")';
-
+        var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
         $(document).ready(function () {
             $('#btnPost').click(function () {
                 var data = {
@@ -57,7 +81,6 @@
         });
 
         function AddLike(ID) {
-            alert("liked: " + ID);
             var data = {
                 postID: ID
             };
@@ -75,11 +98,10 @@
             })
         };
 
-        function AddComment(ID) {
-            alert("comment: " + ID)
+        function AddComment(ID, button) {
             var data = {
                 postID: ID,
-                postContent: $('#txtComment').val()
+                postContent: $('#txtComment'.concat(button.value)).val()
             };
 
             $.ajax({
@@ -96,12 +118,11 @@
         };
 
 
-        function Reload(data) {
+        function Reload() {
             $('#refreshPartialView').load(getRefreshPartialViewUrl);
             $('#txtPost').val("");
             $('#txtComment').val("");
-            alert("liked: " + data.postID);
         };
-
-        </script>
-    }
+    </script>
+    
+}

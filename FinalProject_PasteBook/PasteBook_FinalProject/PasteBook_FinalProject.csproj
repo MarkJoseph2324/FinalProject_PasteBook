@@ -171,6 +171,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-cerulean.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Home.css" />
@@ -194,6 +195,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PasteBook.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -217,7 +219,7 @@
     <Content Include="Views\PasteBook\Index.cshtml" />
     <Content Include="Views\PasteBook\GetAllPostPartialView.cshtml" />
     <Content Include="Views\PasteBook\TimeLine.cshtml" />
-    <Content Include="Views\PasteBook\ListOfFriends.cshtml" />
+    <Content Include="Views\PasteBook\Friends.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

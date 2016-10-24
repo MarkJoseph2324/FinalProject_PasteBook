@@ -9,55 +9,46 @@ namespace PasteBook_FinalProject
 {
     public class Mapper
     {
-        public USER UserMapper(RegistrationModel user)
+        public USER UserMapper(RegistrationModel user, string username)
         {
-            USER entityUser = new USER()
+            USER entityUser = new USER();
+            if (string.IsNullOrEmpty(username))
             {
-                USER_NAME = user.Username,
-                BIRTHDAY = user.Birthday,
-                COUNTRY_ID = user.CountryID,
-                DATE_CREATED = DateTime.Now,
-                FIRST_NAME = user.FirstName,
-                LAST_NAME = user.LastName,
-                GENDER = user.Gender,
-                MOBILE_NO = user.MobileNumber,
-                PASSWORD = user.Password,
-                EMAIL_ADDRESS = user.Email
-            };
+                 entityUser = new USER()
+                {
+                    USER_NAME = user.Username,
+                    BIRTHDAY = user.Birthday,
+                    COUNTRY_ID = user.CountryID,
+                    DATE_CREATED = DateTime.Now,
+                    FIRST_NAME = user.FirstName,
+                    LAST_NAME = user.LastName,
+                    GENDER = user.Gender,
+                    MOBILE_NO = user.MobileNumber,
+                    PASSWORD = user.Password,
+                    EMAIL_ADDRESS = user.Email
+                };
+            }
+            else
+            {
+                entityUser = new USER()
+                {
+                    USER_NAME = username
+                };
+            }
+
             return entityUser;
         }
 
         public USER UserCredentailMapper(LogInModel user)
         {
             USER entityUser = new USER()
-            { 
+            {
                 PASSWORD = user.Password,
                 EMAIL_ADDRESS = user.Email
             };
             return entityUser;
         }
-
-        //public List<PostModel> ListOfPostMapper(List<POST> postList, fri)
-        //{
-        //    List<PostModel> listOfPost = new List<PostModel>();
-        //    foreach (var item2 in postList)
-        //    {
-        //        listOfPost.Add(new PostModel()
-        //        {
-        //            DateCreated = item2.CREATED_DATE,
-        //            ID = item2.ID,
-        //            postContent = item2.CONTENT,
-        //            ProfileOwnerID = item2.PROFILE_OWNER_ID,
-        //            PosterID = item2.POSTER_ID,
-        //            FullName = currentUser.FIRST_NAME + " "+ currentUser.LAST_NAME,
-        //            UserInformationList = userInformation,
-        //            LikeList = likeList,
-        //            CommentList = commentList
-        //        });
-        //    }
-        //    return listOfPost;
-        //}
-
+        
         public LIKE LikeMapper(int postID, int likedBy)
         {
             LIKE entityLike = new LIKE()
@@ -73,7 +64,7 @@ namespace PasteBook_FinalProject
             COMMENT entityComment = new COMMENT()
             {
                 CONTENT = postContent,
-                CREATED_DATE= DateTime.Now,
+                CREATED_DATE = DateTime.Now,
                 POST_ID = postID,
                 POSTER_ID = commentID
             };

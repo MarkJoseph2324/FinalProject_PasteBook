@@ -33,29 +33,47 @@ namespace BusinessLogicLibrary
             List<POST> listOfPost = new List<POST>();
             List<POST> listOfPostOfFriends = new List<POST>();
             int friendID = 0;
-            
+
             try
             {
                 using (var context = new PastebookEntities())
                 {
-                    listOfPost = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == userID || x.PROFILE_OWNER_ID == userID).ToList();
-                    foreach (var friendItem in friendsList)
+                    if (userID != profileOwnerID)
                     {
-                        if (userID != 0)
+                        listOfPost = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == profileOwnerID || x.PROFILE_OWNER_ID == profileOwnerID).OrderByDescending(x => x.CREATED_DATE).Take(100).ToList();
+                        foreach (var friendItem in friendsList)
                         {
-                            if (friendItem.USER_ID == userID)
+                            if (userID != 0)
                             {
-                                friendID = friendItem.FRIEND_ID;
+                                if (friendItem.USER_ID == userID)
+                                {
+                                    friendID = friendItem.FRIEND_ID;
+                                }
+                                else if (friendItem.FRIEND_ID == userID)
+                                {
+                                    friendID = friendItem.USER_ID;
+                                }
                             }
-                            else if (friendItem.FRIEND_ID == userID)
+                        };
+                    }
+                    else
+                    {
+                        listOfPost = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == userID || x.PROFILE_OWNER_ID == userID).ToList();
+                        foreach (var friendItem in friendsList)
+                        {
+                            if (userID != 0)
                             {
-                                friendID = friendItem.USER_ID;
+                                if (friendItem.USER_ID == userID)
+                                {
+                                    friendID = friendItem.FRIEND_ID;
+                                }
+                                else if (friendItem.FRIEND_ID == userID)
+                                {
+                                    friendID = friendItem.USER_ID;
+                                }
                             }
-                        }
 
-                        var postList = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where((x=>x.POSTER_ID == friendID && x.PROFILE_OWNER_ID == friendID)).ToList();
-                        
-                            
+                            var postList = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where((x => x.POSTER_ID == friendID && x.PROFILE_OWNER_ID == friendID)).ToList();
 
                             foreach (var item in postList)
                             {
@@ -67,24 +85,21 @@ namespace BusinessLogicLibrary
                                     POSTER_ID = item.POSTER_ID,
                                     PROFILE_OWNER_ID = item.PROFILE_OWNER_ID,
                                     USER = item.USER,
-                                    USER1 = item.USER1
+                                    COMMENTs = item.COMMENTs,
+                                    USER1 = item.USER1,
+                                    NOTIFICATIONs = item.NOTIFICATIONs,
+                                    LIKEs= item.LIKEs
                                 });
                             }
-                        
-                    };
-
-                    foreach (var item in listOfPostOfFriends)
-                    {
-
+                        };
                     }
-                    listOfPost = listOfPost.OrderByDescending(x => x.CREATED_DATE).Take(100).ToList();
                 }
             }
             catch (Exception ex)
             {
 
             }
-            return listOfPost;
+            return listOfPost.OrderByDescending(x => x.CREATED_DATE).Take(100).ToList();
         }
     }
 }

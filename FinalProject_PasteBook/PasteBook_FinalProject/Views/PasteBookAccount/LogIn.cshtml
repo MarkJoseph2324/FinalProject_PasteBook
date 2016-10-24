@@ -1,13 +1,9 @@
 ﻿@model PasteBook_FinalProject.LogInModel
 
-
-
 @using (Html.BeginForm()) 
 {
     
     <div class="form-horizontal">
-        <h4>LogInModel</h4>
-        <hr />
         <div class="form-group">
             @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

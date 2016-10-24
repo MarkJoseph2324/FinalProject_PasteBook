@@ -1,12 +1,19 @@
-﻿#glyphiconArrowHead{
-    color: #808080;
+﻿#glyphiconArrowHea{
+    color: black;
     font-size: 12px;
 }
 
+.navbar-brand .navbar-inverse{
+    color: #000000;
+}
 span[class*="glyphicon-one-fine"] {
     margin-bottom: .2em;
     overflow: hidden;
 }
+
+/*.container{
+     box-shadow: 5px 5px 5px #888888;
+}*/   
 
 .glyphicon-one-fine-full-dot:before {
     content:"\25cf";
@@ -14,6 +21,27 @@ span[class*="glyphicon-one-fine"] {
     font-size: 1em;
 }
 
+.commentContainer{
+    margin-top: 5px;
+}
+  
+.navIcon{
+    border-top-width: 20px;
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: 20px;
+    font-size: 20px;
+    color: #fff;
+}
+
+.navbar-inverse{
+    background-color: #3e8ef1;
+    border-color: #3e8ef1;
+}
+
+/*di pa gumagana to
+
+*/
 .tooltip {
     position: relative;
     display: inline-block;

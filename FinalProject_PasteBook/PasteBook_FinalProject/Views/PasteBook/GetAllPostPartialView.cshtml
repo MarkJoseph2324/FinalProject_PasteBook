@@ -6,22 +6,22 @@
 {
     <div class="panel panel-info">
         <div class="panel-heading">
-            @{ 
-                    BusinessLogic businessLogic = new BusinessLogic();
+            @{
+                BusinessLogic businessLogic = new BusinessLogic();
 
 
-                    string poster = string.Empty;
-                    string profileOwner = string.Empty;
-                    if (item.POSTER_ID == (int)Session["ID"])
-                    {
-                        poster = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
-                        profileOwner = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
-                    }
-                    else if(item.POSTER_ID != (int)Session["ID"])
-                    {
-                        poster = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
-                        profileOwner = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
-                    }
+                string poster = string.Empty;
+                string profileOwner = string.Empty;
+                if (item.POSTER_ID == (int)Session["ID"])
+                {
+                    poster = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
+                    profileOwner = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
+                }
+                else if (item.POSTER_ID != (int)Session["ID"])
+                {
+                    poster = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
+                    profileOwner = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
+                }
 
                 if (item.POSTER_ID == item.PROFILE_OWNER_ID)
                 {
@@ -32,7 +32,7 @@
                 else if (item.POSTER_ID != item.PROFILE_OWNER_ID)
                 {
                     @Html.Label("FullName", poster);
-                    <span aria-hidden="true" class="glyphicon glyphicon-play" id="glyphiconArrowHead" ></span>
+                    <span aria-hidden="true" class="glyphicon glyphicon-play" id="glyphiconArrowHead"></span>
                     @Html.Label("FullName", profileOwner);
                     <span class="glyphicon glyphicon-one-fine-full-dot "></span>
                     <span>@businessLogic.TimeStamp(@item.CREATED_DATE)</span>
@@ -48,61 +48,53 @@
                 <div>
                     @if (likes > 0)
                     {
-                        <a href="#" onclick="AddLike(@item.ID)">Unlike 
-                            @if (likes != 0)
-                            {
-                                <span class="glyphicon glyphicon-one-fine-full-dot "></span>
-                            }
-                        </a>
+                        if (likes != 0)
+                        {
+                            <button type="button" id="btnUnlike" class="btn btn-default" onclick="DeleteLike(@item.ID)">
+                                Unlike
+                            </button>
+                        }
 
-                    } 
+                    }
                     else
                     {
-                        <a href="#" onclick="AddLike(@item.ID)">Like 
-                            @if (likes != 0)
-                            {
-                                <span class="glyphicon glyphicon-one-fine-full-dot"></span>
-                            }
-                        </a>
+                        if (likes == 0)
+                        {
+                            <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID)">
+                                Like
+                            </button>
+                        }
                     }
                     @if (likes != 0)
                     {
-                        <a href="#" data-toggle="tooltip" title="d" class="likeHover" >@likes <span class="glyphicon glyphicon-thumbs-up"></span></a>
-
-                        foreach (var itemComment in item.COMMENTs)
-                        {
-                            if (item.ID == itemComment.POST_ID)
-                            {
-                                if (itemComment.POSTER_ID == item.USER.ID)
-                                {
-                                    <div class="bg-info">
-                                        @Html.Label("FullName", item.USER.FIRST_NAME + " " + item.USER.LAST_NAME)
-                                    </div>
-                                }
-                                else if (itemComment.POSTER_ID == item.USER1.ID)
-                                {
-                                    <div class="bg-info">
-                                        @Html.Label("FullName", item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME)
-                                    </div>
-                                }
+                        @likes <span class="glyphicon glyphicon-thumbs-up"></span>
+                    }
+                    @if (item.COMMENTs.Count() != 0)
+                    {
+                        <hr />
+                    }
+                    @foreach (var itemComment in item.COMMENTs)
+                    {
+                        <div class="commentContainer">
                             <div class="bg-info">
-                                <span>@itemComment.CONTENT)</span>
+                                @Html.Label("FullName", itemComment.USER.FIRST_NAME + " " + itemComment.USER.LAST_NAME)
+                            </div>
+                            <div class="bg-info">
+                                <span>@itemComment.CONTENT</span>
                             </div>
                             <div class="bg-info">
                                 <span>@itemComment.CREATED_DATE</span>
                             </div>
-                            }
-                        }
+                        </div>
                     }
                 </div>
             }
         </div>
         <div class="panel-footer">
             @{
-                <input type="text" name="comment" id="txtComment" class="form-control" />
-                <button type="button" id="btnComment" class="btn btn-default" onclick="AddComment(@item.ID)">Comment</button>
+                <input type="text" name="comment" id="txtComment@(item.ID)" class="form-control" />
+                <button type="button" id="btnComment" class="btn btn-default" onclick="AddComment(@item.ID, this)" value="@item.ID">Comment</button>
             }
         </div>
     </div>
-}
-
+                }

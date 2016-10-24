@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Entity.FRIEND>
+
+
+@foreach (var item in Model) {
+    <div>
+        <div class="friendContainer">
+
+            @if (item.USER.ID == Convert.ToInt32(Session["ID"]))
+            {
+                @Html.Label("FullName", item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME);
+                <a href="~/PasteBook/?username=@item.USER1.USER_NAME">View Profile</a>
+            }
+            else
+            {
+                @Html.Label("FullName", item.USER.FIRST_NAME + " " + item.USER.LAST_NAME);
+                <a href="~/PasteBook/?username=@item.USER.USER_NAME">View Profile</a>
+            }
+        </div>
+    </div>
+
+}

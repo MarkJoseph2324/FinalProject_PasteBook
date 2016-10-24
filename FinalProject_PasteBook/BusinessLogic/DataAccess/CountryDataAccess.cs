@@ -16,14 +16,12 @@ namespace BusinessLogicLibrary
             {
                 using (var context = new PastebookEntities())
                 {
-                    foreach (var item in context.REF_COUNTRY.ToList())
-                    {
-                        countryList.Add(item);
-                    }
+                    countryList = context.REF_COUNTRY.ToList();
                 }
             }
             catch (Exception ex)
             {
+
             }
             return countryList;
         }

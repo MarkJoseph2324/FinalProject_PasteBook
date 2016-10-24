@@ -1,8 +1,18 @@
 ﻿
-
+TimeLine to
 
 <div id="refreshPartialView">
     @{
         Html.RenderAction("GetAllPostPartial", "PasteBook");
     }
 </div>
+
+@{
+    @Scripts.Render("~/bundles/jquery");
+    <script>
+        var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
+        var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
+        var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
+    </script>
+    <script src="~/Scripts/PasteBook.js"></script>
+}

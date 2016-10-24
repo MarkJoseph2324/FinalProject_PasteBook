@@ -16,7 +16,7 @@ namespace BusinessLogicLibrary
             {
                 using (var context = new PastebookEntities())
                 {
-                    friendsList = (context.FRIENDs.Where(x => x.USER_ID == userID || x.FRIEND_ID == userID)).ToList();
+                    friendsList = (context.FRIENDs.Include("USER").Include("USER1").Where(x => x.USER_ID == userID || x.FRIEND_ID == userID)).ToList();
                 }
             }
             catch (Exception ex)

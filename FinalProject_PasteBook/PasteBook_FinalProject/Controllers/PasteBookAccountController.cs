@@ -29,7 +29,7 @@ namespace PasteBook_FinalProject
         {
             if (ModelState.IsValid)
             {
-                businessLogic.AddUser(mapper.UserMapper(user));
+                businessLogic.AddUser(mapper.UserMapper(user, null));
             }
 
             return View(user);

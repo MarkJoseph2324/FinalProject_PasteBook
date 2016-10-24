@@ -19,23 +19,33 @@ namespace PasteBook_FinalProject.Controllers
             return View();
         }
 
-        public ActionResult GetAllPostPartial()
+        public ActionResult GetAllPostPartial(string username)
         {
             int userID = Convert.ToInt32(Session["ID"]);
-            var friendsList = businessLogic.GetFriendsList(userID);
-            return PartialView("GetAllPostPartialView", businessLogic.GetPostForNewsFeed(userID, userID, friendsList));
+            if (!string.IsNullOrEmpty(username))
+            {
+                var timelineOwner = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
+                var friendsList = businessLogic.GetFriendsList(timelineOwner.ID);
+                return PartialView("GetAllPostPartialView", businessLogic.GetPostForNewsFeed(userID, timelineOwner.ID, friendsList));
+            }
+            else
+            {
+                var friendsList = businessLogic.GetFriendsList(userID);
+                return PartialView("GetAllPostPartialView", businessLogic.GetPostForNewsFeed(userID, userID, friendsList));
+            }
         }
 
         [HttpGet]
-        public ActionResult Timeline()
+        public ActionResult Timeline(string username)
         {
             return View();
         }
 
-        [HttpPost]
-        public ActionResult ListOfFriends()
+        [HttpGet]
+        public ActionResult Friends()
         {
-            return View();
+            int userID = Convert.ToInt32(Session["ID"]);
+            return View(businessLogic.GetFriendsList(userID));
         }
 
         public JsonResult CreatePost(string post)
@@ -53,9 +63,9 @@ namespace PasteBook_FinalProject.Controllers
         }
         public JsonResult AddComment(int postID, string postContent)
         {
-            int commentID = Convert.ToInt32(Session["ID"]);
-            businessLogic.AddComment(mapper.CommentMapper(postID, commentID, postContent));
-            return Json(new { PosterID = commentID, Content = postContent }, JsonRequestBehavior.AllowGet);
+            int posterID = Convert.ToInt32(Session["ID"]);
+            businessLogic.AddComment(mapper.CommentMapper(postID,posterID,  postContent));
+            return Json(new { PosterID = posterID, Content = postContent }, JsonRequestBehavior.AllowGet);
         }
     }
 } 

@@ -61,7 +61,7 @@ namespace BusinessLogicLibrary
                 userCredential.EMAIL_ADDRESS = string.Empty;
                 return userCredential;
             }
-        } 
+        }
 
         public bool CreatePost(string postContent, int posterID, int profileOwner)
         {

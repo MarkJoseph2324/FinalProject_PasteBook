@@ -43,6 +43,10 @@ namespace BusinessLogicLibrary
                     {
                         entityUser = context.USERs.Where(x => x.ID == user.ID).FirstOrDefault();
                     }
+                    if (!string.IsNullOrEmpty(user.USER_NAME))
+                    {
+                        entityUser = context.USERs.Where(x => x.USER_NAME == user.USER_NAME).FirstOrDefault();
+                    }
                 }
             }
             catch (Exception)
