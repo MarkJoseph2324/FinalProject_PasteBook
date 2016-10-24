@@ -216,6 +216,8 @@
     <Content Include="Views\PasteBookAccount\Index.cshtml" />
     <Content Include="Views\PasteBook\Index.cshtml" />
     <Content Include="Views\PasteBook\GetAllPostPartialView.cshtml" />
+    <Content Include="Views\PasteBook\TimeLine.cshtml" />
+    <Content Include="Views\PasteBook\ListOfFriends.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

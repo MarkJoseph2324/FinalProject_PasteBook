@@ -28,39 +28,49 @@ namespace BusinessLogicLibrary
         }
 
 
-        public List<POST> GetPostForNewsFeed(int posterID, int profileOwnerID)
+        public List<POST> GetPostForNewsFeed(int userID, int profileOwnerID, List<FRIEND> friendsList)
         {
-            FriendDataAccess friendDataAccess = new FriendDataAccess();
-            UserDataAccess userDataAccess = new UserDataAccess();
-            
             List<POST> listOfPost = new List<POST>();
             List<POST> listOfPostOfFriends = new List<POST>();
-            List<FRIEND> friendsList = new List<FRIEND>();
-            List<USER> friendsInformationList = new List<USER>();
-
+            int friendID = 0;
+            
             try
             {
                 using (var context = new PastebookEntities())
                 {
-                    friendsList = friendDataAccess.GetAllFriends(posterID);
-                    friendsInformationList = userDataAccess.GetAllFriendsInformation(posterID, friendsList);
-
-                    listOfPost = context.POSTs.Where(x => x.POSTER_ID == posterID || x.PROFILE_OWNER_ID == posterID).ToList();
-                    foreach (var friendItem in friendsInformationList)
+                    listOfPost = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == userID || x.PROFILE_OWNER_ID == userID).ToList();
+                    foreach (var friendItem in friendsList)
                     {
-                        var postList = context.POSTs.Where((x=>x.POSTER_ID == friendItem.ID && x.PROFILE_OWNER_ID == friendItem.ID)).ToList();
-
-                        foreach (var item in postList)
+                        if (userID != 0)
                         {
-                            listOfPost.Add(new POST
+                            if (friendItem.USER_ID == userID)
                             {
-                                CREATED_DATE = item.CREATED_DATE,
-                                ID = item.ID,
-                                CONTENT = item.CONTENT,
-                                POSTER_ID = item.POSTER_ID,
-                                PROFILE_OWNER_ID = item.PROFILE_OWNER_ID
-                            });
+                                friendID = friendItem.FRIEND_ID;
+                            }
+                            else if (friendItem.FRIEND_ID == userID)
+                            {
+                                friendID = friendItem.USER_ID;
+                            }
                         }
+
+                        var postList = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where((x=>x.POSTER_ID == friendID && x.PROFILE_OWNER_ID == friendID)).ToList();
+                        
+                            
+
+                            foreach (var item in postList)
+                            {
+                                listOfPost.Add(new POST
+                                {
+                                    CREATED_DATE = item.CREATED_DATE,
+                                    ID = item.ID,
+                                    CONTENT = item.CONTENT,
+                                    POSTER_ID = item.POSTER_ID,
+                                    PROFILE_OWNER_ID = item.PROFILE_OWNER_ID,
+                                    USER = item.USER,
+                                    USER1 = item.USER1
+                                });
+                            }
+                        
                     };
 
                     foreach (var item in listOfPostOfFriends)

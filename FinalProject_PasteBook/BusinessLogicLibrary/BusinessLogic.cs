@@ -73,9 +73,9 @@ namespace BusinessLogicLibrary
             return postDataAccess.CreatePost(entityPost);
         }
 
-        public List<POST> GetPostForNewsFeed(int posterID, int profileOwnerID)
+        public List<POST> GetPostForNewsFeed(int userID, int profileOwnerID, List<FRIEND> friendsList)
         {
-            return postDataAccess.GetPostForNewsFeed(posterID, profileOwnerID);
+            return postDataAccess.GetPostForNewsFeed(userID, profileOwnerID, friendsList);
         }
 
         public List<FRIEND> GetFriendsList(int userID)

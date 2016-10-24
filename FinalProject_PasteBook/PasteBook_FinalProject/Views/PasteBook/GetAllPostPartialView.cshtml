@@ -1,60 +1,49 @@
 ﻿@using BusinessLogicLibrary;
-@using Entity;
 
-@model IEnumerable<PasteBook_FinalProject.Models.PostModel>
+@model IEnumerable<Entity.POST>
 
 @foreach (var item in Model)
 {
     <div class="panel panel-info">
         <div class="panel-heading">
             @{ 
-                BusinessLogic bl = new BusinessLogic();
-                
-                
-                string poster = string.Empty;
-                string profileOwner = string.Empty;
-                foreach (var itemUser in item.UserInformationList)
-                {
-                    if (item.PosterID == itemUser.ID)
-                    {
-                        poster = itemUser.FIRST_NAME + " " + itemUser.LAST_NAME;
-                    }
-                    else if(item.ProfileOwnerID == itemUser.ID)
-                    {
-                        profileOwner = itemUser.FIRST_NAME + " " + itemUser.LAST_NAME;
-                    }
-                }
+                    BusinessLogic businessLogic = new BusinessLogic();
 
-                if (item.PosterID == item.ProfileOwnerID)
+
+                    string poster = string.Empty;
+                    string profileOwner = string.Empty;
+                    if (item.POSTER_ID == (int)Session["ID"])
+                    {
+                        poster = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
+                        profileOwner = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
+                    }
+                    else if(item.POSTER_ID != (int)Session["ID"])
+                    {
+                        poster = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
+                        profileOwner = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
+                    }
+
+                if (item.POSTER_ID == item.PROFILE_OWNER_ID)
                 {
                     @Html.Label("FullName", poster);
                     <span class="glyphicon glyphicon-one-fine-full-dot "></span>
-                    <span>@bl.TimeStamp(@item.DateCreated)</span>
+                    <span>@businessLogic.TimeStamp(@item.CREATED_DATE)</span>
                 }
-                else if (item.PosterID != item.ProfileOwnerID)
+                else if (item.POSTER_ID != item.PROFILE_OWNER_ID)
                 {
                     @Html.Label("FullName", poster);
                     <span aria-hidden="true" class="glyphicon glyphicon-play" id="glyphiconArrowHead" ></span>
                     @Html.Label("FullName", profileOwner);
                     <span class="glyphicon glyphicon-one-fine-full-dot "></span>
-                    <span>@bl.TimeStamp(@item.DateCreated)</span>
+                    <span>@businessLogic.TimeStamp(@item.CREATED_DATE)</span>
                 }
             }
         </div>
         <div class="panel-body">
-            @Html.DisplayFor(modelItem => item.postContent)
+            @Html.DisplayFor(modelItem => item.CONTENT)
 
             @{
-                List<FRIEND> likedByList = new List<FRIEND>();
-                BusinessLogic businessLogic = new BusinessLogic();
-                foreach (var friends in item.LikeList.Where(x => x.POST_ID == item.ID))
-                {
-                    likedByList.Add(new FRIEND()
-                    {
-                        FRIEND_ID = friends.LIKE_BY
-                    });
-                }
-                int likes = item.LikeList.Where(x => x.POST_ID == item.ID).Count();
+                int likes = item.LIKEs.Where(x => x.POST_ID == item.ID).Count();
                 List<string> list = new List<string>();
                 <div>
                     @if (likes > 0)
@@ -78,41 +67,30 @@
                     }
                     @if (likes != 0)
                     {
-                        @*@foreach (var itemNames in businessLogic.GetFriendsInformationList(0, likedByList))
-                        {
-                            var list1 = @itemNames.FIRST_NAME /*+ @itemNames.LAST_NAME*/;
-                            foreach (var itemList in list1)
-                            {
-                                list.Add(list1);
-                            }
-                        }*@
                         <a href="#" data-toggle="tooltip" title="d" class="likeHover" >@likes <span class="glyphicon glyphicon-thumbs-up"></span></a>
-                        
-                        
-                        @*@Html.Label("Time", bl.TimeStamp(item.DateCreated))*@
 
-
-                    foreach (var itemComment in item.CommentList)
-                    {
-                        if (item.ID == itemComment.POST_ID)
+                        foreach (var itemComment in item.COMMENTs)
                         {
-                            foreach (var itemName in item.UserInformationList)
+                            if (item.ID == itemComment.POST_ID)
                             {
-                                if (itemComment.POSTER_ID == itemName.ID)
+                                if (itemComment.POSTER_ID == item.USER.ID)
                                 {
                                     <div class="bg-info">
-
-                                        @Html.Label("FullName", itemName.FIRST_NAME + " " + itemName.LAST_NAME)
-                                        
+                                        @Html.Label("FullName", item.USER.FIRST_NAME + " " + item.USER.LAST_NAME)
                                     </div>
                                 }
-                            }
+                                else if (itemComment.POSTER_ID == item.USER1.ID)
+                                {
+                                    <div class="bg-info">
+                                        @Html.Label("FullName", item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME)
+                                    </div>
+                                }
                             <div class="bg-info">
-                                @Html.Label("Comment", itemComment.CONTENT)
+                                <span>@itemComment.CONTENT)</span>
                             </div>
-                                <div class="bg-info">
-                                    @Html.Label("Date", itemComment.CREATED_DATE)
-                                </div>
+                            <div class="bg-info">
+                                <span>@itemComment.CREATED_DATE</span>
+                            </div>
                             }
                         }
                     }

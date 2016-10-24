@@ -37,26 +37,26 @@ namespace PasteBook_FinalProject
             return entityUser;
         }
 
-        public List<PostModel> ListOfPostMapper(List<POST> postList, List<USER> userInformation, List<LIKE> likeList,List<COMMENT> commentList, USER currentUser)
-        {
-            List<PostModel> listOfPost = new List<PostModel>();
-            foreach (var item2 in postList)
-            {
-                listOfPost.Add(new PostModel()
-                {
-                    DateCreated = item2.CREATED_DATE,
-                    ID = item2.ID,
-                    postContent = item2.CONTENT,
-                    ProfileOwnerID = item2.PROFILE_OWNER_ID,
-                    PosterID = item2.POSTER_ID,
-                    FullName = currentUser.FIRST_NAME + " "+ currentUser.LAST_NAME,
-                    UserInformationList = userInformation,
-                    LikeList = likeList,
-                    CommentList = commentList
-                });
-            }
-            return listOfPost;
-        }
+        //public List<PostModel> ListOfPostMapper(List<POST> postList, fri)
+        //{
+        //    List<PostModel> listOfPost = new List<PostModel>();
+        //    foreach (var item2 in postList)
+        //    {
+        //        listOfPost.Add(new PostModel()
+        //        {
+        //            DateCreated = item2.CREATED_DATE,
+        //            ID = item2.ID,
+        //            postContent = item2.CONTENT,
+        //            ProfileOwnerID = item2.PROFILE_OWNER_ID,
+        //            PosterID = item2.POSTER_ID,
+        //            FullName = currentUser.FIRST_NAME + " "+ currentUser.LAST_NAME,
+        //            UserInformationList = userInformation,
+        //            LikeList = likeList,
+        //            CommentList = commentList
+        //        });
+        //    }
+        //    return listOfPost;
+        //}
 
         public LIKE LikeMapper(int postID, int likedBy)
         {

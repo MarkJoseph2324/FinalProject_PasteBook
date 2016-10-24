@@ -1,12 +1,13 @@
-﻿
+﻿<a href="#" onclick="">Friends</a>
+    Unlike
     <div class="form-horizontal">
         <hr />
-        <div class="panel panel-primary" >
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 Update Status
             </div>
             <div class="panel-body">
-                @Html.TextArea("txtPost", null, new { @rows = 10, @cols = 300,  @placeholder="What's on your mind?", id="txtPost" })
+                @Html.TextArea("txtPost", null, new { @rows = 10, @cols = 300, @placeholder = "What's on your mind?", id = "txtPost" })
             </div>
             <div class="panel-footer">
                 <button type="button" id="btnPost" class="btn btn-default">Post</button>
@@ -15,20 +16,20 @@
         <div class="col-md-8"></div>
     </div>
 
-<div id="refreshPartialView">
-    @{
-        Html.RenderAction("GetAllPostPartial", "PasteBook");
+    <div id="refreshPartialView">
+        @{
+            Html.RenderAction("GetAllPostPartial", "PasteBook");
+        }
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
     }
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
 
 
-@{ 
-    @Scripts.Render("~/bundles/jquery");
-    <script>
+    @{
+        @Scripts.Render("~/bundles/jquery");
+        <script>
         var getCreatePostUrl = '@Url.Action("CreatePost", "PasteBook")';
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
@@ -102,5 +103,5 @@
             alert("liked: " + data.postID);
         };
 
-    </script>
-}
+        </script>
+    }

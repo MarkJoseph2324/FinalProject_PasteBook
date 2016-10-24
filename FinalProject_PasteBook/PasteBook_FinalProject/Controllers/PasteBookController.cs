@@ -21,17 +21,21 @@ namespace PasteBook_FinalProject.Controllers
 
         public ActionResult GetAllPostPartial()
         {
-            USER entityUser = new USER();
-            LIKE entityLike = new LIKE();
             int userID = Convert.ToInt32(Session["ID"]);
-            entityUser.ID = userID;
             var friendsList = businessLogic.GetFriendsList(userID);
-            var friendsInformationList = businessLogic.GetFriendsInformationList(userID, friendsList);
-            var userInformation = businessLogic.GetSpecificUser(entityUser);
-            var mergeUserInformation = businessLogic.MergeFriendsAndUserList(friendsInformationList, userInformation);
-            var likeList = businessLogic.GetAllLikeList();
-            var commentsList = businessLogic.GetAllComments();
-            return PartialView("GetAllPostPartialView", mapper.ListOfPostMapper((businessLogic.GetPostForNewsFeed(userID, userID)), mergeUserInformation, likeList,commentsList, userInformation));
+            return PartialView("GetAllPostPartialView", businessLogic.GetPostForNewsFeed(userID, userID, friendsList));
+        }
+
+        [HttpGet]
+        public ActionResult Timeline()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ListOfFriends()
+        {
+            return View();
         }
 
         public JsonResult CreatePost(string post)
