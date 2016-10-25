@@ -19,7 +19,7 @@ namespace PasteBook_FinalProject
         [HttpGet]
         public ActionResult Registration()
         {
-            ViewBag.Country = new SelectList(businessLogic.GetAllCountries(), "ID", "Country");
+            ViewBag.Country = new SelectList(businessLogic.GetAllCountries(), "ID", "COUNTRY");
             
             return View();
         }
@@ -27,12 +27,22 @@ namespace PasteBook_FinalProject
         [HttpPost]
         public ActionResult Registration(RegistrationModel user)
         {
+            bool returnValue = false;
             if (ModelState.IsValid)
             {
-                businessLogic.AddUser(mapper.UserMapper(user, null));
+                returnValue=businessLogic.AddUser(mapper.UserMapper(user, null));
             }
-
-            return View(user);
+            if (returnValue)
+            {
+                var currentUser = businessLogic.CheckUserCredential(mapper.UserMapper(user, null));
+                Session["FirstName"] = currentUser.FIRST_NAME;
+                Session["ID"] = currentUser.ID;
+                return RedirectToAction("Index", "Pastebook");
+            }
+            else
+            {
+                return View(user);
+            }
         }
 
         [HttpGet]

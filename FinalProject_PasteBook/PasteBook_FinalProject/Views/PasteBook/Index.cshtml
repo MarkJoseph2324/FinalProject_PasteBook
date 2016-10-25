@@ -1,44 +1,59 @@
 ﻿@section RightNavBar
 {
-<div class="navbar-collapse collapse pull-right">
-    <ul class="nav navbar-nav">
-        <li><span class="glyphicon glyphicon-globe navIcon"></span></li>
-        <li><span class="glyphicon glyphicon-user navIcon"></span></li>
-        @{
-            if (Session["FirstName"] != null)
-            {
-                var name = Session["FirstName"].ToString();
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                       Welcome, @name!<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Settings</a></li>
-                        <li><a href="#" id="btnLogout">Log-Out</a></li>
-                    </ul>
-                </li>
-            }
-        }
-    </ul>
-</div>
-}
-
-<a href="PasteBook/Friends">Friends</a>
-    
-<div class="form-horizontal">
-    <hr />
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            Update Status
-        </div>
-        <div class="panel-body">
-            @Html.TextArea("txtPost", null, new { @rows = 10, @cols = 300, @placeholder = "What's on your mind?", id = "txtPost" })
-        </div>
-        <div class="panel-footer">
-            <button type="button" id="btnPost" class="btn btn-default">Post</button>
+    <div id="custom-search-input">
+        <div class="input-group col-md-3">
+            <input type="text" class="search-query form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
         </div>
     </div>
-    <div class="col-md-8"></div>
+    <div class="navbar-collapse collapse pull-right">
+        <ul class="nav navbar-nav">
+            <li><span class="glyphicon glyphicon-globe navIcon"></span></li>
+            <li><span class="glyphicon glyphicon-user navIcon"></span></li>
+            @{
+                if (Session["FirstName"] != null)
+                {
+                    var name = Session["FirstName"].ToString();
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Welcome, @name!<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#" id="btnLogout">Log-Out</a></li>
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+}
+
+<div class="container">
+    <div class="col-md-4 pull-left">
+
+    </div>
+
+    <div class="col-md-8" id="postContainer">
+        <div class="form-horizontal ">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-pencil"></span> Update Status
+                </div>
+                <div class="panel-body">
+                    @Html.TextArea("txtPost", null, new { @rows = 8, @cols = 93, @placeholder = "What's on your mind?", id = "txtPost" })
+                </div>
+                <div class="panel-footer">
+                    <button type="button" id="btnPost" class="btn btn-default">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="refreshPartialView">
@@ -124,5 +139,5 @@
             $('#txtComment').val("");
         };
     </script>
-    
+
 }

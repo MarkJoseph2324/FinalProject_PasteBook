@@ -31,7 +31,11 @@ namespace PasteBook_FinalProject
             //    defaults: new { controller = "PasteBook", action = "Timeline" },
             //    constraints: new { username = new UserNameConstraint() }
             //);
-
+            routes.MapRoute(
+                "sample",
+                "PasteBook/{action}",
+                new { controller = "Pastebook", action = "index", username = UrlParameter.Optional }
+                );
 
             routes.MapRoute(
                 name: "Default",

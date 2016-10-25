@@ -1,5 +1,23 @@
-﻿
-TimeLine to
+﻿<div class="col-md-12">
+    picture dito
+</div>
+
+<div class="container">
+    <div class="col-md-4 pull-left">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                About Me
+            </div>
+            <div class="panel-body">
+                @Html.TextArea("txtAbuotMe", null, new { @rows = 8, @cols = 41, @placeholder = "About Me", id = "txtAboutMe" })
+            </div>
+            <div class="panel-footer">
+                <button type="button" id="btnAboutMe" class="btn btn-default">Edit</button>
+            </div>
+        </div>
+        <a href="PasteBook/Friends">Friends</a>
+    </div>
+</div>
 
 <div id="refreshPartialView">
     @{
@@ -13,6 +31,69 @@ TimeLine to
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
         var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
+        $(document).ready(function () {
+            $('#btnPost').click(function () {
+                var data = {
+                    post: $('#txtPost').val()
+                }
+                if ($('#txtPost').val() != null) {
+                    $.ajax({
+                        url: getCreatePostUrl,
+                        data: data,
+                        type: 'GET',
+                        success: function () {
+                            Reload();
+                        },
+                        error: function () {
+                            alert('Something went wrong.')
+                        }
+                    })
+                }
+            })
+        });
+
+        function AddLike(ID) {
+            var data = {
+                postID: ID
+            };
+
+            $.ajax({
+                url: getLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                },
+                error: function () {
+                    alert('Something went wrong.')
+                }
+            })
+        };
+
+        function AddComment(ID, button) {
+            var data = {
+                postID: ID,
+                postContent: $('#txtComment'.concat(button.value)).val()
+            };
+
+            $.ajax({
+                url: getCommentPostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                },
+                error: function () {
+                    alert('Something went wrong.')
+                }
+            })
+        };
+
+
+        function Reload() {
+            $('#refreshPartialView').load(getRefreshPartialViewUrl);
+            $('#txtPost').val("");
+            $('#txtComment').val("");
+        };
     </script>
-    <script src="~/Scripts/PasteBook.js"></script>
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -41,6 +42,7 @@ namespace PasteBook_FinalProject
 
         [Required(ErrorMessage = "Birth Date is a required field.")]
         [DisplayName("Birth Date:")]
+        [DataType(DataType.Date)]
         public DateTime Birthday { get; set; }
 
         public int CountryID { get; set; }

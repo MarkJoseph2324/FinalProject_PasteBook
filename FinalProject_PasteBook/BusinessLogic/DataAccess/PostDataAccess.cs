@@ -40,7 +40,7 @@ namespace BusinessLogicLibrary
                 {
                     if (userID != profileOwnerID)
                     {
-                        listOfPost = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == profileOwnerID || x.PROFILE_OWNER_ID == profileOwnerID).OrderByDescending(x => x.CREATED_DATE).Take(100).ToList();
+                        listOfPost = context.POSTs.Include("COMMENTs").Include("COMMENTs.USER").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == profileOwnerID || x.PROFILE_OWNER_ID == profileOwnerID).OrderByDescending(x => x.CREATED_DATE).Take(100).ToList();
                         foreach (var friendItem in friendsList)
                         {
                             if (userID != 0)
@@ -58,7 +58,7 @@ namespace BusinessLogicLibrary
                     }
                     else
                     {
-                        listOfPost = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == userID || x.PROFILE_OWNER_ID == userID).ToList();
+                        listOfPost = context.POSTs.Include("COMMENTs").Include("COMMENTs.USER").Include("LIKEs").Include("USER").Include("USER1").Where(x => x.POSTER_ID == userID || x.PROFILE_OWNER_ID == userID).ToList();
                         foreach (var friendItem in friendsList)
                         {
                             if (userID != 0)
@@ -73,7 +73,7 @@ namespace BusinessLogicLibrary
                                 }
                             }
 
-                            var postList = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Where((x => x.POSTER_ID == friendID && x.PROFILE_OWNER_ID == friendID)).ToList();
+                            var postList = context.POSTs.Include("COMMENTs").Include("LIKEs").Include("USER").Include("USER1").Include("COMMENTs.USER").Where((x => x.POSTER_ID == friendID && x.PROFILE_OWNER_ID == friendID)).ToList();
 
                             foreach (var item in postList)
                             {
