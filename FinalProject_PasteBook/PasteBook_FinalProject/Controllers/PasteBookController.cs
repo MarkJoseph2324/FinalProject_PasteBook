@@ -14,6 +14,8 @@ namespace PasteBook_FinalProject.Controllers
         Mapper mapper = new Mapper();
         BusinessLogic businessLogic = new BusinessLogic();
         // GET: PasteBook
+
+        [Route("Pastebook.com")]
         public ActionResult Index()
         {
             return View();
@@ -35,17 +37,28 @@ namespace PasteBook_FinalProject.Controllers
             }
         }
 
+        [Route("Pastebook.com/{username}")]
         [HttpGet]
         public ActionResult Timeline(string username)
         {
-            return View();
+            var user = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
+            return View(user);
         }
 
+        [Route("Pastebook.com/Friends/{username}")]
         [HttpGet]
         public ActionResult Friends()
         {
             int userID = Convert.ToInt32(Session["ID"]);
             return View(businessLogic.GetFriendsList(userID));
+        }
+
+        public ActionResult Search(string searchValue)
+        {
+            List<USER> user = new List<USER>();
+            int userID = Convert.ToInt32(Session["ID"]);
+            user = businessLogic.Search(userID, searchValue);
+            return View(user);
         }
 
         public JsonResult CreatePost(string post)
@@ -66,6 +79,17 @@ namespace PasteBook_FinalProject.Controllers
             int posterID = Convert.ToInt32(Session["ID"]);
             businessLogic.AddComment(mapper.CommentMapper(postID,posterID,  postContent));
             return Json(new { PosterID = posterID, Content = postContent }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Notification(string notifType, int postID, int commentID)
+        {
+            int posterID = Convert.ToInt32(Session["ID"]);
+            if (postID != 0)
+            {
+                businessLogic.AddNotification(mapper.MapNotification(posterID, notifType, postID, commentID))
+            }
+
+            return View();
         }
     }
 } 

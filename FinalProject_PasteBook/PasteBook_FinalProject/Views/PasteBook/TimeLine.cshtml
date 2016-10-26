@@ -1,21 +1,123 @@
-﻿<div class="col-md-12">
-    picture dito
-</div>
+﻿@model Entity.USER
+@*<div class="well well-lg">
+        @{
+            if (Model.PROFILE_PIC == null)
+            {
+                <img src="~/Content/images/user.png" class="profilePicture" />
+            }
+            else
+            {
+                var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                <img src="@imgSrc" class="profilePicture" />
+            }
+        }
+    </div>
+     public bool Edit(T newEntity)
+           {
+               int status = 0;
+               try
+               {
+                   using (var context = new PASTEBOOKEntities1())
+                   {
+                       context.Entry(newEntity).State = System.Data.Entity.EntityState.Modified;
+                       status = context.SaveChanges();
+                   }
+               }
+               catch (Exception)
+               {
+                   throw;
+               }
+               return status != 0;
+           }
+     public bool UploadImage(USER user, HttpPostedFileBase file)
+           {
+               byte[] profilePic = null;
+               using (MemoryStream ms = new MemoryStream())
+               {
+                   file.InputStream.CopyTo(ms);
+                   profilePic = ms.GetBuffer();
+               }
+               user.PROFILE_PIC = profilePic;
+               return userDataAccess.Edit(user);
+           }
+    CONTROLLER NA TO
+      public ActionResult UploadImage(HttpPostedFileBase file)
+           {
+               //forums.asp.net/t/2006227.aspx?Adding+validation+on+upload+a+image+in+MVC+4+0
+               if (ModelState.IsValid)
+               {
+                   USER model = userManager.GetUserDetailsUsingID((Int32)Session["ID"]);
+                   userManager.UploadImage(model, file);
+                   return RedirectToAction("Profile");
+               }
+               return View();
+           }*@
 
-<div class="container">
+
+<div class="containerPastebook">
     <div class="col-md-4 pull-left">
+
+        <div class="well well-lg">
+            @{
+                if (Model.PROFILE_PIC == null)
+                {
+                    <img src="~/Content/images/default.png" class="profilePicture" id="timeLinePicture" />
+                }
+                else
+                {
+                    var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <img src="@imgSrc" class="profilePicture" id="timeLinePicture" />
+                }
+            }
+        </div>
+        @*photo uploading*@
+        <div class="well well-lg">
+            <h4>Change Profile Picture</h4>
+
+            <div class="wrapper">
+                <div class="col-md-12">
+                    <div id="imageHolder"> </div>
+                    <input id="uploadImage" title="Upload an Image" type="file" name="file" />
+                </div>
+            </div>
+            @Html.ValidationMessageFor(model => model.PROFILE_PIC, "", new { @class = "text-danger" })
+            <button type="submit" class="btn btn-primary" id="editProfilePicture">Save Picture</button>
+        </div>
+
         <div class="panel panel-primary">
             <div class="panel-heading">
                 About Me
             </div>
             <div class="panel-body">
-                @Html.TextArea("txtAbuotMe", null, new { @rows = 8, @cols = 41, @placeholder = "About Me", id = "txtAboutMe" })
+                @Html.Label("AboutMe", Model.ABOUT_ME);
+                @*@Html.TextArea("txtAbuotMe", null, new { @rows = 8, @cols = 41, @placeholder = "About Me", id = "txtAboutMe" })*@
             </div>
             <div class="panel-footer">
-                <button type="button" id="btnAboutMe" class="btn btn-default">Edit</button>
+                @if (Model.ID == (int)Session["ID"])
+                {
+                    <button type="button" id="btnAboutMe" class="btn btn-default">Edit</button>
+                }
             </div>
         </div>
-        <a href="PasteBook/Friends">Friends</a>
+        <a href="~/PasteBook/Friends">Friends</a>
+    </div>
+
+    <div class="col-md-8">
+        <div class="form-horizontal ">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-pencil"></span> Update Status
+                </div>
+                <div class="panel-body">
+                    @Html.TextArea("txtPost", null, new { @rows = 8, @cols = 96, @placeholder = "What's on your mind?", id = "txtPost" })
+                </div>
+                <div class="panel-footer">
+                    <button type="button" id="btnPost" class="btn btn-default">Post</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -28,72 +130,10 @@
 @{
     @Scripts.Render("~/bundles/jquery");
     <script>
+        var getCreatePostUrl = '@Url.Action("CreatePost", "PasteBook")';
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
         var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
-        $(document).ready(function () {
-            $('#btnPost').click(function () {
-                var data = {
-                    post: $('#txtPost').val()
-                }
-                if ($('#txtPost').val() != null) {
-                    $.ajax({
-                        url: getCreatePostUrl,
-                        data: data,
-                        type: 'GET',
-                        success: function () {
-                            Reload();
-                        },
-                        error: function () {
-                            alert('Something went wrong.')
-                        }
-                    })
-                }
-            })
-        });
-
-        function AddLike(ID) {
-            var data = {
-                postID: ID
-            };
-
-            $.ajax({
-                url: getLikePostUrl,
-                data: data,
-                type: 'GET',
-                success: function () {
-                    Reload();
-                },
-                error: function () {
-                    alert('Something went wrong.')
-                }
-            })
-        };
-
-        function AddComment(ID, button) {
-            var data = {
-                postID: ID,
-                postContent: $('#txtComment'.concat(button.value)).val()
-            };
-
-            $.ajax({
-                url: getCommentPostUrl,
-                data: data,
-                type: 'GET',
-                success: function () {
-                    Reload();
-                },
-                error: function () {
-                    alert('Something went wrong.')
-                }
-            })
-        };
-
-
-        function Reload() {
-            $('#refreshPartialView').load(getRefreshPartialViewUrl);
-            $('#txtPost').val("");
-            $('#txtComment').val("");
-        };
     </script>
+    <script src="~/Scripts/PasteBook.js"></script>
 }

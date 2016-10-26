@@ -10,16 +10,13 @@
                 type: 'GET',
                 success: function () {
                     Reload();
-                },
-                error: function () {
-                    alert('Something went wrong.')
                 }
             })
         }
     })
 });
 
-function AddLike(postID) {
+function AddLike(ID) {
     var data = {
         postID: ID
     };
@@ -30,17 +27,14 @@ function AddLike(postID) {
         type: 'GET',
         success: function () {
             Reload();
-        },
-        error: function () {
-            alert('Something went wrong.')
         }
     })
 };
 
-function AddComment(ID) {
+function AddComment(ID, button) {
     var data = {
         postID: ID,
-        postContent: $('#txtComment').val()
+        postContent: $('#txtComment'.concat(button.value)).val()
     };
 
     $.ajax({
@@ -49,13 +43,52 @@ function AddComment(ID) {
         type: 'GET',
         success: function () {
             Reload();
-        },
-        error: function () {
-            alert('Something went wrong.')
         }
     })
 };
 
+function Notification(notificationType, post_ID, comment_ID) {
+    alert(notificationType + post_ID + comment_ID)
+    var data = {
+        notifType: notificationType,
+        postID: post_ID,
+        commentID: comment_ID
+    }
+
+    $.ajax({
+        url: getNotificationUrl,
+        data: data,
+        type: 'GET',
+        success: function () {
+            Reload();
+        },
+        error:
+            alert('error')
+    })
+};
+
+$("#uploadImage").on('change', function () {
+    if (typeof (FileReader) != "undefined") {
+        var image_holder = $("#imageHolder");
+        image_holder.empty();
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $("<img />", {
+                "src": e.target.result,
+                "class": "thumb-image"
+            }).appendTo(image_holder);
+        }
+        image_holder.show();
+        reader.readAsDataURL($(this)[0].files[0]);
+    } else {
+        alert("This browser does not support FileReader.");
+    }
+});
+
+function Search() {
+    location.href = url + '/?searchValue=' + $('#txtSearch').val()
+};
 
 function Reload() {
     $('#refreshPartialView').load(getRefreshPartialViewUrl);

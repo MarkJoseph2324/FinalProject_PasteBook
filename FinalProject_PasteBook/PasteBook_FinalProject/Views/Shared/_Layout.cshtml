@@ -13,38 +13,54 @@
         <div class="container">
             <div class="navbar-header">
                 <div class="form-group">
-                    
-                    @Html.ActionLink("PasteBook", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("PasteBook", "Index", "Pastebook", new { area = "" }, new { @class = "navbar-brand", id = "logo" })
                 </div>
-                @RenderSection("RightNavBar", required: false)
+                <div id="custom-search-input">
+                    <div class="input-group col-md-3">
+                        <input type="text" class="search-query form-control" placeholder="Search" id="txtSearch" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" onclick="Search()">
+                                <span type="submit" class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="navbar-collapse collapse pull-right">
+                    <ul class="nav navbar-nav">
+                        <li><span class="badge"></span><span class="glyphicon glyphicon-globe navIcon" id="globeIcon"></span></li>
+                        <li><span class="glyphicon glyphicon-user navIcon" id="peopleIcon"></span></li>
+                        <li><span class="badge"></span><span class="glyphicon glyphicon-user navIcon"></span></li>
+                        @{
+                            if (Session["FirstName"] != null)
+                            {
+                                var name = Session["FirstName"].ToString();
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Welcome, @name!<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href='@Url.Action("Timeline", "Pastebook", new { username = @Session["Username"].ToString() })'>My Profile</a></li>
+                                        <li><a href="#">Settings</a></li>
+                                        <li><a href="#" id="btnLogout">Log-Out</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        @*<hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script>
+        var url = '@Url.Action("Search", "PasteBook")';
+    </script>
+    <script src="~/Scripts/PasteBook.js"></script>
 </body>
 </html>
-
-@{
-    <script>
-        var getLogOutUrl = '@Url.Action("LogOut", "PastebookAccount")';
-
-        $(document).ready(function () {
-            $('#btnLogout').click(function () {
-
-               
-            })
-        })
-    </script>
-}
-    
-    

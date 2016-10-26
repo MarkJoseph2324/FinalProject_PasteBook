@@ -4,7 +4,7 @@
 
 @foreach (var item in Model)
 {
-    <div class="container">
+    <div>
         <div class="col-md-4"></div>
         <div class="col-md-8">
             <div class="panel panel-info">
@@ -63,7 +63,7 @@
                             {
                                 if (likes == 0)
                                 {
-                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID)">
+                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); Notification('Like',@item.ID,0)">
                                         Like
                                     </button>
                                 }

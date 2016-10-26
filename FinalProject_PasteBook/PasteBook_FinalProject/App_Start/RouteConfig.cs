@@ -14,33 +14,12 @@ namespace PasteBook_FinalProject
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            //// reference: https://www.asp.net/mvc/overview/older-versions-1/controllers-and-routing/creating-a-route-constraint-cs
-
-            //routes.MapRoute(
-            //    name: "Post",
-            //    url: "posts/{id}",
-            //    defaults: new { controller = "Post", action = "Get" },
-            //    constraints: new { id = @"\d+" } // regular expression \d+ matches one or more integers
-            //                                     //constraints: new { id = @"s/0*(\d+)/$1/" }
-            //);
-
-            //// reference: http://stackoverflow.com/a/37359345
-            //routes.MapRoute(
-            //    name: "PasteBook",
-            //    url: "PasteBook/{username}",
-            //    defaults: new { controller = "PasteBook", action = "Timeline" },
-            //    constraints: new { username = new UserNameConstraint() }
-            //);
-            routes.MapRoute(
-                "sample",
-                "PasteBook/{action}",
-                new { controller = "Pastebook", action = "index", username = UrlParameter.Optional }
-                );
+            routes.MapMvcAttributeRoutes();
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "PasteBookAccount", action = "LogIn", id = UrlParameter.Optional }
             );
         }
     }

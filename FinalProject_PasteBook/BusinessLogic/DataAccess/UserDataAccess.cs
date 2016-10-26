@@ -1,9 +1,11 @@
 ﻿using Entity;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BusinessLogicLibrary
 {
@@ -57,6 +59,23 @@ namespace BusinessLogicLibrary
             return entityUser;
         }
 
+        public List<USER> Search(int userID, string searchValue)
+        { 
+            List<USER> entityUser = new List<USER>();
+            try
+            {
+                using (var context = new PastebookEntities())
+                {
+                    entityUser = context.USERs.Where(x => ((x.ID != userID)&& x.FIRST_NAME.Contains(searchValue)) || ( (x.ID != userID)&& x.LAST_NAME.Contains(searchValue))).ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return entityUser;
+        }
 
         public List<USER> GetAllFriendsInformation(int userID, List<FRIEND> friendsList)
         {
@@ -110,6 +129,38 @@ namespace BusinessLogicLibrary
             }
 
             return friendsInformationList;
+        }
+
+        public bool UploadImageInDataBase(HttpPostedFileBase file, USER user)
+        {
+            USER entityUser = new USER();
+            bool returnValue = false;
+            try
+            {
+                using (var context = new PastebookEntities())
+                {
+                    user.PROFILE_PIC = ConvertToBytes(file);
+                    entityUser = new USER
+                    {
+                        PROFILE_PIC = user.PROFILE_PIC
+                    };
+                    context.USERs.Add(entityUser);
+                    returnValue = context.SaveChanges() != 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return returnValue;
+        }
+
+        public byte[] ConvertToBytes(HttpPostedFileBase image)
+        {
+            byte[] imageBytes = null;
+            BinaryReader reader = new BinaryReader(image.InputStream);
+            imageBytes = reader.ReadBytes((int)image.ContentLength);
+            return imageBytes;
         }
     }
 }

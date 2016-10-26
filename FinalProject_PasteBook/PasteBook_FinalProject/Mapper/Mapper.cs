@@ -70,5 +70,48 @@ namespace PasteBook_FinalProject
             };
             return entityComment;
         }
+
+        public NOTIFICATION NotificationMapper(string  notifType, int postID, int commentID,int senderID,int receiverID, DateTime createdDate, string seen )
+        {
+            NOTIFICATION entityNotification = new NOTIFICATION();
+            if (notifType == "Like")
+            {
+                entityNotification = new NOTIFICATION()
+                {
+                    CREATED_DATE = DateTime.Now,
+                    NOTIF_TYPE = "L",
+                    POST_ID = postID,
+                    RECEIVER_ID = receiverID,
+                    SEEN = "N",
+                    SENDER_ID = senderID
+                };
+            }
+            else if (notifType == "Comment")
+            {
+                entityNotification = new NOTIFICATION()
+                {
+                    COMMENT_ID = commentID,
+                    CREATED_DATE = DateTime.Now,
+                    NOTIF_TYPE = "C",
+                    POST_ID = postID,
+                    RECEIVER_ID = receiverID,
+                    SEEN = "N",
+                    SENDER_ID = senderID
+                };
+            }
+            else if (notifType == "Add Friend")
+            {
+                entityNotification = new NOTIFICATION()
+                {
+                    CREATED_DATE = DateTime.Now,
+                    NOTIF_TYPE = "F",
+                    POST_ID = postID,
+                    RECEIVER_ID = receiverID,
+                    SEEN = "N",
+                    SENDER_ID = senderID
+                };
+            }
+            return entityNotification;
+        }
     }
 }

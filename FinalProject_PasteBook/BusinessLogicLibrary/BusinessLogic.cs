@@ -44,7 +44,7 @@ namespace BusinessLogicLibrary
         {
             USER userCredential = new USER();
             userCredential = userDataAccess.GetSpecificUser(user);
-            if (userCredential.ToString().Count() != 0)
+            if (userCredential != null)
             {
                 if (passwordManager.IsPasswordMatch(user.PASSWORD, userCredential.SALT, userCredential.PASSWORD))
                 {
@@ -58,7 +58,6 @@ namespace BusinessLogicLibrary
             }
             else
             {
-                userCredential.EMAIL_ADDRESS = string.Empty;
                 return userCredential;
             }
         }
@@ -196,6 +195,11 @@ namespace BusinessLogicLibrary
         public List<COMMENT> GetAllComments()
         {
             return commentDataAcces.GetAllComments();
+        }
+
+        public List<USER> Search(int userID,string searchValue)
+        {
+            return userDataAccess.Search(userID, searchValue);
         }
     }
 }

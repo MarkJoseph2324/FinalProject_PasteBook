@@ -37,6 +37,7 @@ namespace PasteBook_FinalProject
                 var currentUser = businessLogic.CheckUserCredential(mapper.UserMapper(user, null));
                 Session["FirstName"] = currentUser.FIRST_NAME;
                 Session["ID"] = currentUser.ID;
+                Session["Username"] = currentUser.USER_NAME;
                 return RedirectToAction("Index", "Pastebook");
             }
             else
@@ -60,15 +61,16 @@ namespace PasteBook_FinalProject
             {
                 user = businessLogic.CheckUserCredential(user);
             }
-            if (user.PASSWORD == null || user.EMAIL_ADDRESS == null)
+            if (user==null)
             {
-                ModelState.AddModelError("Password", "Invalid Username or Password.");
+                ModelState.AddModelError("Email", "Invalid Username or Password.");
                 return View(model);
             }
             else
             {
                 Session["FirstName"] = user.FIRST_NAME;
                 Session["ID"] = user.ID;
+                Session["Username"] = user.USER_NAME;
                 return RedirectToAction("Index","Pastebook");
             }
         }
