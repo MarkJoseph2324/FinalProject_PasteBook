@@ -1,5 +1,5 @@
 ﻿using BusinessLogicLibrary;
-using Entity;
+using Entities;
 using PasteBook_FinalProject.Models;
 using System;
 using System.Collections.Generic;
@@ -40,6 +40,7 @@ namespace PasteBook_FinalProject.Controllers
         [Route("Pastebook.com/{username}")]
         [HttpGet]
         public ActionResult Timeline(string username)
+
         {
             var user = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
             return View(user);
@@ -77,19 +78,72 @@ namespace PasteBook_FinalProject.Controllers
         public JsonResult AddComment(int postID, string postContent)
         {
             int posterID = Convert.ToInt32(Session["ID"]);
-            businessLogic.AddComment(mapper.CommentMapper(postID,posterID,  postContent));
+            businessLogic.AddComment(mapper.CommentMapper(postID, posterID, postContent));
             return Json(new { PosterID = posterID, Content = postContent }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Notification(string notifType, int postID, int commentID)
+        public ActionResult Notification(string notifType, int postID, int commentID, int friendRequestID)
         {
-            int posterID = Convert.ToInt32(Session["ID"]);
-            if (postID != 0)
+            int receiverID = 0;
+            int senderID = Convert.ToInt32(Session["ID"]);
+            var postDetails = businessLogic.GetPostDetails(postID);
+            if (postDetails.POSTER_ID == senderID)
             {
-                businessLogic.AddNotification(mapper.MapNotification(posterID, notifType, postID, commentID))
+                receiverID = postDetails.PROFILE_OWNER_ID;
+            }
+            else
+            {
+                receiverID = postDetails.POSTER_ID;
+            }
+            if (notifType == "Like")
+            {
+                if (postID != 0)
+                {
+                    businessLogic.AddNotification(mapper.NotificationMapper(notifType, postID,commentID, senderID, receiverID));
+                }
+            }
+            else if (notifType == "Comment")
+            {
+
+            }
+            else if (notifType == "AddFriend")
+            {
+                businessLogic.AddNotification(mapper.NotificationMapper(notifType, postID, commentID, senderID, friendRequestID));
             }
 
+
+            return View("Index");
+        }
+
+        public ActionResult GetNotificationList()
+        {
+            int currentUserID = Convert.ToInt32(Session["ID"]);
+            var listOfNotif = businessLogic.GetNotificationList(currentUserID);
+            return PartialView("ShowNotificationCommentPartial", listOfNotif);
+        }
+
+        public JsonResult GetNotificationCount()
+        {
+            int currentUserID = Convert.ToInt32(Session["ID"]);
+            int notifCount = businessLogic.GetNotificationList(currentUserID).Count();
+            return Json(new { NotifCount = notifCount }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadImage(HttpPostedFileBase file)
+        {
+            if (ModelState.IsValid)
+            {
+                string currentUser = Session["Username"].ToString();
+                var user = businessLogic.GetSpecificUser(mapper.UserMapper(null, currentUser));
+                var result = businessLogic.UploadImage(user, file);
+                return RedirectToAction("Timeline", "Pastebook", currentUser);
+            }
             return View();
         }
+
+        //public ActionResult AddFriendRequest(int friendRequestID)
+        //{
+        //    int currentUserID = Convert.ToInt32(Session["ID"]);
+        //}
     }
-} 
+}

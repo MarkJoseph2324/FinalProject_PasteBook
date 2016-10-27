@@ -1,4 +1,4 @@
-﻿using Entity;
+﻿using Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -162,5 +162,24 @@ namespace BusinessLogicLibrary
             imageBytes = reader.ReadBytes((int)image.ContentLength);
             return imageBytes;
         }
+
+        public bool ChnageProfilePicture(USER user)
+        {
+            int status = 0;
+            try
+            {
+                using (var context = new PastebookEntities())
+                {
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return status != 0;
+        }
+
+
+
     }
 }

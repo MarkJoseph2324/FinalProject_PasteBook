@@ -1,4 +1,4 @@
-﻿using Entity;
+﻿using Entities;
 using PasteBook_FinalProject.Models;
 using System;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace PasteBook_FinalProject
             return entityComment;
         }
 
-        public NOTIFICATION NotificationMapper(string  notifType, int postID, int commentID,int senderID,int receiverID, DateTime createdDate, string seen )
+        public NOTIFICATION NotificationMapper(string  notifType, int postID, int commentID,int senderID,int receiverID)
         {
             NOTIFICATION entityNotification = new NOTIFICATION();
             if (notifType == "Like")
@@ -99,13 +99,12 @@ namespace PasteBook_FinalProject
                     SENDER_ID = senderID
                 };
             }
-            else if (notifType == "Add Friend")
+            else if (notifType == "AddFriend")
             {
                 entityNotification = new NOTIFICATION()
                 {
                     CREATED_DATE = DateTime.Now,
                     NOTIF_TYPE = "F",
-                    POST_ID = postID,
                     RECEIVER_ID = receiverID,
                     SEEN = "N",
                     SENDER_ID = senderID

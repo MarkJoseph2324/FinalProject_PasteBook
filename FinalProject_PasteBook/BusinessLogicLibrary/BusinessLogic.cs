@@ -1,12 +1,14 @@
 ﻿using BusinessLogicLibrary;
 using DataAccessLibrary;
 using DataAccessLibrary.DataAccess;
-using Entity;
+using Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BusinessLogicLibrary
 {
@@ -19,6 +21,7 @@ namespace BusinessLogicLibrary
         FriendDataAccess friendDataAccess = new FriendDataAccess();
         LikeDataAccess likeDataAccess = new LikeDataAccess();
         CommentDataAcces commentDataAcces = new CommentDataAcces();
+        NotificationDataAccess notificationDataAccess = new NotificationDataAccess();
 
         public List<REF_COUNTRY> GetAllCountries()
         {
@@ -87,48 +90,48 @@ namespace BusinessLogicLibrary
             return userDataAccess.GetAllFriendsInformation(userID, friendsList);
         }
 
-        public List<USER> MergeFriendsAndUserList(List<USER> friendsList, USER userInfo)
-        {
-            List<USER> mergeList = new List<USER>();
-            foreach (var item in friendsList)
-            {
-                mergeList.Add(new USER()
-                {
-                    ABOUT_ME = item.ABOUT_ME,
-                    BIRTHDAY = item.BIRTHDAY,
-                    COUNTRY_ID = item.COUNTRY_ID,
-                    DATE_CREATED = item.DATE_CREATED,
-                    EMAIL_ADDRESS = item.EMAIL_ADDRESS,
-                    FIRST_NAME = item.FIRST_NAME,
-                    GENDER = item.GENDER,
-                    ID = item.ID,
-                    LAST_NAME = item.LAST_NAME,
-                    MOBILE_NO = item.MOBILE_NO,
-                    PASSWORD = item.PASSWORD,
-                    PROFILE_PIC = item.PROFILE_PIC,
-                    SALT = item.SALT,
-                    USER_NAME = item.USER_NAME
-                });
-            }
-            mergeList.Add(new USER()
-            {
-                ABOUT_ME = userInfo.ABOUT_ME,
-                BIRTHDAY = userInfo.BIRTHDAY,
-                COUNTRY_ID = userInfo.COUNTRY_ID,
-                DATE_CREATED = userInfo.DATE_CREATED,
-                EMAIL_ADDRESS = userInfo.EMAIL_ADDRESS,
-                FIRST_NAME = userInfo.FIRST_NAME,
-                GENDER = userInfo.GENDER,
-                ID = userInfo.ID,
-                LAST_NAME = userInfo.LAST_NAME,
-                MOBILE_NO = userInfo.MOBILE_NO,
-                PASSWORD = userInfo.PASSWORD,
-                PROFILE_PIC = userInfo.PROFILE_PIC,
-                SALT = userInfo.SALT,
-                USER_NAME = userInfo.USER_NAME
-            });
-            return mergeList;
-        }
+        //public List<USER> MergeFriendsAndUserList(List<USER> friendsList, USER userInfo)
+        //{
+        //    List<USER> mergeList = new List<USER>();
+        //    foreach (var item in friendsList)
+        //    {
+        //        mergeList.Add(new USER()
+        //        {
+        //            ABOUT_ME = item.ABOUT_ME,
+        //            BIRTHDAY = item.BIRTHDAY,
+        //            COUNTRY_ID = item.COUNTRY_ID,
+        //            DATE_CREATED = item.DATE_CREATED,
+        //            EMAIL_ADDRESS = item.EMAIL_ADDRESS,
+        //            FIRST_NAME = item.FIRST_NAME,
+        //            GENDER = item.GENDER,
+        //            ID = item.ID,
+        //            LAST_NAME = item.LAST_NAME,
+        //            MOBILE_NO = item.MOBILE_NO,
+        //            PASSWORD = item.PASSWORD,
+        //            PROFILE_PIC = item.PROFILE_PIC,
+        //            SALT = item.SALT,
+        //            USER_NAME = item.USER_NAME
+        //        });
+        //    }
+        //    mergeList.Add(new USER()
+        //    {
+        //        ABOUT_ME = userInfo.ABOUT_ME,
+        //        BIRTHDAY = userInfo.BIRTHDAY,
+        //        COUNTRY_ID = userInfo.COUNTRY_ID,
+        //        DATE_CREATED = userInfo.DATE_CREATED,
+        //        EMAIL_ADDRESS = userInfo.EMAIL_ADDRESS,
+        //        FIRST_NAME = userInfo.FIRST_NAME,
+        //        GENDER = userInfo.GENDER,
+        //        ID = userInfo.ID,
+        //        LAST_NAME = userInfo.LAST_NAME,
+        //        MOBILE_NO = userInfo.MOBILE_NO,
+        //        PASSWORD = userInfo.PASSWORD,
+        //        PROFILE_PIC = userInfo.PROFILE_PIC,
+        //        SALT = userInfo.SALT,
+        //        USER_NAME = userInfo.USER_NAME
+        //    });
+        //    return mergeList;
+        //}
         /// <summary>
         /// Reference:
         /// http://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
@@ -197,9 +200,37 @@ namespace BusinessLogicLibrary
             return commentDataAcces.GetAllComments();
         }
 
-        public List<USER> Search(int userID,string searchValue)
+        public List<USER> Search(int userID, string searchValue)
         {
             return userDataAccess.Search(userID, searchValue);
         }
+
+        public POST GetPostDetails(int postID)
+        {
+            return postDataAccess.GetPostDetails(postID);
+        }
+
+        public bool AddNotification(NOTIFICATION notif)
+        {
+            return notificationDataAccess.AddNotification(notif);
+        }
+
+        public List<NOTIFICATION> GetNotificationList(int userID)
+        {
+            return notificationDataAccess.GetNotificationList(userID);
+        }
+
+        public bool UploadImage(USER user, HttpPostedFileBase file)
+        {
+            byte[] profilePic = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                file.InputStream.CopyTo(ms);
+                profilePic = ms.GetBuffer();
+            }
+            user.PROFILE_PIC = profilePic;
+            return userDataAccess.ChnageProfilePicture(user);
+        }
+
     }
 }

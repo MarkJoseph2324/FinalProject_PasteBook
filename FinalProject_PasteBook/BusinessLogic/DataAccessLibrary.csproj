@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,20 +57,26 @@
     <Compile Include="DataAccess\FriendDataAccess.cs" />
     <Compile Include="DataAccess\GenericDataAccess.cs" />
     <Compile Include="DataAccess\LikeDataAccess.cs" />
+    <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\PostDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Entity\Entities.csproj">
-      <Project>{8b3c2e8a-c688-4998-ab4e-f17ef87aa97b}</Project>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{8583f121-51a8-48aa-9016-365903b6b2c6}</Project>
       <Name>Entities</Name>
     </ProjectReference>
   </ItemGroup>

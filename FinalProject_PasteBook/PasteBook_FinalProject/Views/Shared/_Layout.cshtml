@@ -26,9 +26,22 @@
                     </div>
                 </div>
                 <div class="navbar-collapse collapse pull-right">
+
                     <ul class="nav navbar-nav">
-                        <li><span class="badge"></span><span class="glyphicon glyphicon-globe navIcon" id="globeIcon"></span></li>
-                        <li><span class="glyphicon glyphicon-user navIcon" id="peopleIcon"></span></li>
+                        @{
+                            <li class="dropdown" id="commentNotifDropdown">
+                                <span class="dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" onclick="SeenNotif()">
+                                    <span class="badge" id="globeBadge"></span><span class="glyphicon glyphicon-globe navIcon " id="globeIcon"></span>
+                                </span>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1" id="notifDropdown">
+
+                                    @{Html.RenderAction("GetNotificationList", "PasteBook"); }
+
+
+                                </ul>
+                            </li>
+                                    
+                        }
                         <li><span class="badge"></span><span class="glyphicon glyphicon-user navIcon"></span></li>
                         @{
                             if (Session["FirstName"] != null)
@@ -64,3 +77,4 @@
     <script src="~/Scripts/PasteBook.js"></script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Entity.FRIEND>
+﻿@model IEnumerable<Entities.FRIEND>
 
 @foreach (var item in Model)
 {
@@ -7,11 +7,31 @@
            
             @if (item.USER.ID == Convert.ToInt32(Session["ID"]))
             {
+                if (item.USER1.PROFILE_PIC == null)
+                {
+                    <img src="~/Content/images/default.png" class="profilePicture" id="postPicture" />
+                }
+                else
+                {
+                    var base64 = Convert.ToBase64String(item.USER1.PROFILE_PIC);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <img src="@imgSrc" id="postPicture" class="profilePicture" />
+                }
                 @Html.Label("FullName", item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME);
                 <a href='@Url.Action("Timeline", "Pastebook", new { username = @item.USER1.USER_NAME })'>View Profile</a>
             }
             else
             {
+                if (item.USER.PROFILE_PIC == null)
+                {
+                    <img src="~/Content/images/default.png" class="profilePicture" id="postPicture" />
+                }
+                else
+                {
+                    var base64 = Convert.ToBase64String(item.USER.PROFILE_PIC);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <img src="@imgSrc" id="postPicture" class="profilePicture" />
+                }
                 @Html.Label("FullName", item.USER.FIRST_NAME + " " + item.USER.LAST_NAME);
                 <a href='@Url.Action("Timeline", "Pastebook", new { username = @item.USER.USER_NAME })'>View Profile</a>
             }

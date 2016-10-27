@@ -223,6 +223,7 @@
     <Content Include="Views\PasteBook\Friends.cshtml" />
     <Content Include="Views\PasteBook\Search.cshtml" />
     <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="Views\PasteBook\ShowNotificationCommentPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -240,8 +241,12 @@
       <Project>{e1f48127-3925-4db4-9e86-c9df3ee84fcd}</Project>
       <Name>BusinessLogicLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entity\Entities.csproj">
-      <Project>{8b3c2e8a-c688-4998-ab4e-f17ef87aa97b}</Project>
+    <ProjectReference Include="..\BusinessLogic\DataAccessLibrary.csproj">
+      <Project>{b7237ce9-4d1e-4cdd-8e31-69ac6373a3d7}</Project>
+      <Name>DataAccessLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{8583f121-51a8-48aa-9016-365903b6b2c6}</Project>
       <Name>Entities</Name>
     </ProjectReference>
   </ItemGroup>

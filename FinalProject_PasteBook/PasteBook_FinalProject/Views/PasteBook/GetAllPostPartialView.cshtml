@@ -1,6 +1,6 @@
 ﻿@using BusinessLogicLibrary;
 
-@model IEnumerable<Entity.POST>
+@model IEnumerable<Entities.POST>
 
 @foreach (var item in Model)
 {
@@ -12,17 +12,19 @@
                     @{
                         BusinessLogic businessLogic = new BusinessLogic();
 
-
+                        int posterID = 0;
                         string poster = string.Empty;
                         string profileOwner = string.Empty;
                         if (item.POSTER_ID == (int)Session["ID"])
                         {
                             poster = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
+                            posterID = item.USER.ID;
                             profileOwner = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
                         }
                         else if (item.POSTER_ID != (int)Session["ID"])
                         {
                             poster = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
+                            posterID = item.USER1.ID;
                             profileOwner = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
                         }
 
@@ -43,6 +45,39 @@
                     }
                 </div>
                 <div class="panel-body">
+                    @{
+                        if (Model != null)
+                        {
+                            if (item.USER.ID == posterID)
+                            {
+                                if (item.USER.PROFILE_PIC == null)
+                                {
+                                    <img src="~/Content/images/default.png" class="profilePicture" id="postPicture" />
+                                }
+                                else
+                                {
+
+                                    var base64 = Convert.ToBase64String(item.USER.PROFILE_PIC);
+                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    <img src="@imgSrc" id="postPicture" class="profilePicture" />
+                                }
+                            }
+                            else
+                            {
+                                if (item.USER1.PROFILE_PIC == null)
+                                {
+                                    <img src="~/Content/images/default.png" class="profilePicture" id="postPicture" />
+                                }
+                                else
+                                {
+
+                                    var base64 = Convert.ToBase64String(item.USER1.PROFILE_PIC);
+                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    <img src="@imgSrc" id="postPicture" class="profilePicture" />
+                                }
+                            }
+                        }
+                    }
                     @Html.DisplayFor(modelItem => item.CONTENT)
 
                     @{
@@ -53,9 +88,10 @@
                             {
                                 if (likes != 0)
                                 {
-                                    <button type="button" id="btnUnlike" class="btn btn-default" onclick="DeleteLike(@item.ID)">
+                                    @*<button type="button" id="btnUnlike" class="btn btn-default" onclick="DeleteLike(@item.ID)">
                                         Unlike
-                                    </button>
+                                    </button>*@
+                                    <span>Liked</span>
                                 }
 
                             }
@@ -63,7 +99,7 @@
                             {
                                 if (likes == 0)
                                 {
-                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); Notification('Like',@item.ID,0)">
+                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); Notification('Like',@item.ID,0,0)">
                                         Like
                                     </button>
                                 }

@@ -1,98 +1,56 @@
-﻿@model Entity.USER
-@*<div class="well well-lg">
-        @{
-            if (Model.PROFILE_PIC == null)
-            {
-                <img src="~/Content/images/user.png" class="profilePicture" />
-            }
-            else
-            {
-                var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
-                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                <img src="@imgSrc" class="profilePicture" />
-            }
-        }
-    </div>
-     public bool Edit(T newEntity)
-           {
-               int status = 0;
-               try
-               {
-                   using (var context = new PASTEBOOKEntities1())
-                   {
-                       context.Entry(newEntity).State = System.Data.Entity.EntityState.Modified;
-                       status = context.SaveChanges();
-                   }
-               }
-               catch (Exception)
-               {
-                   throw;
-               }
-               return status != 0;
-           }
-     public bool UploadImage(USER user, HttpPostedFileBase file)
-           {
-               byte[] profilePic = null;
-               using (MemoryStream ms = new MemoryStream())
-               {
-                   file.InputStream.CopyTo(ms);
-                   profilePic = ms.GetBuffer();
-               }
-               user.PROFILE_PIC = profilePic;
-               return userDataAccess.Edit(user);
-           }
-    CONTROLLER NA TO
-      public ActionResult UploadImage(HttpPostedFileBase file)
-           {
-               //forums.asp.net/t/2006227.aspx?Adding+validation+on+upload+a+image+in+MVC+4+0
-               if (ModelState.IsValid)
-               {
-                   USER model = userManager.GetUserDetailsUsingID((Int32)Session["ID"]);
-                   userManager.UploadImage(model, file);
-                   return RedirectToAction("Profile");
-               }
-               return View();
-           }*@
-
-
+﻿@model Entities.USER
 <div class="containerPastebook">
     <div class="col-md-4 pull-left">
-
         <div class="well well-lg">
             @{
-                if (Model.PROFILE_PIC == null)
+                if (Model != null)
                 {
-                    <img src="~/Content/images/default.png" class="profilePicture" id="timeLinePicture" />
-                }
-                else
-                {
-                    var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
-                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                    <img src="@imgSrc" class="profilePicture" id="timeLinePicture" />
+                    if (Model.PROFILE_PIC == null)
+                    {
+                        <img src="~/Content/images/default.png" class="profilePicture" id="newsfeedPicture" />
+                    }
+                    else
+                    {
+                        var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                        <img src="@imgSrc" class="profilePicture" id="newsfeedPicture" />
+                    }
                 }
             }
         </div>
-        @*photo uploading*@
-        <div class="well well-lg">
-            <h4>Change Profile Picture</h4>
-
-            <div class="wrapper">
-                <div class="col-md-12">
-                    <div id="imageHolder"> </div>
-                    <input id="uploadImage" title="Upload an Image" type="file" name="file" />
-                </div>
-            </div>
-            @Html.ValidationMessageFor(model => model.PROFILE_PIC, "", new { @class = "text-danger" })
-            <button type="submit" class="btn btn-primary" id="editProfilePicture">Save Picture</button>
-        </div>
-
+        @if (Model != null)
+        {
+            if ((int)Session["ID"] == Model.ID)
+            {
+                using (Html.BeginForm("UploadImage", "PasteBook", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    //photo uploading
+                    <div class="well well-lg">
+                        @*<h4>Change Profile Picture</h4>*@
+                        <div class="wrapper">
+                            <div class="col-md-12">
+                                <div id="imageHolder"> </div>
+                                <input id="uploadImage" title="Upload an Image" type="file" name="file" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="editProfilePicture">Save Picture</button>
+                    </div>
+                }
+            }
+        }
         <div class="panel panel-primary">
             <div class="panel-heading">
                 About Me
             </div>
             <div class="panel-body">
-                @Html.Label("AboutMe", Model.ABOUT_ME);
-                @*@Html.TextArea("txtAbuotMe", null, new { @rows = 8, @cols = 41, @placeholder = "About Me", id = "txtAboutMe" })*@
+                @if (string.IsNullOrEmpty(Model.ABOUT_ME))
+                {
+                    @Html.Label("AboutMe", "")
+                }
+                else if (!string.IsNullOrEmpty(Model.ABOUT_ME))
+                {
+                    @Html.Label("AboutMe", Model.ABOUT_ME)
+                }
             </div>
             <div class="panel-footer">
                 @if (Model.ID == (int)Session["ID"])
@@ -101,9 +59,19 @@
                 }
             </div>
         </div>
-        <a href="~/PasteBook/Friends">Friends</a>
-    </div>
+        @if (Model.ID == (int)Session["ID"])
+        {
+            <a href='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'>View Friends</a>
+        }
+        else
+        {
+                    @{
 
+                        FRIEND friend = new FRIEND()
+                        }
+                    <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="Notification('FriendRequest',0, 0, @Model.USER_NAME)">Add Friend</button>
+        }
+    </div>
     <div class="col-md-8">
         <div class="form-horizontal ">
             <div class="panel panel-primary">
@@ -123,9 +91,13 @@
 
 <div id="refreshPartialView">
     @{
-        Html.RenderAction("GetAllPostPartial", "PasteBook");
+        Html.RenderAction("GetAllPostPartial", "PasteBook", new { username = "" });
     }
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
 @{
     @Scripts.Render("~/bundles/jquery");
@@ -134,6 +106,10 @@
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
         var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
+        var getNotificationUrl = '@Url.Action("Notification", "PasteBook" )';
+        var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
+        var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
+        var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
     </script>
     <script src="~/Scripts/PasteBook.js"></script>
 }

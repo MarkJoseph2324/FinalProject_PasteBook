@@ -1,4 +1,4 @@
-﻿using Entity;
+﻿using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,6 +100,23 @@ namespace BusinessLogicLibrary
 
             }
             return listOfPost.OrderByDescending(x => x.CREATED_DATE).Take(100).ToList();
+        }
+
+        public POST GetPostDetails(int postID)
+        {
+            POST entityPost = new POST();
+            try
+            {
+                using (var context = new PastebookEntities())
+                {
+                    entityPost = context.POSTs.Where(x => x.ID == postID).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return entityPost;
         }
     }
 }
