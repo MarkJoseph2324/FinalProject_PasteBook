@@ -185,7 +185,6 @@ namespace BusinessLogicLibrary
             {
                 using (var context = new PastebookEntities())
                 {
-                    //context.Entry(user).State = System.Data.Entity.EntityState.Modified;
                     var user1 = context.USERs.Where(x => x.ID == user.ID).SingleOrDefault();
 
                     user1.PROFILE_PIC = user.PROFILE_PIC;
@@ -198,5 +197,26 @@ namespace BusinessLogicLibrary
             return status != 0;
         }
 
+        //public bool CheckIfEmailExist(string email)
+        //{
+        //    bool returnValue = false;
+        //    try
+        //    {
+        //        using (var context = new PastebookEntities())
+        //        {
+        //            var result = context.USERs.Where(x => x.EMAIL_ADDRESS == email).SingleOrDefault();
+
+        //            if (result != null)
+        //            {
+        //                returnValue = true;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    return returnValue;
+        //}
     }
 }

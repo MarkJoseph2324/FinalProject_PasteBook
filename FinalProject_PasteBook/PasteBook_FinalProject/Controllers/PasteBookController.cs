@@ -49,7 +49,7 @@ namespace PasteBook_FinalProject.Controllers
             int userID = Convert.ToInt32(Session["ID"]);
             var visitedUserID = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
             var friendsList = businessLogic.GetFriendsList(visitedUserID.ID);
-            ViewBag.Status = businessLogic.GetRelationshipStatus(userID, visitedUserID.ID, friendsList);
+            //ViewBag.Status = businessLogic.GetRelationshipStatus(userID, visitedUserID.ID, friendsList);
             var userDetails = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
             return View(userDetails);
         }

@@ -9,17 +9,18 @@
 {
     <div class="form-horizontal regContainer">
         <div class="form-group ">
+            <span id="registration">Registration</span>
             <span class="control-label col-md-12 col-md-offset-5"> <em>All fields mark with asterisk(*) is required.</em> </span>
         </div>
 
-        <div class="form-group ">
+        <div class="form-group">
             <div class="col-md-2 col-md-offset-5">
                 @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label" })
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Username" } })
-                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Username", id = "txtUsername" } })
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger", id = "txtUsernameValidate" })
             </div>
         </div>
 
@@ -29,8 +30,8 @@
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "First Name" } })
-                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "First Name", id = "txtFirstName" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger", id = "txtFirstNameValidate" })
             </div>
         </div>
 
@@ -40,8 +41,8 @@
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Last Name" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Last Name", id = "txtLastName" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger", id = "txtLastNameValidate" })
             </div>
         </div>
 
@@ -51,8 +52,8 @@
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "E-mail" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "E-mail", id = "txtEmail" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger", id = "txtEmailValidate" })
             </div>
         </div>
 
@@ -62,8 +63,8 @@
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password" } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password", id = "txtPassword" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger", id = "txtPasswordValidate" })
             </div>
         </div>
 
@@ -73,15 +74,14 @@
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Confirm Password" } })
-                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Confirm Password", id="ConfirmPassword" } })
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger", id = "ConfirmPasswordValidate" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-2 col-md-offset-5">
                 @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
-                <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
                 @Html.DropDownList("Gender", new List<SelectListItem>
@@ -99,8 +99,8 @@
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control", @placeholder = "Birth Date", @type = "date" } })
-                @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control", @placeholder = "Birth Date", @type = "date", id="txtBirthDay" } })
+                @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger", id = "txtBirthDayValidate" })
             </div>
         </div>
 
@@ -136,4 +136,88 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        var getUsernameUrl = '@Url.Action("CheckIfUsernameExist", "PasteBookAccount")';
+        var getEmailUrl = '@Url.Action("CheckIfEmailExist", "PasteBookAccount")';
+
+        $("#txtUsername").blur(function () {
+            var data = {
+                username: $('#txtUsername').val()
+            }
+            if ($('#txtUsername').val() == "") {
+                $('#txtUsernameValidate').text("Username is a required field.")
+            } else {
+                $.ajax({
+                    url: getUsernameUrl,
+                    data: data,
+                    type: 'GET',
+                    success: function (data) {
+                        SuccesUsernameValidation(data);
+                    }
+                })
+            }
+        });
+
+        function SuccesUsernameValidation(data){
+            if (data.Existing) {
+                $('#txtUsernameValidate').text("Sorry this username already exists.")
+            }
+        }
+
+        $("#txtPassword").blur(function () {
+            if ($('#txtPassword').val() == "") {
+                $('#txtPasswordValidate').text("Password is a required field.")
+            }
+        });
+
+        $("#txtEmail").blur(function () {
+            var data = {
+                email: $('#txtEmail').val()
+            }
+            if ($('#txtEmail').val() == "") {
+                $('#txtEmailValidate').text("Email Address is a required field.")
+            } else {
+                $.ajax({
+                    url: getEmailUrl,
+                    data: data,
+                    type: 'GET',
+                    success: function (data) {
+                        SuccesEmailValidation(data);
+                    }
+                })
+            }
+        });
+
+        function SuccesEmailValidation(data) {
+            if (data.Existing) {
+                $('#txtEmailValidate').text("Sorry this email address is already exists.")
+            }
+        }
+
+        $("#txtLastName").blur(function () {
+            if ($('#txtLastName').val() == "") {
+                $('#txtLastNameValidate').text("Last Name is a required field.")
+            }
+        });
+
+        $("#txtFirstName").blur(function () {
+            if ($('#txtFirstName').val() == "") {
+                $('#txtFirstNameValidate').text("First Name is a required field.")
+            }
+        });
+
+        $("#ConfirmPassword").blur(function () {
+            if ($('#ConfirmPassword').val() == "") {
+                $('#ConfirmPasswordValidate').text("Confirm Password is a required field.")
+            }
+        });
+
+        $("#txtBirthDay").blur(function () {
+            if ($('#txtBirthDay').val() == "") {
+                $('#txtBirthDayValidate').text("Birth Date is a required field.")
+            }
+        });
+
+    </script>
 }

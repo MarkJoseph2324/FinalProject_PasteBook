@@ -232,34 +232,34 @@ namespace BusinessLogicLibrary
             return userDataAccess.ChnageProfilePicture(user);
         }
 
-        public string GetRelationshipStatus(int currentUserID, int visitedUserID, List<FRIEND> friends)
-        {
-            string status = string.Empty;
-            foreach (var item in friends)
-            {
-                if ((item.USER_ID == visitedUserID && item.BLOCKED == "Y") || (item.FRIEND_ID == visitedUserID && item.BLOCKED == "Y"))
-                {
-                    status = "Blocked";
-                }
-                else if (item.USER_ID == visitedUserID && item.REQUEST == "Y")
-                {
-                    status = "Pending";
-                }
-                else if (item.FRIEND_ID == visitedUserID && item.REQUEST == "Y")
-                {
-                    status = "Acccept";
-                }
-                else if (item.FRIEND_ID != visitedUserID || item.USER_ID != visitedUserID)
-                {
-                    status = "Add";
-                }
-                else if ((item.FRIEND_ID == visitedUserID && item.BLOCKED == "N") || (item.USER_ID == visitedUserID && item.BLOCKED == "N"))
-                {
-                    status = "Block";
-                }
-            }
-            return status;
-        }
+        //public string GetRelationshipStatus(int currentUserID, int visitedUserID, List<FRIEND> friends)
+        //{
+        //    string status = string.Empty;
+        //    foreach (var item in friends)
+        //    {
+        //        if ((item.USER_ID == visitedUserID && item.BLOCKED == "Y") || (item.FRIEND_ID == visitedUserID && item.BLOCKED == "Y"))
+        //        {
+        //            status = "Blocked";
+        //        }
+        //        else if (item.USER_ID == visitedUserID && item.REQUEST == "Y")
+        //        {
+        //            status = "Pending";
+        //        }
+        //        else if (item.FRIEND_ID == visitedUserID && item.REQUEST == "Y")
+        //        {
+        //            status = "Acccept";
+        //        }
+        //        else if (item.FRIEND_ID != visitedUserID || item.USER_ID != visitedUserID)
+        //        {
+        //            status = "Add";
+        //        }
+        //        else if ((item.FRIEND_ID == visitedUserID && item.BLOCKED == "N") || (item.USER_ID == visitedUserID && item.BLOCKED == "N"))
+        //        {
+        //            status = "Block";
+        //        }
+        //    }
+        //    return status;
+        //}
 
         //public string UpdateStatus(int currentUserID, int visited_ID, string relStatus)
         //{
@@ -270,5 +270,7 @@ namespace BusinessLogicLibrary
         {
             return userDataAccess.UpdateUser(user);
         }
+
+        
     }
 }

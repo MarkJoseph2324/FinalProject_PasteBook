@@ -107,5 +107,35 @@ namespace PasteBook_FinalProject
             Session["Username"] = null;
             return View("LogIn");
         }
+
+        public JsonResult CheckIfUsernameExist(string username)
+        {
+            bool usernameExist = false;
+            if(validation.CheckIfUsernameIsExisting(username))
+            {
+                usernameExist = true;
+            }
+            return Json(new { Existing = usernameExist}, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CheckIfEmailExist(string email)
+        {
+            bool emailExist = false;
+            if (validation.CheckIfEmailIsExisting(email))
+            {
+                emailExist = true;
+            }
+            return Json(new { Existing = emailExist }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CheckIfEmailFormatValid(string email)
+        {
+            bool emailExist = false;
+            if (validation.CheckEmailformat(email))
+            {
+                emailExist = true;
+            }
+            return Json(new { Existing = emailExist }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

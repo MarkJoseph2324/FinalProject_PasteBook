@@ -25,7 +25,7 @@ namespace PasteBook_FinalProject
 
         [DisplayName("Email:")]
         [Required(ErrorMessage = "Email is a required field.")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address.")]
         public string Email { get; set; }
 
         [DisplayName("Password:")]

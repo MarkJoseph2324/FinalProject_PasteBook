@@ -11,6 +11,7 @@ namespace PasteBook_FinalProject
     {
         [Required(ErrorMessage = "Please enter your email address.")]
         [DisplayName("Email:")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter your password.")]

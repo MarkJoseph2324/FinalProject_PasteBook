@@ -55,5 +55,18 @@ namespace BusinessLogicLibrary
             }
             return returnValue;
         }
+
+        public bool CheckIfEmailExist(string email)
+        {
+            bool returnValue = false;
+            USER user = new USER();
+            user.EMAIL_ADDRESS = email;
+            var result = userDataAccess.GetSpecificUser(user);
+            if(result != null)
+            {
+                returnValue = true;
+            }
+            return returnValue;
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace PasteBook_FinalProject
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "PasteBookAccount", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "PasteBookAccount", action = "LogIn", id = UrlParameter.Optional }
             );
         }
     }
