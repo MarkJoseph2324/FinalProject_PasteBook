@@ -20,7 +20,7 @@
                         var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
                         <img src="@imgSrc" id="postPicture" class="profilePicture" />
                     }
-                    message = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME + " likes your post.";
+                    message = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME + " likes your post.";
                 }
                 else if (item.NOTIF_TYPE == "C")
                 {

@@ -1,4 +1,40 @@
 ﻿@model Entities.USER
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Time Line";
+}
+
+<div class="modal fade" id="logout">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnOk" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.href = '@Url.Action("LogIn", "PasteBookAccount")'">OK</button>
+                <button id="btnCancel" type="button" class="btn btn-warning" data-dismiss="modal" >CANCEL</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="aboutMe">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @Html.TextArea("txtAboutMe", null, new { @rows = 8, @cols = 73, @placeholder = "Tell something about yourself...", id = "txtAboutMe" })
+            </div>
+            <div class="modal-footer">
+                <button id="btnOkAboutMe" type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                <button id="btnCancelAboutMe" type="button" class="btn btn-warning" data-dismiss="modal">CANCEL</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="containerPastebook">
     <div class="col-md-4 pull-left">
         <div class="well well-lg">
@@ -24,16 +60,10 @@
             {
                 using (Html.BeginForm("UploadImage", "PasteBook", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
-                    //photo uploading
                     <div class="well well-lg">
-                        @*<h4>Change Profile Picture</h4>*@
-                        <div class="wrapper">
-                            <div class="col-md-12">
-                                <div id="imageHolder"> </div>
-                                <input id="uploadImage" title="Upload an Image" type="file" name="file" />
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="editProfilePicture">Save Picture</button>
+                        <label for="file">Upload Image:</label>
+                        <input type="file" name="file" id="file" style="width: 100%;" />
+                        <input type="submit" value="Upload" class="submit" />
                     </div>
                 }
             }
@@ -43,13 +73,20 @@
                 About Me
             </div>
             <div class="panel-body">
-                @if (string.IsNullOrEmpty(Model.ABOUT_ME))
+                @if (Model != null)
+                {
+                    if (string.IsNullOrEmpty(Model.ABOUT_ME))
+                    {
+                        @Html.Label("AboutMe", Model.ABOUT_ME)
+                    }
+                    else
+                    {
+                        @Html.Label("AboutMe", "")
+                    }
+                }
+                else
                 {
                     @Html.Label("AboutMe", "")
-                }
-                else if (!string.IsNullOrEmpty(Model.ABOUT_ME))
-                {
-                    @Html.Label("AboutMe", Model.ABOUT_ME)
                 }
             </div>
             <div class="panel-footer">
@@ -59,19 +96,36 @@
                 }
             </div>
         </div>
-        @if (Model.ID == (int)Session["ID"])
+        @*@if (Model.ID == (int)Session["ID"])
         {
             <a href='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'>View Friends</a>
         }
         else
         {
-                    @{
-
-                        FRIEND friend = new FRIEND()
-                        }
-                    <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="Notification('FriendRequest',0, 0, @Model.USER_NAME)">Add Friend</button>
-        }
+            string status = Convert.ToString(ViewBag.Status);
+            if (status == "Blocked")
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus('Unblocked',@Model.ID)">Unblocked</button>
+            }
+            else if (status == "Block")
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus(Blocked',@Model.ID)">Blocked</button>
+            }
+            else if (status == "Pending")
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="">Pending Request</button>
+            }
+            else if (status == "Accept")
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus('Accept,@Model.ID)">Accept</button>
+            }
+            else if (status == "Add")
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus('Add',@Model.ID)">Add Friend</button>
+            }
+        }*@
     </div>
+
     <div class="col-md-8">
         <div class="form-horizontal ">
             <div class="panel panel-primary">
@@ -82,7 +136,7 @@
                     @Html.TextArea("txtPost", null, new { @rows = 8, @cols = 96, @placeholder = "What's on your mind?", id = "txtPost" })
                 </div>
                 <div class="panel-footer">
-                    <button type="button" id="btnPost" class="btn btn-default">Post</button>
+                    <button type="button" id="btnPostTimeLine" class="btn btn-default" value="@Model.ID">Post</button>
                 </div>
             </div>
         </div>
@@ -91,7 +145,7 @@
 
 <div id="refreshPartialView">
     @{
-        Html.RenderAction("GetAllPostPartial", "PasteBook", new { username = "" });
+        Html.RenderAction("GetAllPostPartial", "PasteBook");
     }
 </div>
 
@@ -103,13 +157,201 @@
     @Scripts.Render("~/bundles/jquery");
     <script>
         var getCreatePostUrl = '@Url.Action("CreatePost", "PasteBook")';
-        var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
+        var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook", new { username =Model.USER_NAME })';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
         var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
-        var getNotificationUrl = '@Url.Action("Notification", "PasteBook" )';
-        var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
-        var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
+        var getAddLikeNotificationUrl = '@Url.Action("Notification", "PasteBook" )';
+        var getGetLikeNotificationCountUrl = '@Url.Action("GetLikeNotificationCount", "PasteBook" )';
+        var getGetLikeNotificationListUrl = '@Url.Action("GetLikeNotificationList", "PasteBook" )';
         var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
+        var getUpdateStatusUrl = '@Url.Action("UpdateStatus", "PasteBook" )';
+        var getEditProfileUrl = '@Url.Action("EditAboutMe", "PasteBook" )';
+
+        $('#btnPostTimeLine').click(function () {
+            var data = {
+                post: $('#txtPost').val(),
+                profileOwnerID: $('#btnPostTimeLine').val()
+            }
+            if ($('#txtPost').val() != null) {
+                $.ajax({
+                    url: getCreatePostUrl,
+                    data: data,
+                    type: 'GET',
+                    success: function () {
+                        Reload();
+                    }
+                })
+            }
+        });
+
+        function AddLike(ID) {
+            var data = {
+                postID: ID
+            };
+
+            $.ajax({
+                url: getLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function AddComment(ID, button) {
+            var data = {
+                postID: ID,
+                postContent: $('#txtComment'.concat(button.value)).val()
+            };
+
+            $.ajax({
+                url: getCommentPostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function Search() {
+            location.href = url + '/?searchValue=' + $('#txtSearch').val()
+        };
+
+        function Reload() {
+            $('#refreshPartialView').load(getRefreshPartialViewUrl);
+            $('#txtPost').val("");
+            $('#txtComment').val("");
+        };
+
+        function LikeNotification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
+            var data = {
+                notifType: notificationType,
+                postID: post_ID,
+                commentID: comment_ID,
+                friendRequestID: IDtoBeFriend
+            }
+
+            $.ajax({
+                url: getAddLikeNotificationUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                    NotifyFriend();
+                    GetLikeNotificationCount();
+                }
+            })
+        };
+
+        function NotifyFriend() {
+            $.ajax({
+                url: getGetLikeNotificationListUrl,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function GetLikeNotificationCount() {
+            $.ajax({
+                url: getGetLikeNotificationCountUrl,
+                type: 'GET',
+                success: function (data) {
+                    RefreshBadge(data);
+                }
+            })
+        };
+
+        function UpdateStatus(status, visitedID) {
+            data = {
+                relStatus: status,
+                visitedID: visited_ID
+            }
+            $.ajax({
+                url: getAddLikeNotificationUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                    NotifyFriend();
+                    GetLikeNotificationCount();
+                }
+            })
+        };
+
+        function RefreshBadge(data) {
+            if (data.NotifCount != 0) {
+                $('#globeBadge').text(data.NotifCount)
+            }
+        }
+
+        //////Logout
+
+        $("#btnLogout").click(function () {
+            $('#logout').modal('show');
+            //$("#btnOk").click(function () {
+            //    var url = $("#RedirectToLogin").val();
+            //    location.href = url;
+            //})
+
+            //$("#btnCancel").click(function () {
+            //    var url = $("#RedirectToIndex").val();
+            //    location.href = url;
+            //})
+        })
+
+        /////// about me
+        $("#btnAboutMe").click(function () {
+            $('#aboutMe').modal('show');
+            $("#btnOkAboutMe").click(function () {
+                var data = {
+                    value: $('#txtAboutMe').val()
+                }
+                $.ajax({
+                    url: getEditProfileUrl,
+                    data: data,
+                    type: 'GET',
+                    success: function () {
+
+                    }
+                })
+            })
+
+            $("#btnCancelAboutMe").click(function () {
+                var url = $("#RedirectToTimeLine").val();
+                location.href = url;
+            })
+        });
+
+
+        window.onload = GetLikeNotificationCount
+
+
+        //Preview profile picture
+        //stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded
+        $("#uploadImage").on('change', function () {
+            if (typeof (FileReader) != "undefined") {
+                var image_holder = $("#imageHolder");
+                image_holder.empty();
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("<img />", {
+                        "src": e.target.result,
+                        "class": "thumb-image"
+                    }).appendTo(image_holder);
+                }
+                image_holder.show();
+                reader.readAsDataURL($(this)[0].files[0]);
+            } else {
+                alert("This browser does not support FileReader.");
+            }
+        });
+
+
     </script>
-    <script src="~/Scripts/PasteBook.js"></script>
+    @*<script src="~/Scripts/PasteBook.js"></script>*@
 }

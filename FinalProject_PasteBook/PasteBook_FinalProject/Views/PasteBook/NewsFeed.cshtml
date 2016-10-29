@@ -1,0 +1,213 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Newsfeed";
+}
+
+<div class="modal fade" id="logout">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnOk" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.href = '@Url.Action("LogIn", "PasteBookAccount")'">OK</button>
+                <button id="btnCancel" type="button" class="btn btn-warning" data-dismiss="modal">CANCEL</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="containerPastebook">
+    <div class="col-md-4 pull-left">
+        <div class="well well-lg">
+          
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="form-horizontal ">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-pencil"></span> Update Status
+                </div>
+                <div class="panel-body">
+                    @Html.TextArea("txtPost", null, new { @rows = 8, @cols = 95, @placeholder = "What's on your mind?", id = "txtPost" })
+                </div>
+                <div class="panel-footer">
+                    <button type="button" id="btnPostNewsFeed" class="btn btn-default" value="@Convert.ToInt32(Session["ID"])">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="refreshPartialView">
+    @{
+        Html.RenderAction("GetAllPostPartial", "PasteBook");
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+@{
+    @Scripts.Render("~/bundles/jquery");
+    <script>
+        var getCreatePostUrl = '@Url.Action("CreatePost", "PasteBook")';
+        var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
+        var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
+        var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
+        var getAddLikeNotificationUrl = '@Url.Action("AddLikeNotification", "PasteBook" )';
+        var getGetLikeNotificationCountUrl = '@Url.Action("GetLikeNotificationCount", "PasteBook" )';
+        var getGetLikeNotificationListUrl = '@Url.Action("GetLikeNotificationList", "PasteBook" )';
+        var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
+        var getUpdateStatusUrl = '@Url.Action("UpdateStatus", "PasteBook" )';
+
+        $('#btnPostNewsFeed').click(function () {
+            var data = {
+                post: $('#txtPost').val(),
+                profileOwnerID: $('#btnPostNewsFeed').val()
+            }
+            if ($('#txtPost').val() != null) {
+                $.ajax({
+                    url: getCreatePostUrl,
+                    data: data,
+                    type: 'GET',
+                    success: function () {
+                        Reload();
+                    }
+                })
+            }
+        })
+
+        function AddLike(ID) {
+            var data = {
+                postID: ID
+            };
+
+            $.ajax({
+                url: getLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function AddComment(ID, button) {
+            var data = {
+                postID: ID,
+                postContent: $('#txtComment'.concat(button.value)).val()
+            };
+
+            $.ajax({
+                url: getCommentPostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function Search() {
+            location.href = url + '/?searchValue=' + $('#txtSearch').val()
+        };
+
+        function Reload() {
+            $('#refreshPartialView').load(getRefreshPartialViewUrl);
+            $('#txtPost').val("");
+            $('#txtComment').val("");
+        };
+
+        function LikeNotification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
+            var data = {
+                notifType: notificationType,
+                postID: post_ID,
+                commentID: comment_ID,
+                friendRequestID: IDtoBeFriend
+            }
+
+            $.ajax({
+                url: getAddLikeNotificationUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                    NotifyFriend();
+                    GetLikeNotificationCount();
+                }
+            })
+        };
+
+        function NotifyFriend() {
+            $.ajax({
+                url: getGetLikeNotificationListUrl,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function GetLikeNotificationCount() {
+            $.ajax({
+                url: getGetLikeNotificationCountUrl,
+                type: 'GET',
+                success: function (data) {
+                    RefreshBadge(data);
+                }
+            })
+        };
+
+        function UpdateStatus(status, visitedID) {
+            data = {
+                relStatus: status,
+                visitedID: visited_ID
+            }
+            $.ajax({
+                url: getAddLikeNotificationUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                    NotifyFriend();
+                    GetLikeNotificationCount();
+                }
+            })
+        };
+
+        function RefreshBadge(data) {
+            if (data.NotifCount != 0) {
+                $('#globeBadge').text(data.NotifCount)
+            }
+        }
+
+        window.onload = GetLikeNotificationCount
+
+        //////Logout
+
+        $("#btnLogout").click(function () {
+            $('#logout').modal('show');
+            //$("#btnOk").click(function () {
+            //    var url = $("#RedirectToLogin").val();
+            //    location.href = url;
+            //})
+
+            //$("#btnCancel").click(function () {
+            //    var url = $("#RedirectToIndex").val();
+            //    location.href = url;
+            //})
+        });
+
+
+
+        //var i = setInterval(function () { GetNotification() }, 2000);
+    </script>
+}

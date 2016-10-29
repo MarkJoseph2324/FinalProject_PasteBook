@@ -1,13 +1,13 @@
 ﻿@model PasteBook_FinalProject.RegistrationModel
 
-
-<h2>Registration</h2>
-
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Title = "Registration";
+}
 
 @using (Html.BeginForm())
 {
-    <div class="form-horizontal">
-        <hr />
+    <div class="form-horizontal regContainer">
         <div class="form-group ">
             <span class="control-label col-md-12 col-md-offset-5"> <em>All fields mark with asterisk(*) is required.</em> </span>
         </div>
@@ -88,7 +88,6 @@
                 {
                     new SelectListItem{ Text="Male", Value="M"},
                     new SelectListItem{ Text="Female", Value="F"},
-                    new SelectListItem{ Text="Unspecified", Value="U"}
                 }, "-- Select Gender --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
             </div>
@@ -112,7 +111,6 @@
             </div>
             <div class="col-md-10 col-md-offset-5">
                 @Html.DropDownList("CountryID", ViewBag.Country as SelectList, "-- Select Country --", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.CountryID, "", new { @class = "text-danger" })
             </div>
         </div>
 

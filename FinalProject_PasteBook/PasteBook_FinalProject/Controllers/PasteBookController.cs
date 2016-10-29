@@ -3,6 +3,7 @@ using Entities;
 using PasteBook_FinalProject.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,9 +16,13 @@ namespace PasteBook_FinalProject.Controllers
         BusinessLogic businessLogic = new BusinessLogic();
         // GET: PasteBook
 
-        [Route("Pastebook.com")]
-        public ActionResult Index()
+        [Route("")]
+        public ActionResult NewsFeed()
         {
+            if(Session["ID"] == null)
+            {
+                return RedirectToAction("LogIn", "PasteBookAccount");
+            }
             return View();
         }
 
@@ -37,16 +42,19 @@ namespace PasteBook_FinalProject.Controllers
             }
         }
 
-        [Route("Pastebook.com/{username}")]
+        [Route("{username}")]
         [HttpGet]
         public ActionResult Timeline(string username)
-
         {
-            var user = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
-            return View(user);
+            int userID = Convert.ToInt32(Session["ID"]);
+            var visitedUserID = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
+            var friendsList = businessLogic.GetFriendsList(visitedUserID.ID);
+            ViewBag.Status = businessLogic.GetRelationshipStatus(userID, visitedUserID.ID, friendsList);
+            var userDetails = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
+            return View(userDetails);
         }
 
-        [Route("Pastebook.com/Friends/{username}")]
+        [Route("Friends/{username}")]
         [HttpGet]
         public ActionResult Friends()
         {
@@ -62,11 +70,11 @@ namespace PasteBook_FinalProject.Controllers
             return View(user);
         }
 
-        public JsonResult CreatePost(string post)
+        public JsonResult CreatePost(string post, int profileOwnerID)
         {
             int posterID = Convert.ToInt32(Session["ID"]);
-            businessLogic.CreatePost(post, posterID, posterID);
-            return Json(new { Post = post, PosterID = posterID, ProfileOwnerID = posterID }, JsonRequestBehavior.AllowGet);
+            businessLogic.CreatePost(post, posterID, profileOwnerID);
+            return Json(new { Post = post, PosterID = posterID, ProfileOwnerID = profileOwnerID }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult LikePost(int postID)
@@ -82,7 +90,7 @@ namespace PasteBook_FinalProject.Controllers
             return Json(new { PosterID = posterID, Content = postContent }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Notification(string notifType, int postID, int commentID, int friendRequestID)
+        public ActionResult AddLikeNotification(string notifType, int postID, int commentID, int friendRequestID)
         {
             int receiverID = 0;
             int senderID = Convert.ToInt32(Session["ID"]);
@@ -95,34 +103,21 @@ namespace PasteBook_FinalProject.Controllers
             {
                 receiverID = postDetails.POSTER_ID;
             }
-            if (notifType == "Like")
+            if (postID != 0)
             {
-                if (postID != 0)
-                {
-                    businessLogic.AddNotification(mapper.NotificationMapper(notifType, postID,commentID, senderID, receiverID));
-                }
+                businessLogic.AddLikeNotification(mapper.NotificationMapper(notifType, postID, commentID, senderID, receiverID));
             }
-            else if (notifType == "Comment")
-            {
-
-            }
-            else if (notifType == "AddFriend")
-            {
-                businessLogic.AddNotification(mapper.NotificationMapper(notifType, postID, commentID, senderID, friendRequestID));
-            }
-
-
             return View("Index");
         }
 
-        public ActionResult GetNotificationList()
+        public ActionResult GetLikeNotificationList()
         {
             int currentUserID = Convert.ToInt32(Session["ID"]);
             var listOfNotif = businessLogic.GetNotificationList(currentUserID);
             return PartialView("ShowNotificationCommentPartial", listOfNotif);
         }
 
-        public JsonResult GetNotificationCount()
+        public JsonResult GetLikeNotificationCount()
         {
             int currentUserID = Convert.ToInt32(Session["ID"]);
             int notifCount = businessLogic.GetNotificationList(currentUserID).Count();
@@ -131,19 +126,29 @@ namespace PasteBook_FinalProject.Controllers
 
         public ActionResult UploadImage(HttpPostedFileBase file)
         {
-            if (ModelState.IsValid)
+            string currentUser = Session["Username"].ToString();
+            var user = businessLogic.GetSpecificUser(mapper.UserMapper(null, currentUser));
+            if (file != null)
             {
-                string currentUser = Session["Username"].ToString();
-                var user = businessLogic.GetSpecificUser(mapper.UserMapper(null, currentUser));
-                var result = businessLogic.UploadImage(user, file);
-                return RedirectToAction("Timeline", "Pastebook", currentUser);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    file.InputStream.CopyTo(ms);
+                    byte[] array = ms.GetBuffer();
+
+                    user.PROFILE_PIC = array;
+                }
             }
-            return View();
+            businessLogic.UpdateUser(user);
+            return RedirectToAction("TimeLine", "Pastebook",new { username = Session["Username"]});
         }
 
-        //public ActionResult AddFriendRequest(int friendRequestID)
-        //{
-        //    int currentUserID = Convert.ToInt32(Session["ID"]);
-        //}
+        public JsonResult EditAboutMe(string value)
+        {
+            string currentUser = Session["Username"].ToString();
+            var user = businessLogic.GetSpecificUser(mapper.UserMapper(null, currentUser));
+            user.ABOUT_ME = value;
+            bool status = businessLogic.UpdateUser(user);
+            return Json(new { s = status }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

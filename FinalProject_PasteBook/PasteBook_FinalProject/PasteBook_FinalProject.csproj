@@ -156,7 +156,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PasteBookAccountController.cs" />
     <Compile Include="Controllers\PasteBookController.cs" />
     <Compile Include="Global.asax.cs">
@@ -216,14 +216,15 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\PasteBookAccount\Registration.cshtml" />
     <Content Include="Views\PasteBookAccount\LogIn.cshtml" />
-    <Content Include="Views\PasteBookAccount\Index.cshtml" />
-    <Content Include="Views\PasteBook\Index.cshtml" />
+    <Content Include="Views\PasteBook\NewsFeed.cshtml" />
     <Content Include="Views\PasteBook\GetAllPostPartialView.cshtml" />
     <Content Include="Views\PasteBook\TimeLine.cshtml" />
     <Content Include="Views\PasteBook\Friends.cshtml" />
     <Content Include="Views\PasteBook\Search.cshtml" />
     <Content Include="Views\Shared\_LayoutLogin.cshtml" />
     <Content Include="Views\PasteBook\ShowNotificationCommentPartial.cshtml" />
+    <Content Include="Views\Error\GlobalError.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

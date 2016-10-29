@@ -53,8 +53,7 @@ namespace BusinessLogicLibrary
             }
             catch (Exception)
             {
-
-                throw;
+                
             }
             return entityUser;
         }
@@ -179,7 +178,25 @@ namespace BusinessLogicLibrary
             return status != 0;
         }
 
+        public bool UpdateUser(USER user)
+        {
+            int status = 0;
+            try
+            {
+                using (var context = new PastebookEntities())
+                {
+                    //context.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    var user1 = context.USERs.Where(x => x.ID == user.ID).SingleOrDefault();
 
+                    user1.PROFILE_PIC = user.PROFILE_PIC;
+                    status = context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+                {
+            }
+            return status != 0;
+        }
 
     }
 }

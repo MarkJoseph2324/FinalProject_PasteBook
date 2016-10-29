@@ -9,7 +9,7 @@ namespace DataAccessLibrary
 { 
     public class NotificationDataAccess
     {
-        public bool AddNotification(NOTIFICATION notif)
+        public bool AddLikeNotification(NOTIFICATION notif)
         {
             bool returnValue = false;
             try
@@ -34,7 +34,7 @@ namespace DataAccessLibrary
             {
                 using (var context = new PastebookEntities())
                 {
-                    entityNotif = context.NOTIFICATIONs.Include("USER").Include("USER1").Where(x => x.RECEIVER_ID == userID && x.SEEN.Equals("N") && x.SENDER_ID != userID).ToList();
+                    entityNotif = context.NOTIFICATIONs.Include("USER").Include("USER1").Where(x => (x.RECEIVER_ID != userID && x.SEEN.Equals("N") && x.NOTIF_TYPE == "L") || ((x.RECEIVER_ID == userID && x.SEEN.Equals("N") && x.NOTIF_TYPE == "C"))).ToList();
                 }
             }
             catch (Exception ex)
@@ -43,5 +43,7 @@ namespace DataAccessLibrary
             }
             return entityNotif;
         }
+
+       
     }
 }

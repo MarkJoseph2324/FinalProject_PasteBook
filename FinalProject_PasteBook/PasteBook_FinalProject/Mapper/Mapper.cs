@@ -11,22 +11,29 @@ namespace PasteBook_FinalProject
     {
         public USER UserMapper(RegistrationModel user, string username)
         {
+            if(user != null)
+            {
+                if (user.Gender == null)
+                {
+                    user.Gender = "U";
+                }
+            }
             USER entityUser = new USER();
             if (string.IsNullOrEmpty(username))
             {
                  entityUser = new USER()
                 {
-                    USER_NAME = user.Username,
+                    USER_NAME = user.Username.Trim(),
                     BIRTHDAY = user.Birthday,
                     COUNTRY_ID = user.CountryID,
                     DATE_CREATED = DateTime.Now,
-                    FIRST_NAME = user.FirstName,
-                    LAST_NAME = user.LastName,
+                    FIRST_NAME = user.FirstName.Trim(),
+                    LAST_NAME = user.LastName.Trim(),
                     GENDER = user.Gender,
                     MOBILE_NO = user.MobileNumber,
                     PASSWORD = user.Password,
-                    EMAIL_ADDRESS = user.Email
-                };
+                    EMAIL_ADDRESS = user.Email.Trim()
+                 };
             }
             else
             {
@@ -43,8 +50,30 @@ namespace PasteBook_FinalProject
         {
             USER entityUser = new USER()
             {
-                PASSWORD = user.Password,
-                EMAIL_ADDRESS = user.Email
+                PASSWORD = user.Password.Trim(),
+                EMAIL_ADDRESS = user.Email.Trim()
+            };
+            return entityUser;
+        }
+
+        public USER RegistrationMapper(RegistrationModel register)
+        {
+            if(register.Gender == "")
+            {
+                register.Gender = "U";
+            }
+            USER entityUser = new USER()
+            {
+                PASSWORD = register.Password.Trim(),
+                EMAIL_ADDRESS = register.Email.Trim(),
+                BIRTHDAY = register.Birthday,
+                COUNTRY_ID = register.CountryID,
+                DATE_CREATED = DateTime.Now,
+                FIRST_NAME = register.FirstName.Trim(),
+                GENDER = register.Gender,
+                LAST_NAME = register.LastName.Trim(),
+                MOBILE_NO = register.MobileNumber.Trim(),
+                USER_NAME = register.Username.Trim()
             };
             return entityUser;
         }
@@ -63,7 +92,7 @@ namespace PasteBook_FinalProject
         {
             COMMENT entityComment = new COMMENT()
             {
-                CONTENT = postContent,
+                CONTENT = postContent.Trim(),
                 CREATED_DATE = DateTime.Now,
                 POST_ID = postID,
                 POSTER_ID = commentID

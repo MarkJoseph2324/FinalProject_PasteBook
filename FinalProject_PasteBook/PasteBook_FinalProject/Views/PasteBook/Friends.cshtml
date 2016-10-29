@@ -1,10 +1,29 @@
 ﻿@model IEnumerable<Entities.FRIEND>
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Friends";
+}
+<div class="modal fade" id="logout">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnOk" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.href = '@Url.Action("LogIn", "PasteBookAccount")'">OK</button>
+                <button id="btnCancel" type="button" class="btn btn-warning" data-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @foreach (var item in Model)
 {
     <div class="containerPastebook">
         <div class="friendContainer">
-           
+
             @if (item.USER.ID == Convert.ToInt32(Session["ID"]))
             {
                 if (item.USER1.PROFILE_PIC == null)
@@ -18,7 +37,7 @@
                     <img src="@imgSrc" id="postPicture" class="profilePicture" />
                 }
                 @Html.Label("FullName", item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME);
-                <a href='@Url.Action("Timeline", "Pastebook", new { username = @item.USER1.USER_NAME })'>View Profile</a>
+                <a href='@Url.Action("Timeline", "Pastebook", new { username =  @item.USER1.USER_NAME })'>View Profile</a>
             }
             else
             {
@@ -33,7 +52,7 @@
                     <img src="@imgSrc" id="postPicture" class="profilePicture" />
                 }
                 @Html.Label("FullName", item.USER.FIRST_NAME + " " + item.USER.LAST_NAME);
-                <a href='@Url.Action("Timeline", "Pastebook", new { username = @item.USER.USER_NAME })'>View Profile</a>
+                <a href='@Url.Action("Timeline", "Pastebook", new { username=@item.USER.USER_NAME })'>View Profile</a>
             }
         </div>
     </div>
@@ -44,4 +63,22 @@
             {
     <h1>You don't have a friend yet.</h1>
 }
+@{
+    @Scripts.Render("~/bundles/jquery");
+    <script>
+        //////Logout
 
+        $("#btnLogout").click(function () {
+            $('#logout').modal('show');
+            //$("#btnOk").click(function () {
+            //    var url = $("#RedirectToLogin").val();
+            //    location.href = url;
+            //})
+
+            //$("#btnCancel").click(function () {
+            //    var url = $("#RedirectToIndex").val();
+            //    location.href = url;
+            //})
+        })
+    </script>
+}

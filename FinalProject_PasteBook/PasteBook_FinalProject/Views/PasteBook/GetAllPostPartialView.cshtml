@@ -45,39 +45,6 @@
                     }
                 </div>
                 <div class="panel-body">
-                    @{
-                        if (Model != null)
-                        {
-                            if (item.USER.ID == posterID)
-                            {
-                                if (item.USER.PROFILE_PIC == null)
-                                {
-                                    <img src="~/Content/images/default.png" class="profilePicture" id="postPicture" />
-                                }
-                                else
-                                {
-
-                                    var base64 = Convert.ToBase64String(item.USER.PROFILE_PIC);
-                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                                    <img src="@imgSrc" id="postPicture" class="profilePicture" />
-                                }
-                            }
-                            else
-                            {
-                                if (item.USER1.PROFILE_PIC == null)
-                                {
-                                    <img src="~/Content/images/default.png" class="profilePicture" id="postPicture" />
-                                }
-                                else
-                                {
-
-                                    var base64 = Convert.ToBase64String(item.USER1.PROFILE_PIC);
-                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                                    <img src="@imgSrc" id="postPicture" class="profilePicture" />
-                                }
-                            }
-                        }
-                    }
                     @Html.DisplayFor(modelItem => item.CONTENT)
 
                     @{
@@ -99,7 +66,7 @@
                             {
                                 if (likes == 0)
                                 {
-                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); Notification('Like',@item.ID,0,0)">
+                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); LikeNotification('Like',@item.ID,0,0)">
                                         Like
                                     </button>
                                 }
