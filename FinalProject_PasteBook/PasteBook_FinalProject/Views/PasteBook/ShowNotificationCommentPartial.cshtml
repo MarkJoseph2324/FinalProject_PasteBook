@@ -6,25 +6,29 @@
 
         string message = string.Empty;
 
-        <div>
-            <button type="button" id="btnComment@(item.ID)" class="btn btn-default notifBtn" onclick="" value="">
-                @if (item.NOTIF_TYPE == "L")
-                {
-                    message = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME + " likes your post.";
-                }
-                else if (item.NOTIF_TYPE == "C")
-                {
-                    message = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME + "comment on your post.";
-                }
-                else if (item.NOTIF_TYPE == "F")
-                {
-                    message = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME + "sent you a friend request.";
-                }
+        <div class="col-md-12">
+            @if (item.NOTIF_TYPE == "L")
+            {
+                <button type="button" id="@(item.COMMENT_ID)" class="form-control btn btn-default notifBtn" onclick="" value="@(item.COMMENT_ID)">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                    @item.USER1.FIRST_NAME  @item.USER1.LAST_NAME likes your post.
+                </button>
+            }
+            else if (item.NOTIF_TYPE == "C")
+            {
+                <button type="button" id="btnComment@(item.ID)" class="form-control btn btn-default notifBtn" onclick="" value="">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    @item.USER1.FIRST_NAME @item.USER1.LAST_NAME commented on your post.
+                </button>
 
-
-                @message
-            </button>
+            }
+            else if (item.NOTIF_TYPE == "F")
+            {
+                <button type="button" class="form-control btn btn-default notifBtn" onclick="location.href='@Url.Action("Timeline","Pastebook", new { username = item.USER1.USER_NAME})'" value="">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    @item.USER1.FIRST_NAME @item.USER1.LAST_NAME sent you a friend request.
+                </button>
+            }
         </div>
-
     }
 }

@@ -57,31 +57,35 @@
             }
         </div>
         @{
+            bool friendshipStatus = false;
             var status = Model.FRIENDs.Where(x => x.USER_ID == (int)Session["ID"] && x.FRIEND_ID == Model.ID && x.REQUEST == "Y").FirstOrDefault();
             var status2 = Model.FRIENDs1.Where(x => x.USER_ID == Model.ID && x.FRIEND_ID == (int)Session["ID"] && x.REQUEST == "Y").FirstOrDefault();
-            @*if (status != null && status2 != null)
-                {
-                    <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Friends</button>
-                }*@
-        if (status != null && status2 == null)
-        {
-            <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Pending Friend Request</button>
-        }
-        else if (status == null && status2 != null)
-        {
-            <div class="col-md-12 btnFriendRequestContainer">
-                <div class="col-md-6">
-                    <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="AcceptFriendRequest(@((int)Session["ID"]), @Model.ID,'@Model.USER_NAME');">Accept</button>
+            if (status != null && status2 != null)
+            {
+                friendshipStatus = true;
+                @*<button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Friends</button>*@
+            }
+            if (status != null && status2 == null)
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Pending Friend Request</button>
+            }
+            else if (status == null && status2 != null)
+            {
+                friendshipStatus = false;
+                <div class="col-md-12 btnFriendRequestContainer">
+                    <div class="col-md-6">
+                        <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="AcceptFriendRequest(@((int)Session["ID"]), @Model.ID,'@Model.USER_NAME');">Accept</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="DeclineFriendRequest(@((int)Session["ID"]), @Model.ID,'@Model.USER_NAME')">Decline </button>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Decline </button>
-                </div>
-            </div>
-        }
-        else if (status == null && status2 == null)
-        {
-            <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="AddFriendRequest(@((int)Session["ID"]), @Model.ID, '@Model.USER_NAME');">Add Friend</button>
-        }
+            }
+            else if (status == null && status2 == null)
+            {
+                friendshipStatus = false;
+                <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="AddFriendRequest(@((int)Session["ID"]), @Model.ID, '@Model.USER_NAME');">Add Friend</button>
+            }
         }
 
 
@@ -190,13 +194,16 @@
         </div>
     </div>
 </div>
-
-<div id="refreshPartialView">
-    @{
-        Html.RenderAction("GetAllPostPartial", "PasteBook");
+@{
+    if (friendshipStatus)
+    {
+        <div id="refreshPartialView">
+            @{
+                Html.RenderAction("GetAllPostPartial", "PasteBook");
+            }
+        </div>
     }
-</div>
-
+}
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
@@ -216,6 +223,7 @@
         var getEditProfileUrl = '@Url.Action("EditAboutMe", "PasteBook" )';
         var getAddFriendNotification = '@Url.Action("Notification", "PasteBook" )';
         var getAddFriendRequest = '@Url.Action("AddFriend", "PasteBook" )';
+        var getDeclineFriendRequest = '@Url.Action("DeclineFriendRequest", "PasteBook" )';
 
         $('#btnPostTimeLine').click(function () {
             var data = {
@@ -267,7 +275,25 @@
                 success: function (data) {
                     var param = data.VisitedUsername;
                     var url = '@Url.Action("Timeline", "Pastebook")';
-                        location.href = url + '/?username=' + param
+                    location.href = url + '/?username=' + param
+                }
+            })
+        };
+
+        function DeclineFriendRequest(user_ID, profileOwner_ID, profileOwnerUsername) {
+            var data = {
+                userID: user_ID,
+                profileOwnerID: profileOwner_ID,
+                visitedUsername: profileOwnerUsername
+            }
+            $.ajax({
+                url: getDeclineFriendRequest,
+                data: data,
+                type: 'GET',
+                success: function (data) {
+                    var param = data.VisitedUsername;
+                    var url = '@Url.Action("Timeline", "Pastebook")';
+                    location.href = url + '/?username=' + param
                 }
             })
         };

@@ -34,7 +34,7 @@ namespace DataAccessLibrary
             {
                 using (var context = new PastebookEntities())
                 {
-                    entityNotif = context.NOTIFICATIONs.Include("USER").Include("USER1").Where(x => (x.RECEIVER_ID != userID && x.SEEN.Equals("N") && x.NOTIF_TYPE == "L") || ((x.RECEIVER_ID == userID && x.SEEN.Equals("N") && x.NOTIF_TYPE == "C"))).ToList();
+                    entityNotif = context.NOTIFICATIONs.Include("USER").Include("USER1").Where(x => (x.RECEIVER_ID == userID && x.SENDER_ID != userID && x.SEEN.Equals("N") && x.NOTIF_TYPE == "L") || ((x.RECEIVER_ID == userID && x.SENDER_ID != userID && x.SEEN.Equals("N") && x.NOTIF_TYPE == "C") || (x.RECEIVER_ID == userID && x.SEEN.Equals("N") && x.NOTIF_TYPE == "F"))).ToList();
                 }
             }
             catch (Exception ex)

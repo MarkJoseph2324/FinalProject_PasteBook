@@ -185,11 +185,17 @@ namespace PasteBook_FinalProject.Controllers
             bool status = businessLogic.UpdateUser(user);
             return Json(new { s = status }, JsonRequestBehavior.AllowGet);
         }
-
+        
         public JsonResult AddFriend(int userID, int profileOwnerID, string visitedUsername)
         {
             var status = businessLogic.AddFriend(mapper.FriendMapper(userID, profileOwnerID));
             return Json(new { UserID = userID, ProfileOwnerID = profileOwnerID , VisitedUsername = visitedUsername }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeclineFriendRequest(int userID, int profileOwnerID, string visitedUsername)
+        {
+            var status = businessLogic.DeclineFriendRequest(mapper.FriendMapper(userID, profileOwnerID));
+            return Json(new { UserID = userID, ProfileOwnerID = profileOwnerID, VisitedUsername = visitedUsername }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -239,5 +239,10 @@ namespace BusinessLogicLibrary
         {
             return friendDataAccess.AddFriend(friend);
         }
+
+        public bool DeclineFriendRequest(FRIEND friend)
+        {
+            return friendDataAccess.DeclineFriendRequest(friend);
+        }
     }
 }

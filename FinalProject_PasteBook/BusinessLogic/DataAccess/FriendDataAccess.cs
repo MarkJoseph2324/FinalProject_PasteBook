@@ -67,5 +67,25 @@ namespace BusinessLogicLibrary
 
             return returnValue;
         }
+
+        public bool DeclineFriendRequest(FRIEND friend)
+        {
+            bool returnValue = false;
+            try
+            {
+                using (var context = new PastebookEntities())
+                {
+                    var record = context.FRIENDs.Where(x => x.FRIEND_ID == friend.USER_ID && x.USER_ID == friend.FRIEND_ID && x.REQUEST == "Y").First();
+                    context.FRIENDs.Remove(record);
+                    returnValue = context.SaveChanges() != 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return returnValue;
+        }
     }
 }
