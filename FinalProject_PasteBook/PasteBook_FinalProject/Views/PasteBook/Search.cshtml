@@ -24,9 +24,22 @@
 {
     <div class="containerPastebook">
         <div class="friendContainer">
-           
+
             @if ((int)Session["ID"] != item.ID)
             {
+
+                if (item.PROFILE_PIC == null)
+                {
+                    <img src="~/Content/images/default.png" class="profilePicture" id="newsfeedPicture" />
+                }
+                else
+                {
+                    var base64 = Convert.ToBase64String(item.PROFILE_PIC);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <img src="@imgSrc" class="profilePicture" id="newsfeedPicture" />
+                }
+
+
                 @Html.Label("FullName", item.FIRST_NAME + " " + item.LAST_NAME);
                 <a href='@Url.Action("Timeline", "Pastebook", new { username = item.USER_NAME })'>View Profile</a>
             }

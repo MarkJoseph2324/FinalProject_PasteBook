@@ -1,5 +1,6 @@
-﻿#txtPost #txtAboutMe{
+﻿.txtPost, #txtAboutMeEdit{
     width: 100%;
+    overflow-y:hidden;
 }
 
 #glyphiconArrowHead{
@@ -19,6 +20,10 @@
 
 .commentContainer{
     margin-top: 5px;
+}
+
+.commentText{
+    padding-bottom: 15px;
 }
   
 .navIcon {
@@ -174,18 +179,18 @@
     overflow-y: auto;
 }
 
-#postPicture{
-    width:50px;
+#friendsPicture{
+    width:100px;
 }
 
 .notifBtn{
     border-radius: 0px;
 }
 
-/*.panel-body{
-    overflow-x:hidden;
-    overflow-wrap:break-word;
-}*/
+.textContainer{
+    /*overflow-y:hidden;*/
+    word-wrap:break-word;
+}
 
 .regContainer{
     margin-top: 20px;
@@ -194,4 +199,12 @@
 #error500{
     font-size: 80px;
     margin-top: 100px;
+}
+
+.wellInfo{
+    color: #428bca;
+}
+
+.labelInfo{
+    font-weight: bold;
 }

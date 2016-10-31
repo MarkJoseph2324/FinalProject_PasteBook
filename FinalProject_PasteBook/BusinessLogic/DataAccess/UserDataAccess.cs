@@ -39,15 +39,15 @@ namespace BusinessLogicLibrary
                 {
                     if (user.EMAIL_ADDRESS != null)
                     {
-                        entityUser = context.USERs.Where(x => x.EMAIL_ADDRESS == user.EMAIL_ADDRESS).FirstOrDefault();
+                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.EMAIL_ADDRESS == user.EMAIL_ADDRESS).FirstOrDefault();
                     }
                     if(user.ID != 0)
                     {
-                        entityUser = context.USERs.Where(x => x.ID == user.ID).FirstOrDefault();
+                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.ID == user.ID).FirstOrDefault();
                     }
                     if (!string.IsNullOrEmpty(user.USER_NAME))
                     {
-                        entityUser = context.USERs.Where(x => x.USER_NAME == user.USER_NAME).FirstOrDefault();
+                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.USER_NAME == user.USER_NAME).FirstOrDefault();
                     }
                 }
             }
@@ -65,7 +65,7 @@ namespace BusinessLogicLibrary
             {
                 using (var context = new PastebookEntities())
                 {
-                    entityUser = context.USERs.Where(x => ((x.ID != userID)&& x.FIRST_NAME.Contains(searchValue)) || ( (x.ID != userID)&& x.LAST_NAME.Contains(searchValue))).ToList();
+                    entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => ((x.ID != userID)&& x.FIRST_NAME.Contains(searchValue)) || ( (x.ID != userID)&& x.LAST_NAME.Contains(searchValue))).ToList();
                 }
             }
             catch (Exception)
@@ -98,7 +98,7 @@ namespace BusinessLogicLibrary
                             }
                         }
 
-                        var list = context.USERs.Where(x => x.ID == friendID).ToList();
+                        var list = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.ID == friendID).ToList();
 
                         foreach (var item1 in list)
                         {
@@ -130,45 +130,17 @@ namespace BusinessLogicLibrary
             return friendsInformationList;
         }
 
-        public bool UploadImageInDataBase(HttpPostedFileBase file, USER user)
-        {
-            USER entityUser = new USER();
-            bool returnValue = false;
-            try
-            {
-                using (var context = new PastebookEntities())
-                {
-                    user.PROFILE_PIC = ConvertToBytes(file);
-                    entityUser = new USER
-                    {
-                        PROFILE_PIC = user.PROFILE_PIC
-                    };
-                    context.USERs.Add(entityUser);
-                    returnValue = context.SaveChanges() != 0;
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return returnValue;
-        }
-
-        public byte[] ConvertToBytes(HttpPostedFileBase image)
-        {
-            byte[] imageBytes = null;
-            BinaryReader reader = new BinaryReader(image.InputStream);
-            imageBytes = reader.ReadBytes((int)image.ContentLength);
-            return imageBytes;
-        }
-
-        public bool ChnageProfilePicture(USER user)
+        public bool UpdateUserAboutMe(USER user)
         {
             int status = 0;
             try
             {
                 using (var context = new PastebookEntities())
                 {
+                    var user1 = context.USERs.Where(x => x.ID == user.ID).SingleOrDefault();
+
+                    user1.ABOUT_ME = user.ABOUT_ME;
+                    status = context.SaveChanges();
                 }
             }
             catch (Exception)
@@ -178,7 +150,7 @@ namespace BusinessLogicLibrary
             return status != 0;
         }
 
-        public bool UpdateUser(USER user)
+        public bool ChnageProfilePicture(USER user)
         {
             int status = 0;
             try

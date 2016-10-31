@@ -7,3 +7,4 @@ C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\Ent
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\Entities\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\Entities\obj\Debug\Entities.dll
 C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\Entities\obj\Debug\Entities.pdb
+C:\Users\Bootcamp\Source\Repos\FinalProject_PasteBook\FinalProject_PasteBook\Entities\obj\Debug\Entities.csprojResolveAssemblyReference.cache

@@ -33,10 +33,11 @@
                     <span class="glyphicon glyphicon-pencil"></span> Update Status
                 </div>
                 <div class="panel-body">
-                    @Html.TextArea("txtPost", null, new { @rows = 8, @cols = 95, @placeholder = "What's on your mind?", id = "txtPost" })
+                    @Html.TextArea("txtPost", null, new { @rows = 5, @placeholder = "What's on your mind?", @class = "txtPost" })
                 </div>
                 <div class="panel-footer">
-                    <button type="button" id="btnPostNewsFeed" class="btn btn-default" value="@Convert.ToInt32(Session["ID"])">Post</button>
+                    <div class="col-md-11"></div>
+                    <button type="button" id="btnPostNewsFeed" class="btn btn-primary" value="@Convert.ToInt32(Session["ID"])">Post</button>
                 </div>
             </div>
         </div>

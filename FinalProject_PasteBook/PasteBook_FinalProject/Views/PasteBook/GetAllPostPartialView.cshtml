@@ -17,15 +17,15 @@
                         string profileOwner = string.Empty;
                         if (item.POSTER_ID == (int)Session["ID"])
                         {
-                            poster = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
-                            posterID = item.USER.ID;
-                            profileOwner = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
+                            poster = item.USER1.FIRST_NAME + " " + item.USER.LAST_NAME;
+                            posterID = item.USER1.ID;
+                            profileOwner = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
                         }
                         else if (item.POSTER_ID != (int)Session["ID"])
                         {
-                            poster = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
-                            posterID = item.USER1.ID;
-                            profileOwner = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
+                            poster = item.USER.FIRST_NAME + " " + item.USER.LAST_NAME;
+                            posterID = item.USER.ID;
+                            profileOwner = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
                         }
 
                         if (item.POSTER_ID == item.PROFILE_OWNER_ID)
@@ -44,7 +44,7 @@
                         }
                     }
                 </div>
-                <div class="panel-body">
+                <div class="panel-body textContainer">
                     @Html.DisplayFor(modelItem => item.CONTENT)
 
                     @{
@@ -66,7 +66,7 @@
                             {
                                 if (likes == 0)
                                 {
-                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); LikeNotification('Like',@item.ID,0,0)">
+                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); Notification('Like',@item.ID,0,0)">
                                         Like
                                     </button>
                                 }
@@ -77,15 +77,14 @@
                             }
                             @if (item.COMMENTs.Count() != 0)
                             {
-                                <hr />
                                 foreach (var itemComment in item.COMMENTs)
                                 {
                                     <div class="commentContainer">
                                         <div class="bg-info">
                                             @Html.Label("FullName", itemComment.USER.FIRST_NAME + " " + itemComment.USER.LAST_NAME)
                                         </div>
-                                        <div class="bg-info">
-                                            <span>@itemComment.CONTENT</span>
+                                        <div class="bg-info commentText">
+                                            <span class="textContainer" >@itemComment.CONTENT</span>
                                         </div>
                                         <div class="bg-info">
                                             <span>@itemComment.CREATED_DATE</span>
@@ -100,7 +99,7 @@
                     <div class="col-md-10">
                         <input type="text" name="comment" id="txtComment@(item.ID)" class="form-control textComment" placeholder="Write a comment..." />
                     </div>
-                    <button type="button" id="btnComment" class="btn btn-default" onclick="AddComment(@item.ID, this)" value="@item.ID">Comment</button>
+                    <button type="button" id="btnComment" class="btn btn-default" onclick="AddComment(@item.ID, this);" value="@item.ID">Comment</button>
                 </div>
             </div>
         </div>

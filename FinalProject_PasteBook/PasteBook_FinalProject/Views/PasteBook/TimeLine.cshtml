@@ -1,10 +1,11 @@
-﻿@model Entities.USER
+﻿@using BusinessLogicLibrary;
+@model Entities.USER
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Time Line";
 }
-
+@*logout modal*@
 <div class="modal fade" id="logout">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -13,18 +14,18 @@
             </div>
             <div class="modal-footer">
                 <button id="btnOk" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.href = '@Url.Action("LogIn", "PasteBookAccount")'">OK</button>
-                <button id="btnCancel" type="button" class="btn btn-warning" data-dismiss="modal" >CANCEL</button>
-
+                <button id="btnCancel" type="button" class="btn btn-warning" data-dismiss="modal">CANCEL</button>
             </div>
         </div>
     </div>
 </div>
-
+@*Edit About Me Modal*@
 <div class="modal fade" id="aboutMe">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                @Html.TextArea("txtAboutMe", null, new { @rows = 8, @cols = 73, @placeholder = "Tell something about yourself...", id = "txtAboutMe" })
+                @Html.TextArea("txtAboutMeEdit", null, new { @rows = 8, @placeholder = "Tell something about yourself...", id = "txtAboutMeEdit" })
+                @Html.ValidationMessage("txtAboutMeEdit", "", new { @class = "text-danger", id = "txtEmailEditValidate" })
             </div>
             <div class="modal-footer">
                 <button id="btnOkAboutMe" type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
@@ -37,6 +38,7 @@
 
 <div class="containerPastebook">
     <div class="col-md-4 pull-left">
+        @*Profile Picture*@
         <div class="well well-lg">
             @{
                 if (Model != null)
@@ -54,6 +56,25 @@
                 }
             }
         </div>
+        @{
+            var status = Model.FRIENDs.Where(x => x.USER_ID == (int)Session["ID"] && x.FRIEND_ID == Model.ID && x.REQUEST == "Y").FirstOrDefault();
+            var status2 = Model.FRIENDs1.Where(x => x.USER_ID == Model.ID && x.FRIEND_ID == (int)Session["ID"] && x.REQUEST == "Y").FirstOrDefault();
+            if (status != null && status2 != null)
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="">Friends</button>
+            }
+            else if (status != null && status2 != null)
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="">Pending Friend Request</button>
+            }
+            else if (status == null && status2 == null)
+            {
+                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="AddFriendRequest(@((int)Session["ID"]), @Model.ID)">Add Friends</button>
+            }
+        }
+
+
+
         @if (Model != null)
         {
             if ((int)Session["ID"] == Model.ID)
@@ -68,6 +89,52 @@
                 }
             }
         }
+        @*User information Panel*@
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                User Information
+            </div>
+            <div class="panel-body">
+                @{
+                    <div>
+                        <span class="labelInfo">Name: </span>
+                        <span>@Model.FIRST_NAME @Model.LAST_NAME</span>
+                    </div>
+                    <div>
+                        <span class="labelInfo">Gender: </span>
+                        @if (Model.GENDER == "F")
+                        {
+                            <span>Female</span>
+                        }
+                        else if (Model.GENDER == "M")
+                        {
+                            <span>Male</span>
+                        }
+                        else if (Model.GENDER == "U")
+                        {
+                            <span>Unspecified</span>
+                        }
+                    </div>
+                    <div>
+                        <span class="labelInfo">Birthday: </span>
+                        <span>@Model.BIRTHDAY.ToString("MMMM dd, yyyy")</span>
+                    </div>
+                    <div>
+                        <span class="labelInfo">Mobile Number: </span>
+                        <span>@Model.MOBILE_NO</span>
+                    </div>
+                    <div>
+                        <span class="labelInfo">Username: </span>
+                        <span>@Model.USER_NAME</span>
+                    </div>
+                    <div>
+                        <span class="labelInfo">Country: </span>
+                        <span>@Model.REF_COUNTRY.COUNTRY</span>
+                    </div>
+                }
+            </div>
+        </div>
+        @*About Me Panel*@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 About Me
@@ -75,18 +142,7 @@
             <div class="panel-body">
                 @if (Model != null)
                 {
-                    if (string.IsNullOrEmpty(Model.ABOUT_ME))
-                    {
-                        @Html.Label("AboutMe", Model.ABOUT_ME)
-                    }
-                    else
-                    {
-                        @Html.Label("AboutMe", "")
-                    }
-                }
-                else
-                {
-                    @Html.Label("AboutMe", "")
+                    <span class="textContainer" , id="txtAboutMe"> @Model.ABOUT_ME</span>
                 }
             </div>
             <div class="panel-footer">
@@ -96,36 +152,10 @@
                 }
             </div>
         </div>
-        @*@if (Model.ID == (int)Session["ID"])
-        {
-            <a href='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'>View Friends</a>
-        }
-        else
-        {
-            string status = Convert.ToString(ViewBag.Status);
-            if (status == "Blocked")
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus('Unblocked',@Model.ID)">Unblocked</button>
-            }
-            else if (status == "Block")
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus(Blocked',@Model.ID)">Blocked</button>
-            }
-            else if (status == "Pending")
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="">Pending Request</button>
-            }
-            else if (status == "Accept")
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus('Accept,@Model.ID)">Accept</button>
-            }
-            else if (status == "Add")
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="UpdateStatus('Add',@Model.ID)">Add Friend</button>
-            }
-        }*@
-    </div>
 
+        @*<a href='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'>View Friends</a>*@
+    </div>
+    @*Post div*@
     <div class="col-md-8">
         <div class="form-horizontal ">
             <div class="panel panel-primary">
@@ -133,10 +163,11 @@
                     <span class="glyphicon glyphicon-pencil"></span> Update Status
                 </div>
                 <div class="panel-body">
-                    @Html.TextArea("txtPost", null, new { @rows = 8, @cols = 96, @placeholder = "What's on your mind?", id = "txtPost" })
+                    @Html.TextArea("txtPost", null, new { @rows = 5, @placeholder = "What's on your mind?", @class = "txtPost" })
                 </div>
                 <div class="panel-footer">
-                    <button type="button" id="btnPostTimeLine" class="btn btn-default" value="@Model.ID">Post</button>
+                    <div class="col-md-11"></div>
+                    <button type="button" id="btnPostTimeLine" class="btn btn-primary" value="@Model.ID">Post</button>
                 </div>
             </div>
         </div>
@@ -160,12 +191,14 @@
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook", new { username =Model.USER_NAME })';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
         var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
-        var getAddLikeNotificationUrl = '@Url.Action("Notification", "PasteBook" )';
-        var getGetLikeNotificationCountUrl = '@Url.Action("GetLikeNotificationCount", "PasteBook" )';
-        var getGetLikeNotificationListUrl = '@Url.Action("GetLikeNotificationList", "PasteBook" )';
+        var getAddNotificationUrl = '@Url.Action("AddNotification", "PasteBook" )';
+        var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
+        var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
         var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
         var getUpdateStatusUrl = '@Url.Action("UpdateStatus", "PasteBook" )';
         var getEditProfileUrl = '@Url.Action("EditAboutMe", "PasteBook" )';
+        var getAddFriendNotification = '@Url.Action("Notification", "PasteBook" )';
+        var getAddFriendRequest = '@Url.Action("AddFriend", "PasteBook" )';
 
         $('#btnPostTimeLine').click(function () {
             var data = {
@@ -183,6 +216,22 @@
                 })
             }
         });
+
+        function AddFriend(user_ID, profileOwner_ID) {
+            var data = {
+                userID: user_ID,
+                profileOwnerID: profileOwner_ID
+            }
+            $.ajax({
+                url: getCommentPostUrl,
+                data: data,
+                type: 'GET',
+                success: function (data) {
+                    Notification('AddFriend', data.PostID, data.CommentID, data.ProfileOwnerID)
+                    Reload();
+                }
+            })
+        };
 
         function AddLike(ID) {
             var data = {
@@ -209,7 +258,8 @@
                 url: getCommentPostUrl,
                 data: data,
                 type: 'GET',
-                success: function () {
+                success: function (data) {
+                    Notification('Comment', data.PostID, data.CommentID, data.ProfileOwnerID)
                     Reload();
                 }
             })
@@ -225,7 +275,7 @@
             $('#txtComment').val("");
         };
 
-        function LikeNotification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
+        function Notification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
             var data = {
                 notifType: notificationType,
                 postID: post_ID,
@@ -234,7 +284,7 @@
             }
 
             $.ajax({
-                url: getAddLikeNotificationUrl,
+                url: getAddNotificationUrl,
                 data: data,
                 type: 'GET',
                 success: function () {
@@ -247,7 +297,7 @@
 
         function NotifyFriend() {
             $.ajax({
-                url: getGetLikeNotificationListUrl,
+                url: getGetNotificationListUrl,
                 type: 'GET',
                 success: function () {
                     Reload();
@@ -255,9 +305,9 @@
             })
         };
 
-        function GetLikeNotificationCount() {
+        function GetNotificationCount() {
             $.ajax({
-                url: getGetLikeNotificationCountUrl,
+                url: getGetNotificationCountUrl,
                 type: 'GET',
                 success: function (data) {
                     RefreshBadge(data);
@@ -305,26 +355,33 @@
 
         /////// about me
         $("#btnAboutMe").click(function () {
+            $('#txtAboutMeEdit').val("")
             $('#aboutMe').modal('show');
             $("#btnOkAboutMe").click(function () {
                 var data = {
-                    value: $('#txtAboutMe').val()
+                    value: $('#txtAboutMeEdit').val()
                 }
                 $.ajax({
                     url: getEditProfileUrl,
                     data: data,
                     type: 'GET',
                     success: function () {
-
+                        $("#txtAboutMe").text($('#txtAboutMeEdit').val());
                     }
                 })
             })
-
-            $("#btnCancelAboutMe").click(function () {
-                var url = $("#RedirectToTimeLine").val();
-                location.href = url;
-            })
         });
+
+        $("#txtAboutMeEdit").keyup(function () {
+            if ($("#txtAboutMeEdit").val().length > 2000) {
+                $("#txtEmailEditValidate").text("Description must not exceed 2000 characters. ")
+                $("#btnOkAboutMe").attr('disabled', true);
+                $("#btnOkAboutMe").css('cursor', 'not-allowed');
+            }
+            else {
+                $("#txtEmailEditValidate").text("")
+            }
+        })
 
 
         window.onload = GetLikeNotificationCount

@@ -141,5 +141,18 @@ namespace PasteBook_FinalProject
             }
             return entityNotification;
         }
+
+        public FRIEND FriendMapper(int userID, int profileOwnerID)
+        {
+            FRIEND entityFriend = new FRIEND()
+            {
+                BLOCKED = "N",
+                CREATED_DATE = DateTime.Now,
+                FRIEND_ID = profileOwnerID,
+                REQUEST = "N",
+                USER_ID = userID
+            };
+            return entityFriend;
+        }
     }
 }

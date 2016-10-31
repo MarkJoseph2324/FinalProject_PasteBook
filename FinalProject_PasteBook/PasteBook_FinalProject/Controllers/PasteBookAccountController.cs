@@ -41,7 +41,7 @@ namespace PasteBook_FinalProject
             }
             else
             {
-                ModelState.AddModelError("EmailAddress", "Please enter a proper email. (e.g. 'sample@yahoo.com')");
+                ModelState.AddModelError("Email", "Please enter a proper email. (e.g. 'sample@yahoo.com')");
             }
             
             if (validation.CheckIfUsernameIsExisting(user.Username))

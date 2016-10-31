@@ -46,12 +46,19 @@ namespace PasteBook_FinalProject.Controllers
         [HttpGet]
         public ActionResult Timeline(string username)
         {
-            int userID = Convert.ToInt32(Session["ID"]);
-            var visitedUserID = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
-            var friendsList = businessLogic.GetFriendsList(visitedUserID.ID);
-            //ViewBag.Status = businessLogic.GetRelationshipStatus(userID, visitedUserID.ID, friendsList);
-            var userDetails = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
-            return View(userDetails);
+            if (Session["ID"] ==  null)
+            {
+                return RedirectToAction("LogIn", "PasteBookAccount");
+            }
+            else
+            {
+                int userID = Convert.ToInt32(Session["ID"]);
+                var visitedUserID = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
+                var friendsList = businessLogic.GetFriendsList(visitedUserID.ID);
+                //ViewBag.Status = businessLogic.GetRelationshipStatus(userID, visitedUserID.ID, friendsList);
+                var userDetails = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
+                return View(userDetails);
+            }
         }
 
         [Route("Friends/{username}")]
@@ -64,10 +71,17 @@ namespace PasteBook_FinalProject.Controllers
 
         public ActionResult Search(string searchValue)
         {
-            List<USER> user = new List<USER>();
-            int userID = Convert.ToInt32(Session["ID"]);
-            user = businessLogic.Search(userID, searchValue);
-            return View(user);
+            if (Session["ID"] == null)
+            {
+                return RedirectToAction("LogIn", "PasteBookAccount");
+            }
+            else
+            {
+                List<USER> user = new List<USER>();
+                int userID = Convert.ToInt32(Session["ID"]);
+                user = businessLogic.Search(userID, searchValue);
+                return View(user);
+            }
         }
 
         public JsonResult CreatePost(string post, int profileOwnerID)
@@ -85,12 +99,24 @@ namespace PasteBook_FinalProject.Controllers
         }
         public JsonResult AddComment(int postID, string postContent)
         {
+            int receiverID = 0;
+            COMMENT comment = new COMMENT();
             int posterID = Convert.ToInt32(Session["ID"]);
-            businessLogic.AddComment(mapper.CommentMapper(postID, posterID, postContent));
-            return Json(new { PosterID = posterID, Content = postContent }, JsonRequestBehavior.AllowGet);
+            var postDetails = businessLogic.GetPostDetails(postID);
+            if (postDetails.POSTER_ID == posterID)
+            {
+                receiverID = postDetails.PROFILE_OWNER_ID;
+            }
+            else
+            {
+                receiverID = postDetails.POSTER_ID;
+            }
+            comment = businessLogic.AddComment(mapper.CommentMapper(postID, posterID, postContent));
+            
+            return Json(new { PostID = comment.POST_ID, CommentID = comment.ID, ProfileOwnerID = receiverID }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddLikeNotification(string notifType, int postID, int commentID, int friendRequestID)
+        public ActionResult AddNotification(string notifType, int postID, int commentID, int friendRequestID)
         {
             int receiverID = 0;
             int senderID = Convert.ToInt32(Session["ID"]);
@@ -110,14 +136,14 @@ namespace PasteBook_FinalProject.Controllers
             return View("Index");
         }
 
-        public ActionResult GetLikeNotificationList()
+        public ActionResult GetNotificationList()
         {
             int currentUserID = Convert.ToInt32(Session["ID"]);
             var listOfNotif = businessLogic.GetNotificationList(currentUserID);
             return PartialView("ShowNotificationCommentPartial", listOfNotif);
         }
 
-        public JsonResult GetLikeNotificationCount()
+        public JsonResult GetNotificationCount()
         {
             int currentUserID = Convert.ToInt32(Session["ID"]);
             int notifCount = businessLogic.GetNotificationList(currentUserID).Count();
@@ -138,7 +164,7 @@ namespace PasteBook_FinalProject.Controllers
                     user.PROFILE_PIC = array;
                 }
             }
-            businessLogic.UpdateUser(user);
+            businessLogic.ChnageProfilePicture(user);
             return RedirectToAction("TimeLine", "Pastebook",new { username = Session["Username"]});
         }
 
@@ -149,6 +175,12 @@ namespace PasteBook_FinalProject.Controllers
             user.ABOUT_ME = value;
             bool status = businessLogic.UpdateUser(user);
             return Json(new { s = status }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddFriend(int userID, int profileOwnerID)
+        {
+            businessLogic.AddFriend(mapper.FriendMapper(userID, profileOwnerID));
+            return RedirectToAction("TimeLine", "PasteBook");
         }
     }
 }

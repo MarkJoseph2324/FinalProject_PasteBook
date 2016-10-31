@@ -9,22 +9,21 @@ namespace DataAccessLibrary.DataAccess
 {
     public class CommentDataAcces
     {
-        public bool AddComment(COMMENT comment)
+        public COMMENT AddComment(COMMENT comment)
         {
-            bool returnValue = false;
             try
             {
                 using (var context = new PastebookEntities())
                 {
                     context.COMMENTs.Add(comment);
-                    returnValue = context.SaveChanges() != 0;
+                    context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
 
             }
-            return returnValue;
+            return comment;
         }
 
         public List<COMMENT> GetAllComments()

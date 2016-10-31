@@ -13,7 +13,7 @@
         <div class="containerReg">
             <div class="navbar-header">
                 <div class="form-group">
-                    @Html.ActionLink("PasteBook", "Index", "Pastebook", new { area = "" }, new { @class = "navbar-brand", id = "logo" })
+                    @Html.ActionLink("PasteBook", "NewsFeed", "Pastebook", new { area = "" }, new { @class = "navbar-brand", id = "logo" })
                 </div>
                 <div id="custom-search-input">
                     <div class="input-group col-md-3">
@@ -30,19 +30,24 @@
                     <ul class="nav navbar-nav">
                         @{
                             <li class="dropdown" id="commentNotifDropdown">
-                                <span class="dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" onclick="SeenNotif()">
+                                <span class="dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" >
                                     <span class="badge" id="globeBadge"></span><span class="glyphicon glyphicon-globe navIcon " id="globeIcon"></span>
                                 </span>
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1" id="notifDropdown">
 
-                                    @{Html.RenderAction("GetLikeNotificationList", "PasteBook"); }
+                                    @{Html.RenderAction("GetNotificationList", "PasteBook"); }
 
 
                                 </ul>
                             </li>
 
                         }
-                        <li><span class="badge"></span><span class="glyphicon glyphicon-user navIcon"></span></li>
+                        <li>
+                            <span class="glyphicon glyphicon-user navIcon" onclick="location.href ='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'">
+                                @*<a href='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'></a>*@
+                                @*<a href=>'@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'</a>*@
+                            </span>
+                        </li>
                         @{
                             if (Session["FirstName"] != null)
                             {

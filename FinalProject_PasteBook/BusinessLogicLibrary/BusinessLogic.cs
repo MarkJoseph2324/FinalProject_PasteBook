@@ -190,7 +190,7 @@ namespace BusinessLogicLibrary
             return likeDataAccess.GetAllLike();
         }
 
-        public bool AddComment(COMMENT comment)
+        public COMMENT AddComment(COMMENT comment)
         {
             return commentDataAcces.AddComment(comment);
         }
@@ -219,58 +219,25 @@ namespace BusinessLogicLibrary
         {
             return notificationDataAccess.GetNotificationList(userID);
         }
-
-        public bool UploadImage(USER user, HttpPostedFileBase file)
+        
+        public bool UpdateUser(USER user)
         {
-            byte[] profilePic = null;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                file.InputStream.CopyTo(ms);
-                profilePic = ms.GetBuffer();
-            }
-            user.PROFILE_PIC = profilePic;
+            return userDataAccess.UpdateUserAboutMe(user);
+        }
+
+        public bool ChnageProfilePicture(USER user)
+        {
             return userDataAccess.ChnageProfilePicture(user);
         }
 
-        //public string GetRelationshipStatus(int currentUserID, int visitedUserID, List<FRIEND> friends)
-        //{
-        //    string status = string.Empty;
-        //    foreach (var item in friends)
-        //    {
-        //        if ((item.USER_ID == visitedUserID && item.BLOCKED == "Y") || (item.FRIEND_ID == visitedUserID && item.BLOCKED == "Y"))
-        //        {
-        //            status = "Blocked";
-        //        }
-        //        else if (item.USER_ID == visitedUserID && item.REQUEST == "Y")
-        //        {
-        //            status = "Pending";
-        //        }
-        //        else if (item.FRIEND_ID == visitedUserID && item.REQUEST == "Y")
-        //        {
-        //            status = "Acccept";
-        //        }
-        //        else if (item.FRIEND_ID != visitedUserID || item.USER_ID != visitedUserID)
-        //        {
-        //            status = "Add";
-        //        }
-        //        else if ((item.FRIEND_ID == visitedUserID && item.BLOCKED == "N") || (item.USER_ID == visitedUserID && item.BLOCKED == "N"))
-        //        {
-        //            status = "Block";
-        //        }
-        //    }
-        //    return status;
-        //}
-
-        //public string UpdateStatus(int currentUserID, int visited_ID, string relStatus)
-        //{
-        //    return notificationDataAccess.UpdateStatus(currentUserID, visited_ID, relStatus);
-        //}
-
-        public bool UpdateUser(USER user)
+        public bool CheckIfFriend(int userID, int profileOwnerID)
         {
-            return userDataAccess.UpdateUser(user);
+            return friendDataAccess.CheckIfFriend(userID, profileOwnerID);
         }
 
-        
+        public bool AddFriend(FRIEND friend)
+        {
+            return friendDataAccess.AddFriend(friend);
+        }
     }
 }
