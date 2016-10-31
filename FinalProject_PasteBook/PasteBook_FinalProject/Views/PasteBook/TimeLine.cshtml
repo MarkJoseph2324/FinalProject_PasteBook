@@ -59,18 +59,29 @@
         @{
             var status = Model.FRIENDs.Where(x => x.USER_ID == (int)Session["ID"] && x.FRIEND_ID == Model.ID && x.REQUEST == "Y").FirstOrDefault();
             var status2 = Model.FRIENDs1.Where(x => x.USER_ID == Model.ID && x.FRIEND_ID == (int)Session["ID"] && x.REQUEST == "Y").FirstOrDefault();
-            if (status != null && status2 != null)
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="">Friends</button>
-            }
-            else if (status != null && status2 != null)
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="">Pending Friend Request</button>
-            }
-            else if (status == null && status2 == null)
-            {
-                <button type="button" id="friendRequest" class="form-control btn btn-primary" onclick="AddFriendRequest(@((int)Session["ID"]), @Model.ID)">Add Friends</button>
-            }
+            @*if (status != null && status2 != null)
+                {
+                    <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Friends</button>
+                }*@
+        if (status != null && status2 == null)
+        {
+            <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Pending Friend Request</button>
+        }
+        else if (status == null && status2 != null)
+        {
+            <div class="col-md-12 btnFriendRequestContainer">
+                <div class="col-md-6">
+                    <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="AcceptFriendRequest(@((int)Session["ID"]), @Model.ID,'@Model.USER_NAME');">Accept</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="">Decline </button>
+                </div>
+            </div>
+        }
+        else if (status == null && status2 == null)
+        {
+            <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="AddFriendRequest(@((int)Session["ID"]), @Model.ID, '@Model.USER_NAME');">Add Friend</button>
+        }
         }
 
 
@@ -121,7 +132,10 @@
                     </div>
                     <div>
                         <span class="labelInfo">Mobile Number: </span>
-                        <span>@Model.MOBILE_NO</span>
+                        @if (Model.MOBILE_NO != null)
+                        {
+                            <span>@Model.MOBILE_NO</span>
+                        }
                     </div>
                     <div>
                         <span class="labelInfo">Username: </span>
@@ -129,7 +143,10 @@
                     </div>
                     <div>
                         <span class="labelInfo">Country: </span>
-                        <span>@Model.REF_COUNTRY.COUNTRY</span>
+                        @if (Model.COUNTRY_ID != null)
+                        {
+                            <span>@Model.REF_COUNTRY.COUNTRY</span>
+                        }
                     </div>
                 }
             </div>
@@ -217,18 +234,40 @@
             }
         });
 
-        function AddFriend(user_ID, profileOwner_ID) {
+        function AddFriendRequest(user_ID, profileOwner_ID, profileOwnerUsername) {
             var data = {
                 userID: user_ID,
-                profileOwnerID: profileOwner_ID
+                profileOwnerID: profileOwner_ID,
+                visitedUsername: profileOwnerUsername
             }
             $.ajax({
-                url: getCommentPostUrl,
+                url: getAddFriendRequest,
                 data: data,
                 type: 'GET',
                 success: function (data) {
-                    Notification('AddFriend', data.PostID, data.CommentID, data.ProfileOwnerID)
+                    Notification('AddFriend', 0, 0, data.ProfileOwnerID)
+                    var param = data.VisitedUsername;
+                    var url = '@Url.Action("Timeline", "Pastebook")';
+                    location.href = url + '/?username=' + param
                     Reload();
+                }
+            })
+        };
+
+        function AcceptFriendRequest(user_ID, profileOwner_ID, profileOwnerUsername) {
+            var data = {
+                userID: user_ID,
+                profileOwnerID: profileOwner_ID,
+                visitedUsername: profileOwnerUsername
+            }
+            $.ajax({
+                url: getAddFriendRequest,
+                data: data,
+                type: 'GET',
+                success: function (data) {
+                    var param = data.VisitedUsername;
+                    var url = '@Url.Action("Timeline", "Pastebook")';
+                        location.href = url + '/?username=' + param
                 }
             })
         };
@@ -265,10 +304,6 @@
             })
         };
 
-        function Search() {
-            location.href = url + '/?searchValue=' + $('#txtSearch').val()
-        };
-
         function Reload() {
             $('#refreshPartialView').load(getRefreshPartialViewUrl);
             $('#txtPost').val("");
@@ -290,7 +325,7 @@
                 success: function () {
                     Reload();
                     NotifyFriend();
-                    GetLikeNotificationCount();
+                    GetNotificationCount();
                 }
             })
         };
@@ -338,25 +373,16 @@
             }
         }
 
-        //////Logout
-
         $("#btnLogout").click(function () {
             $('#logout').modal('show');
-            //$("#btnOk").click(function () {
-            //    var url = $("#RedirectToLogin").val();
-            //    location.href = url;
-            //})
-
-            //$("#btnCancel").click(function () {
-            //    var url = $("#RedirectToIndex").val();
-            //    location.href = url;
-            //})
         })
 
-        /////// about me
         $("#btnAboutMe").click(function () {
+            alert("napindot")
             $('#txtAboutMeEdit').val("")
             $('#aboutMe').modal('show');
+            $("#txtEmailEditValidate").text("")
+            $("#btnOkAboutMe").removeAttr('disabled');
             $("#btnOkAboutMe").click(function () {
                 var data = {
                     value: $('#txtAboutMeEdit').val()
@@ -375,16 +401,16 @@
         $("#txtAboutMeEdit").keyup(function () {
             if ($("#txtAboutMeEdit").val().length > 2000) {
                 $("#txtEmailEditValidate").text("Description must not exceed 2000 characters. ")
-                $("#btnOkAboutMe").attr('disabled', true);
-                $("#btnOkAboutMe").css('cursor', 'not-allowed');
+                $("#btnOkAboutMe").attr('disabled', 'disabled');
             }
             else {
                 $("#txtEmailEditValidate").text("")
+                $("#btnOkAboutMe").removeAttr('disabled');
             }
         })
 
 
-        window.onload = GetLikeNotificationCount
+        window.onload = GetNotificationCount
 
 
         //Preview profile picture

@@ -39,15 +39,15 @@ namespace BusinessLogicLibrary
                 {
                     if (user.EMAIL_ADDRESS != null)
                     {
-                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.EMAIL_ADDRESS == user.EMAIL_ADDRESS).FirstOrDefault();
+                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs.USER1").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.EMAIL_ADDRESS == user.EMAIL_ADDRESS).FirstOrDefault();
                     }
                     if(user.ID != 0)
                     {
-                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.ID == user.ID).FirstOrDefault();
+                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs.USER1").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.ID == user.ID).FirstOrDefault();
                     }
                     if (!string.IsNullOrEmpty(user.USER_NAME))
                     {
-                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.USER_NAME == user.USER_NAME).FirstOrDefault();
+                        entityUser = context.USERs.Include("REF_COUNTRY").Include("FRIENDs").Include("FRIENDs.USER1").Include("FRIENDs1").Include("LIKEs").Include("NOTIFICATIONs").Include("NOTIFICATIONs1").Include("POSTs").Include("POSTs1").Where(x => x.USER_NAME == user.USER_NAME).FirstOrDefault();
                     }
                 }
             }

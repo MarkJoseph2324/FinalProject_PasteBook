@@ -59,7 +59,7 @@
 }
 
 #postFooter{
-    height: 50px;
+    height: 150px;
 }
 
 .textComment{
@@ -173,6 +173,14 @@
 #newsfeedPicture{
     width: 300px;
 }
+.friendsPicture{
+    width: 130px;
+    height: 150px;
+}
+.friendsPictureWell{
+    width: 180px;
+    height: 200px;
+}
 
 #notifDropdown{
     max-height: 300px;
@@ -207,4 +215,12 @@
 
 .labelInfo{
     font-weight: bold;
+}
+
+.btnFriendRequest{
+    margin-bottom: 25px;
+}
+
+.btnFriendRequestContainer{
+        padding-bottom: 50px;
 }

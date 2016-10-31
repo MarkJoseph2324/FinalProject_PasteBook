@@ -63,9 +63,9 @@
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
         var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
-        var getAddLikeNotificationUrl = '@Url.Action("AddLikeNotification", "PasteBook" )';
-        var getGetLikeNotificationCountUrl = '@Url.Action("GetLikeNotificationCount", "PasteBook" )';
-        var getGetLikeNotificationListUrl = '@Url.Action("GetLikeNotificationList", "PasteBook" )';
+        var getAddLikeNotificationUrl = '@Url.Action("AddNotification", "PasteBook" )';
+        var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
+        var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
         var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
         var getUpdateStatusUrl = '@Url.Action("UpdateStatus", "PasteBook" )';
 
@@ -127,7 +127,7 @@
             $('#txtComment').val("");
         };
 
-        function LikeNotification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
+        function Notification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
             var data = {
                 notifType: notificationType,
                 postID: post_ID,
@@ -136,20 +136,20 @@
             }
 
             $.ajax({
-                url: getAddLikeNotificationUrl,
+                url: getAddNotificationUrl,
                 data: data,
                 type: 'GET',
                 success: function () {
                     Reload();
                     NotifyFriend();
-                    GetLikeNotificationCount();
+                    GetNotificationCount();
                 }
             })
         };
 
         function NotifyFriend() {
             $.ajax({
-                url: getGetLikeNotificationListUrl,
+                url: getGetNotificationListUrl,
                 type: 'GET',
                 success: function () {
                     Reload();
@@ -157,9 +157,9 @@
             })
         };
 
-        function GetLikeNotificationCount() {
+        function GetNotificationCount() {
             $.ajax({
-                url: getGetLikeNotificationCountUrl,
+                url: getGetNotificationCountUrl,
                 type: 'GET',
                 success: function (data) {
                     RefreshBadge(data);
@@ -173,13 +173,13 @@
                 visitedID: visited_ID
             }
             $.ajax({
-                url: getAddLikeNotificationUrl,
+                url: getAddNotificationUrl,
                 data: data,
                 type: 'GET',
                 success: function () {
                     Reload();
                     NotifyFriend();
-                    GetLikeNotificationCount();
+                    GetNotificationCount();
                 }
             })
         };
@@ -190,7 +190,7 @@
             }
         }
 
-        window.onload = GetLikeNotificationCount
+        window.onload = GetNotificationCount
 
         //////Logout
 

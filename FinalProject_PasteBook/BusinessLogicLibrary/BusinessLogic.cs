@@ -210,9 +210,9 @@ namespace BusinessLogicLibrary
             return postDataAccess.GetPostDetails(postID);
         }
 
-        public bool AddLikeNotification(NOTIFICATION notif)
+        public bool AddNotification(NOTIFICATION notif)
         {
-            return notificationDataAccess.AddLikeNotification(notif);
+            return notificationDataAccess.AddNotification(notif);
         }
 
         public List<NOTIFICATION> GetNotificationList(int userID)

@@ -2040,7 +2040,6 @@ textarea.input-lg {
 .btn.disabled,
 .btn[disabled],
 fieldset[disabled] .btn {
-  pointer-events: none;
   cursor: not-allowed;
   opacity: 0.65;
   filter: alpha(opacity=65);

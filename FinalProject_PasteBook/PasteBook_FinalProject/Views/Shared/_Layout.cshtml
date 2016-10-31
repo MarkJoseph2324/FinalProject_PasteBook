@@ -44,8 +44,6 @@
                         }
                         <li>
                             <span class="glyphicon glyphicon-user navIcon" onclick="location.href ='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'">
-                                @*<a href='@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'></a>*@
-                                @*<a href=>'@Url.Action("Friends", "Pastebook", new { username = Session["Username"].ToString() })'</a>*@
                             </span>
                         </li>
                         @{
@@ -78,8 +76,11 @@
     @RenderSection("scripts", required: false)
     <script>
         var url = '@Url.Action("Search", "PasteBook")';
+
+        function Search() {
+            location.href = url + '/?searchValue=' + $('#txtSearch').val()
+        };
     </script>
-    <script src="~/Scripts/PasteBook.js"></script>
 </body>
 </html>
 

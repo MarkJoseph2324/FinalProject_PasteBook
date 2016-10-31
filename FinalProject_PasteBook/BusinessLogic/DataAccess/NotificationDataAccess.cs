@@ -9,7 +9,7 @@ namespace DataAccessLibrary
 { 
     public class NotificationDataAccess
     {
-        public bool AddLikeNotification(NOTIFICATION notif)
+        public bool AddNotification(NOTIFICATION notif)
         {
             bool returnValue = false;
             try

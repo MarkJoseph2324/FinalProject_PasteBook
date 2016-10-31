@@ -9,9 +9,19 @@ namespace PasteBook_FinalProject
 {
     public class Mapper
     {
+
+        public USER UserMapperByID(int userID)
+        {
+            USER entityUser = new USER()
+            {
+                ID = userID
+            };
+            return entityUser;
+        }
+
         public USER UserMapper(RegistrationModel user, string username)
         {
-            if(user != null)
+            if (user != null)
             {
                 if (user.Gender == null)
                 {
@@ -21,7 +31,7 @@ namespace PasteBook_FinalProject
             USER entityUser = new USER();
             if (string.IsNullOrEmpty(username))
             {
-                 entityUser = new USER()
+                entityUser = new USER()
                 {
                     USER_NAME = user.Username.Trim(),
                     BIRTHDAY = user.Birthday,
@@ -33,7 +43,7 @@ namespace PasteBook_FinalProject
                     MOBILE_NO = user.MobileNumber,
                     PASSWORD = user.Password,
                     EMAIL_ADDRESS = user.Email.Trim()
-                 };
+                };
             }
             else
             {
@@ -58,7 +68,7 @@ namespace PasteBook_FinalProject
 
         public USER RegistrationMapper(RegistrationModel register)
         {
-            if(register.Gender == "")
+            if (register.Gender == "")
             {
                 register.Gender = "U";
             }
@@ -77,7 +87,7 @@ namespace PasteBook_FinalProject
             };
             return entityUser;
         }
-        
+
         public LIKE LikeMapper(int postID, int likedBy)
         {
             LIKE entityLike = new LIKE()
@@ -100,7 +110,7 @@ namespace PasteBook_FinalProject
             return entityComment;
         }
 
-        public NOTIFICATION NotificationMapper(string  notifType, int postID, int commentID,int senderID,int receiverID)
+        public NOTIFICATION NotificationMapper(string notifType, int postID, int commentID, int senderID, int receiverID)
         {
             NOTIFICATION entityNotification = new NOTIFICATION();
             if (notifType == "Like")
@@ -136,7 +146,7 @@ namespace PasteBook_FinalProject
                     NOTIF_TYPE = "F",
                     RECEIVER_ID = receiverID,
                     SEEN = "N",
-                    SENDER_ID = senderID
+                    SENDER_ID = senderID,
                 };
             }
             return entityNotification;
@@ -149,7 +159,7 @@ namespace PasteBook_FinalProject
                 BLOCKED = "N",
                 CREATED_DATE = DateTime.Now,
                 FRIEND_ID = profileOwnerID,
-                REQUEST = "N",
+                REQUEST = "Y",
                 USER_ID = userID
             };
             return entityFriend;

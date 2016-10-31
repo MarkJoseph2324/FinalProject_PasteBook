@@ -19,7 +19,7 @@ namespace PasteBook_FinalProject.Controllers
         [Route("")]
         public ActionResult NewsFeed()
         {
-            if(Session["ID"] == null)
+            if (Session["ID"] == null)
             {
                 return RedirectToAction("LogIn", "PasteBookAccount");
             }
@@ -46,7 +46,7 @@ namespace PasteBook_FinalProject.Controllers
         [HttpGet]
         public ActionResult Timeline(string username)
         {
-            if (Session["ID"] ==  null)
+            if (Session["ID"] == null)
             {
                 return RedirectToAction("LogIn", "PasteBookAccount");
             }
@@ -55,7 +55,6 @@ namespace PasteBook_FinalProject.Controllers
                 int userID = Convert.ToInt32(Session["ID"]);
                 var visitedUserID = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
                 var friendsList = businessLogic.GetFriendsList(visitedUserID.ID);
-                //ViewBag.Status = businessLogic.GetRelationshipStatus(userID, visitedUserID.ID, friendsList);
                 var userDetails = businessLogic.GetSpecificUser(mapper.UserMapper(null, username));
                 return View(userDetails);
             }
@@ -66,7 +65,7 @@ namespace PasteBook_FinalProject.Controllers
         public ActionResult Friends()
         {
             int userID = Convert.ToInt32(Session["ID"]);
-            return View(businessLogic.GetFriendsList(userID));
+            return View(businessLogic.GetSpecificUser(mapper.UserMapperByID(userID)));
         }
 
         public ActionResult Search(string searchValue)
@@ -112,35 +111,45 @@ namespace PasteBook_FinalProject.Controllers
                 receiverID = postDetails.POSTER_ID;
             }
             comment = businessLogic.AddComment(mapper.CommentMapper(postID, posterID, postContent));
-            
+
             return Json(new { PostID = comment.POST_ID, CommentID = comment.ID, ProfileOwnerID = receiverID }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddNotification(string notifType, int postID, int commentID, int friendRequestID)
         {
+            USER visitedUsername = new USER();
             int receiverID = 0;
             int senderID = Convert.ToInt32(Session["ID"]);
             var postDetails = businessLogic.GetPostDetails(postID);
-            if (postDetails.POSTER_ID == senderID)
+            visitedUsername = businessLogic.GetSpecificUser(mapper.UserMapperByID(friendRequestID));
+            if (postDetails != null)
             {
-                receiverID = postDetails.PROFILE_OWNER_ID;
+                if (postDetails.POSTER_ID == senderID)
+                {
+                    receiverID = postDetails.PROFILE_OWNER_ID;
+                }
+                else
+                {
+                    receiverID = postDetails.POSTER_ID;
+                }
             }
-            else
+            if(friendRequestID != 0 )
             {
-                receiverID = postDetails.POSTER_ID;
+                receiverID = friendRequestID;
             }
-            if (postID != 0)
-            {
-                businessLogic.AddLikeNotification(mapper.NotificationMapper(notifType, postID, commentID, senderID, receiverID));
-            }
-            return View("Index");
+
+            businessLogic.AddNotification(mapper.NotificationMapper(notifType, postID, commentID, senderID, receiverID));
+
+            return RedirectToAction("TimeLine", "PasteBook", new { username = visitedUsername.USER_NAME });
         }
 
         public ActionResult GetNotificationList()
         {
-            int currentUserID = Convert.ToInt32(Session["ID"]);
-            var listOfNotif = businessLogic.GetNotificationList(currentUserID);
-            return PartialView("ShowNotificationCommentPartial", listOfNotif);
+           
+                int currentUserID = Convert.ToInt32(Session["ID"]);
+                var listOfNotif = businessLogic.GetNotificationList(currentUserID);
+                return PartialView("ShowNotificationCommentPartial", listOfNotif);
+            
         }
 
         public JsonResult GetNotificationCount()
@@ -165,7 +174,7 @@ namespace PasteBook_FinalProject.Controllers
                 }
             }
             businessLogic.ChnageProfilePicture(user);
-            return RedirectToAction("TimeLine", "Pastebook",new { username = Session["Username"]});
+            return RedirectToAction("TimeLine", "Pastebook", new { username = Session["Username"] });
         }
 
         public JsonResult EditAboutMe(string value)
@@ -177,10 +186,10 @@ namespace PasteBook_FinalProject.Controllers
             return Json(new { s = status }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddFriend(int userID, int profileOwnerID)
+        public JsonResult AddFriend(int userID, int profileOwnerID, string visitedUsername)
         {
-            businessLogic.AddFriend(mapper.FriendMapper(userID, profileOwnerID));
-            return RedirectToAction("TimeLine", "PasteBook");
+            var status = businessLogic.AddFriend(mapper.FriendMapper(userID, profileOwnerID));
+            return Json(new { UserID = userID, ProfileOwnerID = profileOwnerID , VisitedUsername = visitedUsername }, JsonRequestBehavior.AllowGet);
         }
     }
 }
