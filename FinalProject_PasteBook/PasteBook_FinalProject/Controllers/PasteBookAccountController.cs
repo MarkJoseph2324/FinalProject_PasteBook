@@ -11,7 +11,7 @@ namespace PasteBook_FinalProject
         BusinessLogic businessLogic = new BusinessLogic();
         Validation validation = new Validation();
         Mapper mapper = new Mapper();
-        // GET: PasteBookUser
+        //GET: PasteBookUser
         public ActionResult Index()
         {
             return View();

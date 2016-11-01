@@ -12,16 +12,9 @@ namespace BusinessLogicLibrary
         public List<REF_COUNTRY> GetAllCountries()
         {
             List<REF_COUNTRY> countryList = new List<REF_COUNTRY>();
-            try
+            using (var context = new PastebookEntities())
             {
-                using (var context = new PastebookEntities())
-                {
-                    countryList = context.REF_COUNTRY.ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-
+                countryList = context.REF_COUNTRY.ToList();
             }
             return countryList;
         }

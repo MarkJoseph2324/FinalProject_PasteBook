@@ -9,14 +9,14 @@
         <div class="col-md-12">
             @if (item.NOTIF_TYPE == "L")
             {
-                <button type="button" id="@(item.COMMENT_ID)" class="form-control btn btn-default notifBtn" onclick="" value="@(item.COMMENT_ID)">
+                <button type="button" id="@(item.COMMENT_ID)" class="form-control btn btn-default notifBtn" onclick="location.href='@Url.Action("ViewSpecificPost","Pastebook", new { postID = item.POST_ID })'" value="@(item.COMMENT_ID)">
                     <span class="glyphicon glyphicon-thumbs-up"></span>
                     @item.USER1.FIRST_NAME  @item.USER1.LAST_NAME likes your post.
                 </button>
             }
             else if (item.NOTIF_TYPE == "C")
             {
-                <button type="button" id="btnComment@(item.ID)" class="form-control btn btn-default notifBtn" onclick="" value="">
+                <button type="button" class="form-control btn btn-default notifBtn" onclick="location.href='@Url.Action("ViewSpecificPost","Pastebook", new { postID = item.POST_ID })'" value="">
                     <span class="glyphicon glyphicon-comment"></span>
                     @item.USER1.FIRST_NAME @item.USER1.LAST_NAME commented on your post.
                 </button>

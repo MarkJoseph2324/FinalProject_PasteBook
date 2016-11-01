@@ -12,7 +12,7 @@
             </div>
             <div class="modal-footer">
                 <button id="btnOk" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.href = '@Url.Action("LogIn", "PasteBookAccount")'">OK</button>
-                <button id="btnCancel" type="button" class="btn btn-warning" data-dismiss="modal">CANCEL</button>
+                <button id="btnCancel" type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
 
             </div>
         </div>
@@ -33,7 +33,8 @@
                     <span class="glyphicon glyphicon-pencil"></span> Update Status
                 </div>
                 <div class="panel-body">
-                    @Html.TextArea("txtPost", null, new { @rows = 5, @placeholder = "What's on your mind?", @class = "txtPost" })
+                    @Html.TextArea("txtPostNewsfeed", null, new { @rows = 5, @placeholder = "What's on your mind?", @class = "txtPost", id= "txtPostNewsfeed" })
+                    @Html.ValidationMessage("txtPostNewsfeed", "", new { @class = "text-danger", id = "txtPostNewsfeedValidate" })
                 </div>
                 <div class="panel-footer">
                     <div class="col-md-11"></div>
@@ -63,18 +64,27 @@
         var getRefreshPartialViewUrl = '@Url.Action("GetAllPostPartial", "PasteBook")';
         var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
         var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
-        var getAddLikeNotificationUrl = '@Url.Action("AddNotification", "PasteBook" )';
+        var getAddNotificationUrl = '@Url.Action("AddNotification", "PasteBook" )';
         var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
         var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
         var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
-        var getUpdateStatusUrl = '@Url.Action("UpdateStatus", "PasteBook" )';
+        var getUnLikePostUrl = '@Url.Action("Unlike", "PasteBook" )';
 
         $('#btnPostNewsFeed').click(function () {
+            if ($('#txtPostNewsfeed').val() == "") {
+                $('#txtPostNewsfeedValidate').text("You cannot upadate your status with empty message.");
+            } else {
+                if ($('#txtPostNewsfeed').val().length > 1000) {
+                    $('#txtPostNewsfeedValidate').text("You exceeded the 1000 character limit of a message. ");
+                } else {
+                    $('#txtPostNewsfeedValidate').text('');
+                }
+            }
             var data = {
-                post: $('#txtPost').val(),
+                post: $('#txtPostNewsfeed').val(),
                 profileOwnerID: $('#btnPostNewsFeed').val()
             }
-            if ($('#txtPost').val() != null) {
+            if ($('#txtPostNewsfeed').val() != "" && $('#txtPostNewsfeed').val().length < 1001) {
                 $.ajax({
                     url: getCreatePostUrl,
                     data: data,
@@ -84,7 +94,7 @@
                     }
                 })
             }
-        })
+        });
 
         function AddLike(ID) {
             var data = {
@@ -93,6 +103,21 @@
 
             $.ajax({
                 url: getLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function UnLike(ID) {
+            var data = {
+                postID: ID
+            };
+
+            $.ajax({
+                url: getUnLikePostUrl,
                 data: data,
                 type: 'GET',
                 success: function () {
@@ -112,7 +137,48 @@
                 data: data,
                 type: 'GET',
                 success: function () {
+                    Notification('Comment', data.PostID, data.CommentID, data.ProfileOwnerID)
                     Reload();
+                }
+            })
+        };
+
+        function Notification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
+            var data = {
+                notifType: notificationType,
+                postID: post_ID,
+                commentID: comment_ID,
+                friendRequestID: IDtoBeFriend
+            }
+
+            $.ajax({
+                url: getAddNotificationUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                    NotifyFriend();
+                    GetNotificationCount();
+                }
+            })
+        };
+
+        function NotifyFriend() {
+            $.ajax({
+                url: getGetNotificationListUrl,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function GetNotificationCount() {
+            $.ajax({
+                url: getGetNotificationCountUrl,
+                type: 'GET',
+                success: function (data) {
+                    RefreshBadge(data);
                 }
             })
         };
@@ -157,29 +223,14 @@
             })
         };
 
+
+
         function GetNotificationCount() {
             $.ajax({
                 url: getGetNotificationCountUrl,
                 type: 'GET',
                 success: function (data) {
                     RefreshBadge(data);
-                }
-            })
-        };
-
-        function UpdateStatus(status, visitedID) {
-            data = {
-                relStatus: status,
-                visitedID: visited_ID
-            }
-            $.ajax({
-                url: getAddNotificationUrl,
-                data: data,
-                type: 'GET',
-                success: function () {
-                    Reload();
-                    NotifyFriend();
-                    GetNotificationCount();
                 }
             })
         };
@@ -192,19 +243,22 @@
 
         window.onload = GetNotificationCount
 
+        $("#txtPostNewsfeed").keyup(function () {
+            if ($('#txtPostNewsfeed').val() == "") {
+                $('#txtPostNewsfeedValidate').text("You cannot upadate your status with empty message.");
+            } else {
+                if ($('#txtPostNewsfeed').val().length > 1000) {
+                    $('#txtPostNewsfeedValidate').text("You exceeded the 1000 character limit of a message. ");
+                } else {
+                    $('#txtPostNewsfeedValidate').text('');
+                }
+            }
+        });
+
         //////Logout
 
         $("#btnLogout").click(function () {
             $('#logout').modal('show');
-            //$("#btnOk").click(function () {
-            //    var url = $("#RedirectToLogin").val();
-            //    location.href = url;
-            //})
-
-            //$("#btnCancel").click(function () {
-            //    var url = $("#RedirectToIndex").val();
-            //    location.href = url;
-            //})
         });
 
 

@@ -12,36 +12,38 @@ namespace DataAccessLibrary
         public bool AddLike(LIKE like)
         {
             bool returnValue = false;
-            try
+            using (var context = new PastebookEntities())
             {
-                using (var context = new PastebookEntities())
-                {
-                    context.LIKEs.Add(like);
-                    returnValue = context.SaveChanges() != 0;
-                }
+                context.LIKEs.Add(like);
+                returnValue = context.SaveChanges() != 0;
             }
-            catch (Exception ex)
-            {
-
-            }
-
             return returnValue;
         }
+
+        public bool Unlike(LIKE like)
+        {
+            bool returnValue = false;
+            using (var context = new PastebookEntities())
+            {
+                var itemToRemove = context.LIKEs.SingleOrDefault(x => x.POST_ID == like.POST_ID && x.LIKE_BY == like.LIKE_BY); //returns a single item.
+
+                if (itemToRemove != null)
+                {
+                    context.LIKEs.Remove(itemToRemove);
+                    context.SaveChanges();
+                }
+            }
+            return returnValue;
+        }
+
+        
 
         public List<LIKE> GetAllLike()
         {
             List<LIKE> likeList = new List<LIKE>();
-
-            try
+            using (var context = new PastebookEntities())
             {
-                using (var context = new PastebookEntities())
-                {
-                    likeList = context.LIKEs.Select(x => x).ToList();
-                }
-            }
-            catch (Exception)
-            {
-                
+                likeList = context.LIKEs.Select(x => x).ToList();
             }
             return likeList;
         }

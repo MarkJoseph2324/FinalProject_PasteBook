@@ -1,0 +1,248 @@
+﻿@using BusinessLogicLibrary;
+
+@model Entities.POST
+
+  <div class="specificPostContainer">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    @{
+                        BusinessLogic businessLogic = new BusinessLogic();
+
+                        int posterID = 0;
+                        string poster = string.Empty;
+                        string profileOwner = string.Empty;
+                        if (Model.POSTER_ID == (int)Session["ID"])
+                        {
+                            poster = Model.USER1.FIRST_NAME + " " + Model.USER.LAST_NAME;
+                            posterID = Model.USER1.ID;
+                            profileOwner = Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME;
+                        }
+                        else if (Model.POSTER_ID != (int)Session["ID"])
+                        {
+                            poster = Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME;
+                            posterID = Model.USER.ID;
+                            profileOwner = Model.USER1.FIRST_NAME + " " + Model.USER1.LAST_NAME;
+                        }
+
+                        if (Model.POSTER_ID == Model.PROFILE_OWNER_ID)
+                        {
+                            @Html.Label("FullName", poster);
+                            <span class="glyphicon glyphicon-one-fine-full-dot "></span>
+                            <span>@businessLogic.TimeStamp(@Model.CREATED_DATE)</span>
+                        }
+                        else if (Model.POSTER_ID != Model.PROFILE_OWNER_ID)
+                        {
+                            @Html.Label("FullName", poster);
+                            <span aria-hidden="true" class="glyphicon glyphicon-play" id="glyphiconArrowHead"></span>
+                            @Html.Label("FullName", profileOwner);
+                            <span class="glyphicon glyphicon-one-fine-full-dot "></span>
+                            <span>@businessLogic.TimeStamp(@Model.CREATED_DATE)</span>
+                        }
+                    }
+                </div>
+                <div class="panel-body textContainer">
+                    @Html.DisplayFor(Model => Model.CONTENT)
+
+                    @{
+                        int likes = Model.LIKEs.Where(x => x.POST_ID == Model.ID).Count();
+                        List<string> list = new List<string>();
+                        <div id="buttonLikesContainer2">
+                            <div class="col-md-1">
+                                @if (likes > 0)
+                                {
+                                    if (likes != 0)
+                                    {
+                                        <button type="button" id="btnUnlike" class="btn btn-default" onclick="UnLike(@Model.ID);">
+                                            Unlike
+                                        </button>
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (likes == 0)
+                                    {
+                                        <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@Model.ID); Notification('Like',@Model.ID,0,0)">
+                                            Like
+                                        </button>
+                                    }
+                                }
+                            </div>
+                            @if (likes != 0)
+                            {
+                                <div class="dropdown col-md-10 dropdownLiker">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="btnDropdownLike">
+
+                                        @likes<span class="glyphicon glyphicon-thumbs-up"></span>
+
+                                        <span class="caret"></span>
+
+                                    </button>
+                                    <ul class="dropdown-menu likerList">
+                                        @{
+                                            foreach (var likers in Model.LIKEs)
+                                            {
+                                                <li><a href='@Url.Action("Timeline","PasteBook",new {username = likers.USER.USER_NAME })'>@(likers.USER.FIRST_NAME) @(likers.USER.LAST_NAME)</a></li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                            }
+                        </div>
+                                if (Model.COMMENTs.Count() != 0)
+                                {
+                                    foreach (var itemComment in Model.COMMENTs)
+                                    {
+                                        <div class="commentContainer">
+                                            <div class="bg-info">
+                                                @Html.Label("FullName", itemComment.USER.FIRST_NAME + " " + itemComment.USER.LAST_NAME)
+                                            </div>
+                                            <div class="bg-info commentText">
+                                                <span class="textContainer">@itemComment.CONTENT</span>
+                                            </div>
+                                            <div class="bg-info">
+                                                <span>@itemComment.CREATED_DATE</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                    }
+                </div>
+                <div class="panel-footer">
+                    <div class="col-md-10">
+                        <input type="text" name="comment" id="txtComment@(Model.ID)" class="form-control textComment" placeholder="Write a comment..." />
+                    </div>
+                    <button type="button" id="btnComment" class="btn btn-default" onclick="AddComment(@Model.ID, this);" value="@Model.ID">Comment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                        
+
+@{
+    @Scripts.Render("~/bundles/jquery");
+    <script>
+        var getLikePostUrl = '@Url.Action("LikePost", "PasteBook")';
+        var getCommentPostUrl = '@Url.Action("AddComment", "PasteBook" )';
+        var getAddNotificationUrl = '@Url.Action("AddNotification", "PasteBook" )';
+        var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
+        var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
+        var getAddFriendNotification = '@Url.Action("Notification", "PasteBook" )';
+        
+        function AddLike(ID) {
+            var data = {
+                postID: ID
+            };
+
+            $.ajax({
+                url: getLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function UnLike(ID) {
+            var data = {
+                postID: ID
+            };
+
+            $.ajax({
+                url: getUnLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function AddComment(ID, button) {
+            var data = {
+                postID: ID,
+                postContent: $('#txtComment'.concat(button.value)).val()
+            };
+
+            $.ajax({
+                url: getCommentPostUrl,
+                data: data,
+                type: 'GET',
+                success: function (data) {
+                    Notification('Comment', data.PostID, data.CommentID, data.ProfileOwnerID)
+                    Reload();
+                }
+            })
+        };
+
+        function Reload() {
+            location.reload()
+            $('#txtPost').val("");
+            $('#txtComment').val("");
+        };
+
+        function Notification(notificationType, post_ID, comment_ID, IDtoBeFriend) {
+            var data = {
+                notifType: notificationType,
+                postID: post_ID,
+                commentID: comment_ID,
+                friendRequestID: IDtoBeFriend
+            }
+
+            $.ajax({
+                url: getAddNotificationUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                    NotifyFriend();
+                    GetNotificationCount();
+                }
+            })
+        };
+
+        function NotifyFriend() {
+            $.ajax({
+                url: getGetNotificationListUrl,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
+        function GetNotificationCount() {
+            $.ajax({
+                url: getGetNotificationCountUrl,
+                type: 'GET',
+                success: function (data) {
+                    RefreshBadge(data);
+                }
+            })
+        };
+
+
+        function RefreshBadge(data) {
+            if (data.NotifCount != 0) {
+                $('#globeBadge').text(data.NotifCount)
+            }
+        }
+
+        $("#btnLogout").click(function () {
+            $('#logout').modal('show');
+        })
+
+
+
+        function Search() {
+            location.href = url + '/?searchValue=' + $('#txtSearch').val()
+        };
+
+        window.onload = GetNotificationCount
+        var i = setInterval(function () { GetNotificationCount() }, 1000);
+
+
+    </script>
+}

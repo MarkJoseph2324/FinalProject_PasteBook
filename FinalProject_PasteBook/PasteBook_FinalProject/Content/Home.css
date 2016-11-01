@@ -54,8 +54,22 @@
     background-color: #428bca;
 }
 
-#likeCounts, #btnLike{
+#buttonLikesContainer{
     margin-top: 35px;
+    margin-bottom: 80px;
+}
+
+#buttonLikesContainer2{
+    margin-top: 35px;
+    margin-bottom: 80px;
+}
+
+.likerList{
+        margin-left: 14px;
+}
+
+.dropdownLiker{
+    margin-left: 20px;
 }
 
 #postFooter{
@@ -99,7 +113,7 @@
     padding: 10px 0px 0px 0px;
 }
 
-#LoginLogo{
+#loginLogo{
     font-family: "Copperplate";
 	font-size: 30px;
 	font-style: normal;
@@ -107,6 +121,17 @@
 	font-weight: bold;
 	line-height: 48.4px;
     padding: 0px 0px 10px 0px;
+}
+
+#registerLogo{
+    font-family: "Copperplate";
+	font-size: 30px;
+	font-style: normal;
+	font-variant: small-caps;
+	font-weight: bold;
+	line-height: 48.4px;
+    padding: 0px 0px 10px 0px;
+    margin-left: 499px;
 }
 
 .dropdown{
@@ -170,7 +195,7 @@
     margin-left: -3px;
 }
 
-#newsfeedPicture{
+#timelinePicture{
     width: 300px;
 }
 .friendsPicture{
@@ -224,4 +249,8 @@
 
 .btnFriendRequestContainer{
         padding-bottom: 50px;
+}
+
+.specificPostContainer{
+    margin-top: 40px;
 }

@@ -185,6 +185,12 @@ namespace BusinessLogicLibrary
             return likeDataAccess.AddLike(like);
         }
 
+        public bool Unlike(LIKE like)
+        {
+            return likeDataAccess.Unlike(like);
+        }
+        
+
         public List<LIKE> GetAllLikeList()
         {
             return likeDataAccess.GetAllLike();
@@ -219,7 +225,12 @@ namespace BusinessLogicLibrary
         {
             return notificationDataAccess.GetNotificationList(userID);
         }
-        
+
+        public List<NOTIFICATION> GetNotificationListCount(int userID)
+        {
+            return notificationDataAccess.GetNotificationListCount(userID);
+        }
+
         public bool UpdateUser(USER user)
         {
             return userDataAccess.UpdateUserAboutMe(user);
@@ -243,6 +254,16 @@ namespace BusinessLogicLibrary
         public bool DeclineFriendRequest(FRIEND friend)
         {
             return friendDataAccess.DeclineFriendRequest(friend);
+        }
+
+        public POST ViewSpecificPost(int postID)
+        {
+            return postDataAccess.GetPostDetails(postID);
+        }
+
+        public bool SeenNotification(int userID, List<NOTIFICATION> notif)
+        {
+            return notificationDataAccess.SeenNotification(userID, notif);
         }
     }
 }

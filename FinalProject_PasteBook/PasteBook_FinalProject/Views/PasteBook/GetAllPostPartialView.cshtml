@@ -50,58 +50,80 @@
                     @{
                         int likes = item.LIKEs.Where(x => x.POST_ID == item.ID).Count();
                         List<string> list = new List<string>();
-                        <div>
-                            @if (likes > 0)
-                            {
-                                if (likes != 0)
+                        <div id="buttonLikesContainer2">
+                            <div class="col-md-1">
+                                @if (likes > 0)
                                 {
-                                    @*<button type="button" id="btnUnlike" class="btn btn-default" onclick="DeleteLike(@item.ID)">
-                                        Unlike
-                                    </button>*@
-                                    <span>Liked</span>
-                                }
+                                    if (likes != 0)
+                                    {
+                                        <button type="button" id="btnUnlike" class="btn btn-default" onclick="UnLike(@item.ID);">
+                                            Unlike
+                                        </button>
+                                    }
 
-                            }
-                            else
-                            {
-                                if (likes == 0)
-                                {
-                                    <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); Notification('Like',@item.ID,0,0)">
-                                        Like
-                                    </button>
                                 }
-                            }
+                                else
+                                {
+                                    if (likes == 0)
+                                    {
+                                        <button type="button" id="btnLike" class="btn btn-default" onclick="AddLike(@item.ID); Notification('Like',@item.ID,0,0);">
+                                            Like
+                                        </button>
+                                    }
+                                }
+                            </div>
                             @if (likes != 0)
                             {
-                                @likes <span id="likeCounts" class="glyphicon glyphicon-thumbs-up"></span>
-                            }
-                            @if (item.COMMENTs.Count() != 0)
-                            {
-                                foreach (var itemComment in item.COMMENTs)
-                                {
-                                    <div class="commentContainer">
-                                        <div class="bg-info">
-                                            @Html.Label("FullName", itemComment.USER.FIRST_NAME + " " + itemComment.USER.LAST_NAME)
-                                        </div>
-                                        <div class="bg-info commentText">
-                                            <span class="textContainer" >@itemComment.CONTENT</span>
-                                        </div>
-                                        <div class="bg-info">
-                                            <span>@itemComment.CREATED_DATE</span>
-                                        </div>
-                                    </div>
-                                }
-                            }
+                                @*<span id="likeCounts" class="glyphicon glyphicon-thumbs-up"></span>*@
+                                <div class="dropdown col-md-10 dropdownLiker">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="btnDropdownLike">
+
+                                        @likes<span class="glyphicon glyphicon-thumbs-up"></span>
+
+                                        <span class="caret"></span>
+
+                                    </button>
+                                    <ul class="dropdown-menu likerList">
+                                        @{
+                                            foreach (var likers in item.LIKEs)
+                                            {
+                                                <li><a href='@Url.Action("Timeline","PasteBook",new {username = likers.USER.USER_NAME })'>@(likers.USER.FIRST_NAME) @(likers.USER.LAST_NAME)</a></li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                            }
                         </div>
+
+
+
+                                            if (item.COMMENTs.Count() != 0)
+                                            {
+                                                foreach (var itemComment in item.COMMENTs)
+                                                {
+                                                    <div class="commentContainer">
+                                                        <div class="bg-info">
+                                                            @Html.Label("FullName", itemComment.USER.FIRST_NAME + " " + itemComment.USER.LAST_NAME)
+                                                        </div>
+                                                        <div class="bg-info commentText">
+                                                            <span class="textContainer">@itemComment.CONTENT</span>
+                                                        </div>
+                                                        <div class="bg-info">
+                                                            <span>@itemComment.CREATED_DATE</span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
                     }
                 </div>
                 <div class="panel-footer">
                     <div class="col-md-10">
                         <input type="text" name="comment" id="txtComment@(item.ID)" class="form-control textComment" placeholder="Write a comment..." />
+                        @Html.ValidationMessage("textComment", "", new { @class = "text-danger", id = "textCommentValidate" + item.ID })
                     </div>
-                    <button type="button" id="btnComment" class="btn btn-default" onclick="AddComment(@item.ID, this);" value="@item.ID">Comment</button>
+                    <button type="button" id="btnComment" class="btn btn-default btnComment" onclick="AddComment(@item.ID, this);" value="@item.ID">Comment</button>
                 </div>
             </div>
         </div>
     </div>
-                        }
+                                            }

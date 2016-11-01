@@ -9,7 +9,9 @@
 {
     <div class="form-horizontal regContainer">
         <div class="form-group ">
-            <span id="registration">Registration</span>
+            <div class="col-sm-12 col-md-12 col-md-offset-5" id="registerLogo">
+                Register Account
+            </div>
             <span class="control-label col-md-12 col-md-offset-5"> <em>All fields mark with asterisk(*) is required.</em> </span>
         </div>
 
@@ -99,7 +101,7 @@
                 <span class="text-danger control-label">*</span>
             </div>
             <div class="col-md-10 col-md-offset-5">
-                @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control", @placeholder = "Birth Date", @type = "date", id="txtBirthDay" } })
+                @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control", @placeholder = "Birth Date", @type = "date", id="txtBirthDay", max = DateTime.Now } })
                 @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger", id = "txtBirthDayValidate" })
             </div>
         </div>
@@ -127,7 +129,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-5 col-md-7">
-                <input type="submit" value="Register" class="btn btn-default" />
+                <input type="submit" value="Register" class="btn btn-primary" />
+                <input type="button" value="Cancel" class="btn btn-danger" onclick="location.href='@Url.Action("LogIn","PastebookAccount")'" />
             </div>
         </div>
     </div>

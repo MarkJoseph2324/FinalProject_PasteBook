@@ -13,14 +13,20 @@ namespace PasteBook_FinalProject
     {
         [DisplayName("Username:")]
         [Required(ErrorMessage = "Username is a required field.")]
+        [StringLength(50, ErrorMessage = "Username should be less than 50 characters only")]
+        [RegularExpression(@"^((([_.]?)[a-zA-Z0-9]+)+([_.]?)*)$", ErrorMessage = "Username may contains any letters, numbers and special characters (._). Special characters shouldn't be in consecutive order.")]
         public string Username { get; set; }
 
         [DisplayName("First Name:")]
         [Required(ErrorMessage = "First Name is a required field.")]
+        [StringLength(50, ErrorMessage = "First name should be less than 50 characters only")]
+        [RegularExpression(@"^((\s*[ '.-]?\s*[a-zA-Z0-9]+)+[ '.-]?\s*)$", ErrorMessage = "Invalid format. First name may contains any letters, numbers and special characters ('._). Special characters shouldn't be in consecutive order.")]
         public string FirstName { get; set; }
 
         [DisplayName("Last Name:")]
         [Required(ErrorMessage = "Last Name is a required field.")]
+        [StringLength(50, ErrorMessage = "Last name should be less than 50 characters only")]
+        [RegularExpression(@"^((\s*[ '.-]?\s*[a-zA-Z0-9]+)+[ '.-]?\s*)$", ErrorMessage = "Invalid format. Last name may contains any letters, numbers and special characters ('._). Special characters shouldn't be in consecutive order.")]
         public string LastName { get; set; }
 
         [DisplayName("Email:")]

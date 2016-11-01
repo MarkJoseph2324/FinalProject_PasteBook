@@ -11,17 +11,10 @@ namespace DataAccessLibrary.DataAccess
     {
         public COMMENT AddComment(COMMENT comment)
         {
-            try
+            using (var context = new PastebookEntities())
             {
-                using (var context = new PastebookEntities())
-                {
-                    context.COMMENTs.Add(comment);
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-
+                context.COMMENTs.Add(comment);
+                context.SaveChanges();
             }
             return comment;
         }
@@ -29,16 +22,9 @@ namespace DataAccessLibrary.DataAccess
         public List<COMMENT> GetAllComments()
         {
             List<COMMENT> entityComment = new List<COMMENT>();
-            try
+            using (var context = new PastebookEntities())
             {
-                using (var context = new PastebookEntities())
-                {
-                    entityComment = context.COMMENTs.Select(x => x).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-
+                entityComment = context.COMMENTs.Select(x => x).ToList();
             }
             return entityComment;
         }

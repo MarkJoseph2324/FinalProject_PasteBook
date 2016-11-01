@@ -31,7 +31,7 @@
                         @{
                             <li class="dropdown" id="commentNotifDropdown">
                                 <span class="dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" >
-                                    <span class="badge" id="globeBadge"></span><span class="glyphicon glyphicon-globe navIcon " id="globeIcon"></span>
+                                    <span class="badge" id="globeBadge"></span><span class="glyphicon glyphicon-globe navIcon " id="globeIcon" onclick="ResetBadge(@((int)Session["ID"]))"></span>
                                 </span>
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1" id="notifDropdown">
 
@@ -76,10 +76,46 @@
     @RenderSection("scripts", required: false)
     <script>
         var url = '@Url.Action("Search", "PasteBook")';
+        var getBadgeResetUrl = '@Url.Action("ResetBadge", "PasteBook" )';
+        var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
 
         function Search() {
             location.href = url + '/?searchValue=' + $('#txtSearch').val()
         };
+
+
+        function ResetBadge(user_ID) {
+            var data = {
+                userID: user_ID
+            }
+            $.ajax({
+                url: getBadgeResetUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    GetNotificationCount();
+                }
+            })
+        };
+
+        function GetNotificationCount() {
+            $.ajax({
+                url: getGetNotificationCountUrl,
+                type: 'GET',
+                success: function (data) {
+                    RefreshBadge(data);
+                }
+            })
+        };
+
+        function RefreshBadge(data) {
+            if (data.NotifCount != 0) {
+                $('#globeBadge').text(data.NotifCount)
+            } else {
+                $('#globeBadge').text("")
+            }
+        }
+
     </script>
 </body>
 </html>

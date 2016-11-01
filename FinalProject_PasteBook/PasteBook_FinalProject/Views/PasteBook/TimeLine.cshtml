@@ -3,7 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Time Line";
+    ViewBag.Title = "Timeline";
 }
 @*logout modal*@
 <div class="modal fade" id="logout">
@@ -14,7 +14,7 @@
             </div>
             <div class="modal-footer">
                 <button id="btnOk" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.href = '@Url.Action("LogIn", "PasteBookAccount")'">OK</button>
-                <button id="btnCancel" type="button" class="btn btn-warning" data-dismiss="modal">CANCEL</button>
+                <button id="btnCancel" type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
             </div>
             <div class="modal-footer">
                 <button id="btnOkAboutMe" type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-                <button id="btnCancelAboutMe" type="button" class="btn btn-warning" data-dismiss="modal">CANCEL</button>
+                <button id="btnCancelAboutMe" type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
 
             </div>
         </div>
@@ -51,7 +51,7 @@
                     {
                         var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
                         var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                        <img src="@imgSrc" class="profilePicture" id="newsfeedPicture" />
+                        <img src="@imgSrc" class="profilePicture" id="timelinePicture" />
                     }
                 }
             }
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             }
-            else if (status == null && status2 == null)
+            else if (status == null && status2 == null && (int)Session["ID"] != Model.ID)
             {
                 friendshipStatus = false;
                 <button type="button" id="friendRequest" class="form-control btn btn-primary btnFriendRequest" onclick="AddFriendRequest(@((int)Session["ID"]), @Model.ID, '@Model.USER_NAME');">Add Friend</button>
@@ -97,9 +97,16 @@
                 using (Html.BeginForm("UploadImage", "PasteBook", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     <div class="well well-lg">
-                        <label for="file">Upload Image:</label>
-                        <input type="file" name="file" id="file" style="width: 100%;" />
-                        <input type="submit" value="Upload" class="submit" />
+                        <div>
+                            <label for="file">Upload Image:</label>
+                        </div>
+                        <div>
+                            <input type="file" name="file" id="file" style="width: 100%;" />
+                            @Html.ValidationMessage("file", "", new { @class = "text-danger", id = "picValidate" })
+                        </div>
+                        <div>
+                            <input type="submit" value="Upload" class="submit" id="uploadPic" />
+                        </div>
                     </div>
                 }
             }
@@ -184,7 +191,8 @@
                     <span class="glyphicon glyphicon-pencil"></span> Update Status
                 </div>
                 <div class="panel-body">
-                    @Html.TextArea("txtPost", null, new { @rows = 5, @placeholder = "What's on your mind?", @class = "txtPost" })
+                    @Html.TextArea("txtPostTimeline", null, new { @rows = 5, @placeholder = "What's on your mind?", @class = "txtPost", id = "txtPostTimeline" })
+                    @Html.ValidationMessage("txtPostTimeline", "", new { @class = "text-danger", id = "txtPostTimelineValidate" })
                 </div>
                 <div class="panel-footer">
                     <div class="col-md-11"></div>
@@ -195,14 +203,14 @@
     </div>
 </div>
 @{
-    if (friendshipStatus)
+    if (friendshipStatus == true || (int)Session["ID"] == Model.ID)
     {
         <div id="refreshPartialView">
             @{
                 Html.RenderAction("GetAllPostPartial", "PasteBook");
             }
         </div>
-    }
+                }
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -219,18 +227,27 @@
         var getGetNotificationCountUrl = '@Url.Action("GetNotificationCount", "PasteBook" )';
         var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
         var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
-        var getUpdateStatusUrl = '@Url.Action("UpdateStatus", "PasteBook" )';
         var getEditProfileUrl = '@Url.Action("EditAboutMe", "PasteBook" )';
         var getAddFriendNotification = '@Url.Action("Notification", "PasteBook" )';
         var getAddFriendRequest = '@Url.Action("AddFriend", "PasteBook" )';
         var getDeclineFriendRequest = '@Url.Action("DeclineFriendRequest", "PasteBook" )';
+        var getUnLikePostUrl = '@Url.Action("Unlike", "PasteBook" )';
 
         $('#btnPostTimeLine').click(function () {
+            if ($('#txtPostTimeline').val() == "") {
+                $('#txtPostTimelineValidate').text("You cannot upadate your status with empty message.");
+            } else {
+                if ($('#txtPostTimeline').val().length > 1000) {
+                    $('#txtPostTimelineValidate').text("You exceeded the 1000 character limit of a message. ");
+                } else {
+                    $('#txtPostTimelineValidate').text('');
+                }
+            }
             var data = {
-                post: $('#txtPost').val(),
+                post: $('#txtPostTimeline').val(),
                 profileOwnerID: $('#btnPostTimeLine').val()
             }
-            if ($('#txtPost').val() != null) {
+            if ($('#txtPostTimeline').val() != "" && $('#txtPostTimeline').val().length > 1000) {
                 $.ajax({
                     url: getCreatePostUrl,
                     data: data,
@@ -313,21 +330,46 @@
             })
         };
 
+        function UnLike(ID) {
+            var data = {
+                postID: ID
+            };
+
+            $.ajax({
+                url: getUnLikePostUrl,
+                data: data,
+                type: 'GET',
+                success: function () {
+                    Reload();
+                }
+            })
+        };
+
         function AddComment(ID, button) {
+
             var data = {
                 postID: ID,
                 postContent: $('#txtComment'.concat(button.value)).val()
             };
-
-            $.ajax({
-                url: getCommentPostUrl,
-                data: data,
-                type: 'GET',
-                success: function (data) {
-                    Notification('Comment', data.PostID, data.CommentID, data.ProfileOwnerID)
-                    Reload();
+            if ($('#txtComment'.concat(button.value)).val() == "") {
+                $('#textCommentValidate'.concat(button.value)).text("You cannot comment with empty message.");
+            } else {
+                if ($('#txtComment'.concat(button.value)).val().length > 1000) {
+                    $('#textCommentValidate'.concat(button.value)).text("You exceeded the 1000 character limit of a comment. ");
+                } else {
+                    $('#textCommentValidate'.concat(button.value)).val('');
+                    $.ajax({
+                        url: getCommentPostUrl,
+                        data: data,
+                        type: 'GET',
+                        success: function (data) {
+                            Notification('Comment', data.PostID, data.CommentID, data.ProfileOwnerID)
+                            Reload();
+                        }
+                    })
                 }
-            })
+            }
+
         };
 
         function Reload() {
@@ -341,7 +383,9 @@
                 notifType: notificationType,
                 postID: post_ID,
                 commentID: comment_ID,
-                friendRequestID: IDtoBeFriend
+                friendRequestID: IDtoBeFriend,
+                view: "timeline"
+
             }
 
             $.ajax({
@@ -376,23 +420,6 @@
             })
         };
 
-        function UpdateStatus(status, visitedID) {
-            data = {
-                relStatus: status,
-                visitedID: visited_ID
-            }
-            $.ajax({
-                url: getAddLikeNotificationUrl,
-                data: data,
-                type: 'GET',
-                success: function () {
-                    Reload();
-                    NotifyFriend();
-                    GetLikeNotificationCount();
-                }
-            })
-        };
-
         function RefreshBadge(data) {
             if (data.NotifCount != 0) {
                 $('#globeBadge').text(data.NotifCount)
@@ -404,7 +431,6 @@
         })
 
         $("#btnAboutMe").click(function () {
-            alert("napindot")
             $('#txtAboutMeEdit').val("")
             $('#aboutMe').modal('show');
             $("#txtEmailEditValidate").text("")
@@ -435,32 +461,72 @@
             }
         })
 
+        function Search() {
+            location.href = url + '/?searchValue=' + $('#txtSearch').val()
+        };
 
         window.onload = GetNotificationCount
+        var i = setInterval(function () { GetNotificationCount() }, 3000);
 
-
-        //Preview profile picture
-        //stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded
-        $("#uploadImage").on('change', function () {
-            if (typeof (FileReader) != "undefined") {
-                var image_holder = $("#imageHolder");
-                image_holder.empty();
-
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $("<img />", {
-                        "src": e.target.result,
-                        "class": "thumb-image"
-                    }).appendTo(image_holder);
+        $('#file').bind('change', function () {
+            if (this.files[0].size <= 2097152) {
+                var fileExtension = ['jpeg', 'jpg', 'png'];
+                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                    $('#picValidate').text('Invalid extension file. Acceptable file extensions (jpeg, jpg and png).')
+                    $('#uploadPic').prop('disabled', true);
+                } else {
+                    $('#uploadPic').prop('disabled', false);
+                    $('#picValidate').text('')
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#timelinePicture').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL($(this)[0].files[0]);
                 }
-                image_holder.show();
-                reader.readAsDataURL($(this)[0].files[0]);
             } else {
-                alert("This browser does not support FileReader.");
+                $('#picValidate').text('File size is too large, maximum size is 2 Mb')
+            }
+
+        });
+
+        $("#txtPostTimeline").keyup(function () {
+            if ($('#txtPostTimeline').val() == "") {
+                $('#txtPostTimelineValidate').text("You cannot upadate your status with empty message.");
+            } else {
+                if ($('#txtPostTimeline').val().length > 1000) {
+                    $('#txtPostTimelineValidate').text("You exceeded the 1000 character limit of a message. ");
+                } else {
+                    $('#txtPostTimelineValidate').text('');
+                }
             }
         });
+
+        $(".textComment").keyup(function () {
+            if ($('.textComment').val() == "") {
+                $('#textCommentValidate').text("You cannot comment with empty message.");
+            } else {
+                if ($('.textComment').val().length > 1000) {
+                    $('#textCommentValidate').text("You exceeded the 1000 character limit of a comment. ");
+                } else {
+                    $('#textCommentValidate').text('');
+                }
+            }
+        });
+
+        //$(".btnComment").click(function () {
+        //    if ($('.textComment').val() == "") {
+        //        $('#textCommentValidate').text("You cannot comment with empty message.");
+        //    } else {
+        //        if ($('.textComment').val().length > 1000) {
+        //            $('#textCommentValidate').text("You exceeded the 1000 character limit of a comment. ");
+        //        } else {
+        //            $('#textCommentValidate').text('');
+        //        }
+        //    }
+        //});
+
 
 
     </script>
     @*<script src="~/Scripts/PasteBook.js"></script>*@
-}
+} 

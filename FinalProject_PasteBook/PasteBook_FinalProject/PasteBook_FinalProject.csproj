@@ -162,8 +162,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Manager\CustomAuthorize.cs" />
     <Compile Include="Mapper\Mapper.cs" />
     <Compile Include="Models\CountryModel.cs" />
+    <Compile Include="Models\EditSettingModel.cs" />
     <Compile Include="Models\LogInModel.cs" />
     <Compile Include="Models\PostModel.cs" />
     <Compile Include="Models\RegistrationModel.cs" />
@@ -225,6 +227,7 @@
     <Content Include="Views\PasteBook\ShowNotificationCommentPartial.cshtml" />
     <Content Include="Views\Error\GlobalError.cshtml" />
     <Content Include="Views\Error\Error404.cshtml" />
+    <Content Include="Views\PasteBook\ViewSpecificPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
