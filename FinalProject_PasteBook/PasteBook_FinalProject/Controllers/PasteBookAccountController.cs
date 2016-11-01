@@ -71,6 +71,10 @@ namespace PasteBook_FinalProject
         [HttpGet]
         public ActionResult LogIn()
         {
+            if(Session["ID"] != null)
+            {
+                RedirectToAction("NewsFeed", "PasteBook");
+            }
             return View();
         }
 

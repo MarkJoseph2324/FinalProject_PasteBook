@@ -21,8 +21,8 @@
 
 <div class="containerPastebook">
     <div class="col-md-4 pull-left">
-        <div class="well well-lg">
-          
+        <div class="well well-lg" id="welcomeBanner">
+          Welcome to PasteBook!
         </div>
     </div>
 
@@ -69,6 +69,9 @@
         var getGetNotificationListUrl = '@Url.Action("GetNotificationList", "PasteBook" )';
         var getAddFriendRequestUrl = '@Url.Action("AddFriendRequest", "PasteBook" )';
         var getUnLikePostUrl = '@Url.Action("Unlike", "PasteBook" )';
+
+
+        var i = setInterval(function () { Reload() }, 60000);
 
         $('#btnPostNewsFeed').click(function () {
             if ($('#txtPostNewsfeed').val() == "") {
@@ -263,6 +266,5 @@
 
 
 
-        //var i = setInterval(function () { GetNotification() }, 2000);
     </script>
 }

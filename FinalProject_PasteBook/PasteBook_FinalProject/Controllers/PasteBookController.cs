@@ -241,5 +241,69 @@ namespace PasteBook_FinalProject.Controllers
             var seen = businessLogic.SeenNotification(userID, notif);
             return Json(new { UserID = userID }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public ActionResult EditPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditPassword(RegistrationModel model, string CurrentPassword)
+        {
+            USER usermodel = new USER();
+            PasswordManager pwdManager = new PasswordManager();
+            int currentUserID = (int)Session["ID"];
+            usermodel = businessLogic.GetSpecificUser(mapper.UserMapperByID(currentUserID));
+            bool isPasswordMatch = pwdManager.IsPasswordMatch(CurrentPassword, usermodel.SALT, usermodel.PASSWORD);
+
+            if (isPasswordMatch && model.Password != null && model.ConfirmPassword != null)
+            {
+                string generatedSalt = null;
+                string hash = pwdManager.GeneratePasswordHash(model.Password, out generatedSalt);
+                string salt = generatedSalt;
+                bool result = businessLogic.UpdateUserPassword(currentUserID, hash, salt);
+                if (result)
+                {
+                    ModelState.AddModelError("txtCurrentPasswordValidate", "Update successfully!");
+                    return View(model);
+                }
+                else
+                {
+                    ModelState.AddModelError("txtCurrentPasswordValidate", "Wrong Password.");
+                    return View(model);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("txtCurrentPasswordValidate", "Password do not match.");
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult EditEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditEmail(RegistrationModel model)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditBasaicInfo()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditBasaicInfo(RegistrationModel model)
+        {
+            return View();
+        }
+
     }
 }

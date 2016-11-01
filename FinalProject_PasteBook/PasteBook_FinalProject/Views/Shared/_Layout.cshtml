@@ -56,7 +56,7 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li><a href='@Url.Action("Timeline", "Pastebook", new { username = @Session["Username"].ToString() })'>My Profile</a></li>
-                                        <li><a href="#">Settings</a></li>
+                                        <li class="dropdown-submenu"><a href='@Url.Action("EditPassword", "Pastebook")'>Edit Password</a></li>
                                         <li><a href="#" id="btnLogout">Log-Out</a></li>
                                     </ul>
                                 </li>
@@ -115,6 +115,8 @@
                 $('#globeBadge').text("")
             }
         }
+
+        var i = setInterval(function () { GetNotificationCount() }, 1000);
 
     </script>
 </body>

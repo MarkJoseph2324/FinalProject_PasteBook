@@ -265,5 +265,10 @@ namespace BusinessLogicLibrary
         {
             return notificationDataAccess.SeenNotification(userID, notif);
         }
+
+        public bool UpdateUserPassword(int currentUserID, string hash, string salt)
+        {
+            return userDataAccess.UpdatePassword(currentUserID, hash, salt);
+        }
     }
 }

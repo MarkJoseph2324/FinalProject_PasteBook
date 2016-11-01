@@ -129,6 +129,24 @@ namespace BusinessLogicLibrary
             return status != 0;
         }
 
+        public bool UpdatePassword(int userID, string hash, string salt)
+        {
+            bool returnValue = false;
+            using (var context = new PastebookEntities())
+            {
+
+                USER record = context.USERs.Where(x => x.ID == userID).SingleOrDefault();
+                if (record != null)
+                {
+                    record.SALT = salt;
+                    record.PASSWORD = hash;
+                    returnValue = context.SaveChanges() != 0;
+                }
+            }
+
+            return returnValue;
+        }
+
         //public bool CheckIfEmailExist(string email)
         //{
         //    bool returnValue = false;

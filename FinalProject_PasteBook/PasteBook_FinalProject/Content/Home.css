@@ -113,7 +113,17 @@
     padding: 10px 0px 0px 0px;
 }
 
-#loginLogo{
+#welcomeBanner{
+     font-family: "Copperplate Gothic Light";
+	font-size: 30px;
+	font-style: normal;
+	font-variant: small-caps;
+	font-weight: bold;
+	line-height: 48.4px;
+    padding: 10px 0px 0px 0px;
+}
+
+#loginLogo, #editPassLogo{
     font-family: "Copperplate";
 	font-size: 30px;
 	font-style: normal;
